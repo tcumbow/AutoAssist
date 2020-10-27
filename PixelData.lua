@@ -12,6 +12,34 @@ local function OnEventMountedStateChanged(eventCode,mounted)
 	end
 end
 
+local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
+	if unitTag=="player" then
+		local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending = false, false, false, false, false
+		local numBuffs = GetNumBuffs("player")
+		if numBuffs > 0 then
+			for i = 1, numBuffs do
+				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
+				if name=="Major Sorcery" then
+					MajorSorcery = true
+				elseif name=="Major Prophesy" then
+					MajorProphesy = true
+				elseif name=="Minor Sorcery" then
+					MinorSorcery = true
+				elseif name=="Major Resolve" then
+					MajorResolve = true
+				elseif name=="Minor Mending" then
+					MinorMending = true
+				end
+			end
+		end
+		if MajorResolve then
+			PDL_MajorResolve:SetColor(255,255,255,255)
+		else
+			PDL_MajorResolve:SetColor(0,0,0,255)
+		end
+	end
+end
+
 function PD_InputReady()
 	PDL_InputReady:SetColor(0,0,0,255)
 end
@@ -85,7 +113,13 @@ local function OnAddonLoaded(event, name)
 		PDL_Mounted:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 9, 1)
 		PDL_Mounted:SetColor(0,0,0,255)
 
+		PDL_MajorResolve  = CreateControl(nil, PixelDataWindow,  CT_LINE)
+		PDL_MajorResolve:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 11, 0)
+		PDL_MajorResolve:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 11, 1)
+		PDL_MajorResolve:SetColor(0,0,0,255)
+
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
 	
 	end
 end
