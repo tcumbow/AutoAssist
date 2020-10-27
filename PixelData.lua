@@ -4,6 +4,13 @@ local ADDON_AUTHOR = "Tom Cumbow"
 
 local SV
 
+local function OnEventMountedStateChanged(eventCode,mounted)
+	if mounted then
+		PD_Mounted()
+	else
+		PD_NotMounted()
+	end
+end
 
 function PD_InputReady()
 	PDL_InputReady:SetColor(0,0,0,255)
@@ -19,6 +26,14 @@ end
 
 function PD_InCombat()
 	PDL_InCombat:SetColor(255,255,255,255)
+end
+
+function PD_NotMounted()
+	PDL_Mounted:SetColor(0,0,0,255)
+end
+
+function PD_Mounted()
+	PDL_Mounted:SetColor(255,255,255,255)
 end
 
 function PD_HealingNotNeeded()
@@ -64,6 +79,13 @@ local function OnAddonLoaded(event, name)
 		PDL_MagPlenty:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 7, 0)
 		PDL_MagPlenty:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 7, 1)
 		PDL_MagPlenty:SetColor(0,0,0,255)
+
+		PDL_Mounted  = CreateControl(nil, PixelDataWindow,  CT_LINE)
+		PDL_Mounted:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 9, 0)
+		PDL_Mounted:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 9, 1)
+		PDL_Mounted:SetColor(0,0,0,255)
+
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 	
 	end
 end
