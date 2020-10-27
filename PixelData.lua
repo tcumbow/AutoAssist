@@ -89,8 +89,8 @@ local function OnAddonLoaded(event, name)
 		PixelDataWindow:SetDimensions(100,100)
 
 		PDL_InputReady  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_InputReady:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 0, 0)
-		PDL_InputReady:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 0, 1)
+		PDL_InputReady:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 1, 0)
+		PDL_InputReady:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
 		PDL_InputReady:SetColor(0,0,0,255)
 	
 		PDL_InCombat  = CreateControl(nil, PixelDataWindow,  CT_LINE)
