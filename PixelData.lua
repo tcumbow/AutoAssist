@@ -63,7 +63,7 @@ local function UpdatePixel()
 		Heal()
 		return
 	end
-	if InCombat == true and MajorSorcery == false and MagickaPercent > 0.50 then
+	if InCombat == true and MajorSorcery == false and MagickaPercent > 0.30 then
 		Entropy()
 		return
 	end
@@ -71,7 +71,7 @@ local function UpdatePixel()
 		Channel()
 		return
 	end
-	if InCombat == true and MagickaPercent > 0.75 then
+	if InCombat == true and MagickaPercent > 0.50 then
 		Pokes()
 		return
 	end
