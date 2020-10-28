@@ -2,19 +2,102 @@ local ADDON_NAME = "PixelData"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
-local SV
+local Mounted = false
+local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending = false, false, false, false, false
+local InputReady = true
+local InCombat = false
+local InputReady = true
+local HealingNeeded = false
+local MagickaPercent = 1.00
+
+
+local function PD_SetPixel(x)
+	PDL:SetColor(0,0,(x/255))
+end
+
+
+
+
+
+
+
+local function DoNothing()
+	PD_SetPixel(0)
+end
+
+local function Heal()
+	PD_SetPixel(1)
+end
+
+local function Channel()
+	PD_SetPixel(2)
+end
+
+local function Entropy()
+	PD_SetPixel(3)
+end
+
+local function Staff()
+	PD_SetPixel(4)
+end
+
+local function Pokes()
+	PD_SetPixel(5)
+end
+
+
+
+
+
+
+
+
+
+
+local function UpdatePixel()
+	if InputReady == false or Mounted == true then
+		DoNothing()
+		return
+	end
+	if HealingNeeded == true then
+		Heal()
+		return
+	end
+	if InCombat == true and MajorSorcery == false then
+		Entropy()
+		return
+	end
+	if InCombat == true and MajorResolve == false then
+		Channel()
+		return
+	end
+	if InCombat == true and MagickaPercent > .75 then
+		Pokes()
+		return
+	end
+	if InCombat == true then
+		Staff()
+		return
+	end
+	DoNothing()
+end
+
+
+
+
+
+
+
+
 
 local function OnEventMountedStateChanged(eventCode,mounted)
-	if mounted then
-		PD_Mounted()
-	else
-		PD_NotMounted()
-	end
+	Mounted = mounted
+	UpdatePixel()
 end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending = false, false, false, false, false
+		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending = false, false, false, false, false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
 			for i = 1, numBuffs do
@@ -32,91 +115,77 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 				end
 			end
 		end
-		if MajorResolve then
-			PDL_MajorResolve:SetColor(255,255,255,255)
-		else
-			PDL_MajorResolve:SetColor(0,0,0,255)
-		end
 	end
 end
 
+
+
+
+
+
+
+
 function PD_InputReady()
-	PDL_InputReady:SetColor(0,0,0,255)
+	InputReady = true
+	UpdatePixel()
 end
 
 function PD_InputNotReady()
-	PDL_InputReady:SetColor(255,255,255,255)
+	InputReady = false
+	UpdatePixel()
 end
 
 function PD_NotInCombat()
-	PDL_InCombat:SetColor(0,0,0,255)
+	InCombat = false
+	UpdatePixel()
 end
 
 function PD_InCombat()
-	PDL_InCombat:SetColor(255,255,255,255)
+	InCombat = true
+	UpdatePixel()
 end
 
 function PD_NotMounted()
-	PDL_Mounted:SetColor(0,0,0,255)
+	Mounted = false
+	UpdatePixel()
 end
 
 function PD_Mounted()
-	PDL_Mounted:SetColor(255,255,255,255)
+	Mounted = true
+	UpdatePixel()
 end
 
 function PD_HealingNotNeeded()
-	PDL_HealingNeeded:SetColor(0,0,0,255)
+	HealingNeeded = false
+	UpdatePixel()
 end
 
 function PD_HealingNeeded()
-	PDL_HealingNeeded:SetColor(255,255,255,255)
+	HealingNeeded = true
+	UpdatePixel()
 end
 
-function PD_MagPlenty()
-	PDL_MagPlenty:SetColor(0,0,0,255)
+function PD_MagickaPercent(x)
+	MagickaPercent = x
+	UpdatePixel()
 end
 
-function PD_MagNotPlenty()
-	PDL_MagPlenty:SetColor(255,255,255,255)
-end
+
+
+
 
 
 
 local function OnAddonLoaded(event, name)
 	if name == ADDON_NAME then
 		EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event)
-		PixelDataWindow = WINDOW_MANAGER:CreateTopLevelWindow("Sandbox")
+		PixelDataWindow = WINDOW_MANAGER:CreateTopLevelWindow("PixelData")
 		PixelDataWindow:SetDimensions(100,100)
 
-		PDL_InputReady  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_InputReady:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 1, 0)
-		PDL_InputReady:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
-		PDL_InputReady:SetColor(0,0,0,255)
-	
-		PDL_InCombat  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_InCombat:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 3, 0)
-		PDL_InCombat:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 3, 1)
-		PDL_InCombat:SetColor(0,0,0,255)
-	
-		PDL_HealingNeeded  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_HealingNeeded:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 5, 0)
-		PDL_HealingNeeded:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 5, 1)
-		PDL_HealingNeeded:SetColor(0,0,0,255)
-	
-		PDL_MagPlenty  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_MagPlenty:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 7, 0)
-		PDL_MagPlenty:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 7, 1)
-		PDL_MagPlenty:SetColor(0,0,0,255)
-
-		PDL_Mounted  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_Mounted:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 9, 0)
-		PDL_Mounted:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 9, 1)
-		PDL_Mounted:SetColor(0,0,0,255)
-
-		PDL_MajorResolve  = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL_MajorResolve:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 11, 0)
-		PDL_MajorResolve:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 11, 1)
-		PDL_MajorResolve:SetColor(0,0,0,255)
+		PDL = CreateControl(nil, PixelDataWindow,  CT_LINE)
+		PDL:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 0, 0)
+		PDL:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
+		PD_SetPixel(5)
 
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
