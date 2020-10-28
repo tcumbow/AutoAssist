@@ -118,6 +118,16 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 	end
 end
 
+local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
+	-- local UnitType = GetUnitType(unitTag)
+	-- local UnitName = GetUnitName(unitTag)
+	-- if unitTag ~= "worldevent7" and unitTag ~= "worldevent8" and unitTag ~= "reticleover" and unitTag ~= "player" then
+	-- 	d(unitTag)
+	-- 	d(UnitName)
+	-- 	d(UnitType)
+	-- end
+end
+
 
 
 
@@ -189,6 +199,7 @@ local function OnAddonLoaded(event, name)
 
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
+		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_POWER_UPDATE, OnEventPowerUpdate)
 	
 	end
 end
