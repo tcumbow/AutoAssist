@@ -89,7 +89,7 @@ local function UpdatePixel()
 		Channel()
 		return
 	end
-	if InCombat == true and MagickaPercent > 0.50 then
+	if InCombat == true and MagickaPercent > 0.70 then
 		Pokes()
 		return
 	end
