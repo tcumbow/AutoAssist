@@ -9,6 +9,8 @@ local InCombat = false
 local InputReady = true
 local HealingNeeded = false
 local MagickaPercent = 1.00
+local LowestGroupHealthPercentWithoutRegen = 1.00
+local LowestGroupHealthPercentWithRegen = 1.00
 
 
 local function PD_SetPixel(x)
@@ -27,6 +29,14 @@ end
 
 local function Heal()
 	PD_SetPixel(1)
+end
+
+local function Regen()
+	PD_SetPixel(6)
+end
+
+local function RegenNow()
+	PD_SetPixel(7)
 end
 
 local function Channel()
@@ -59,8 +69,16 @@ local function UpdatePixel()
 		DoNothing()
 		return
 	end
-	if HealingNeeded == true then
+	if LowestGroupHealthPercentWithRegen < 0.40 then
 		Heal()
+		return
+	end
+	if LowestGroupHealthPercentWithoutRegen < 0.80 then
+		RegenNow()
+		return
+	end
+	if LowestGroupHealthPercentWithoutRegen < 0.90 then
+		Regen()
 		return
 	end
 	if InCombat == true and MajorSorcery == false and MagickaPercent > 0.30 then
@@ -83,7 +101,49 @@ local function UpdatePixel()
 end
 
 
+local function UnitHasRegen(unitTag)
+		local numBuffs = GetNumBuffs(unitTag)
+		if numBuffs > 0 then
+			for i = 1, numBuffs do
+				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo(unitTag, i)
+				if name=="Rapid Regeneration" then
+					return true
+				end
+			end
+		end
+		return false
+end
 
+local function UpdateLowestGroupHealth()
+	GroupSize = GetGroupSize()
+	LowestGroupHealthPercentWithoutRegen = 1.00
+	LowestGroupHealthPercentWithRegen = 1.00
+
+	if GroupSize > 0 then
+		for i = 1, GroupSize do
+			local unitTag = GetGroupUnitTagByIndex(i)
+			local currentHp, maxHp, effectiveMaxHp = GetUnitPower(unitTag, POWERTYPE_HEALTH)
+			local HpPercent = currentHp / maxHp
+			local HasRegen = UnitHasRegen(unitTag)
+			local InHealingRange = IsUnitInGroupSupportRange(unitTag)
+			if HpPercent < LowestGroupHealthPercentWithoutRegen and HasRegen == false and InHealingRange then
+				LowestGroupHealthPercentWithoutRegen = HpPercent
+			elseif HpPercent < LowestGroupHealthPercentWithRegen and HasRegen and InHealingRange then
+				LowestGroupHealthPercentWithRegen = HpPercent
+			end
+		end
+	else
+		local unitTag = "player"
+		local currentHp, maxHp, effectiveMaxHp = GetUnitPower(unitTag, POWERTYPE_HEALTH)
+		local HpPercent = currentHp / maxHp
+		local HasRegen = UnitHasRegen(unitTag)
+		if HasRegen == false then
+			LowestGroupHealthPercentWithoutRegen = HpPercent
+		elseif HasRegen then
+			LowestGroupHealthPercentWithRegen = HpPercent
+		end
+	end
+end
 
 
 
@@ -116,18 +176,19 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 			end
 		end
 	end
+	UpdateLowestGroupHealth()
+	UpdatePixel()
 end
 
-local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
-	-- local UnitType = GetUnitType(unitTag)
-	-- local UnitName = GetUnitName(unitTag)
-	-- if unitTag ~= "worldevent7" and unitTag ~= "worldevent8" and unitTag ~= "reticleover" and unitTag ~= "player" then
-	-- 	d(unitTag)
-	-- 	d(UnitName)
-	-- 	d(UnitType)
-	-- end
+local function OnEventPowerUpdate()
+	UpdateLowestGroupHealth()
+	UpdatePixel()
 end
 
+local function OnEventGroupSupportRangeUpdate()
+	UpdateLowestGroupHealth()
+	UpdatePixel()
+end
 
 
 
@@ -166,13 +227,11 @@ function PD_Mounted()
 end
 
 function PD_HealingNotNeeded()
-	HealingNeeded = false
-	UpdatePixel()
+
 end
 
 function PD_HealingNeeded()
-	HealingNeeded = true
-	UpdatePixel()
+
 end
 
 function PD_MagickaPercent(x)
@@ -199,7 +258,8 @@ local function OnAddonLoaded(event, name)
 
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
-		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_POWER_UPDATE, OnEventPowerUpdate)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_POWER_UPDATE, OnEventPowerUpdate)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_GROUP_SUPPORT_RANGE_UPDATE, OnEventGroupSupportRangeUpdate)
 	
 	end
 end
