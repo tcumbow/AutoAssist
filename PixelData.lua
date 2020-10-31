@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending = false, false, false, false, false
+local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon = false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -23,82 +23,52 @@ end
 
 
 
-local function DoNothing()
-	PD_SetPixel(0)
-end
-
-local function Heal()
-	PD_SetPixel(1)
-end
-
-local function Regen()
-	PD_SetPixel(6)
-end
-
-local function RegenNow()
-	PD_SetPixel(7)
-end
-
-local function Channel()
-	PD_SetPixel(2)
-end
-
-local function Entropy()
-	PD_SetPixel(3)
-end
-
-local function Staff()
-	PD_SetPixel(4)
-end
-
-local function Pokes()
-	PD_SetPixel(5)
-end
-
-
-
-
-
-
-
-
-
 
 local function UpdatePixel()
 	if InputReady == false or Mounted == true then
-		DoNothing()
+		PD_SetPixel(0)
 		return
 	end
 	if LowestGroupHealthPercentWithRegen < 0.40 then
-		Heal()
+		PD_SetPixel(1)
 		return
 	end
-	if LowestGroupHealthPercentWithoutRegen < 0.80 then
-		RegenNow()
+	if LowestGroupHealthPercentWithoutRegen < 0.40 then
+		PD_SetPixel(1)
 		return
 	end
 	if LowestGroupHealthPercentWithoutRegen < 0.90 then
-		Regen()
+		PD_SetPixel(2)
 		return
 	end
-	if InCombat == true and MajorSorcery == false and MagickaPercent > 0.30 then
-		Entropy()
+	if InCombat and MagickaPercent < 0.50 and DeepThoughts == false then
+		PD_SetPixel(3)
+		return
+	end
+	if InCombat and MagickaPercent < 0.90 and DeepThoughts == true then
+		PD_SetPixel(0)
 		return
 	end
 	if InCombat == true and MajorResolve == false then
-		Channel()
+		PD_SetPixel(4)
 		return
 	end
-	if InCombat == true and MagickaPercent > 0.70 then
-		Pokes()
+	if InCombat == true and ElementalWeapon == false then
+		PD_SetPixel(5)
 		return
 	end
 	if InCombat == true then
-		Staff()
+		PD_SetPixel(6)
 		return
 	end
-	DoNothing()
+	PD_SetPixel(0)
 end
+
+
+
+
+
+
 
 
 local function UnitHasRegen(unitTag)
@@ -157,7 +127,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending = false, false, false, false, false
+		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon = false, false, false, false, false, false, false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
 			for i = 1, numBuffs do
@@ -172,6 +142,10 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					MajorResolve = true
 				elseif name=="Minor Mending" then
 					MinorMending = true
+				elseif name=="Deep Thoughts" then
+					DeepThoughts = true
+				elseif name=="Elemental Weapon" then
+					ElementalWeapon = true
 				end
 			end
 		end
@@ -224,14 +198,6 @@ end
 function PD_Mounted()
 	Mounted = true
 	UpdatePixel()
-end
-
-function PD_HealingNotNeeded()
-
-end
-
-function PD_HealingNeeded()
-
 end
 
 function PD_MagickaPercent(x)
