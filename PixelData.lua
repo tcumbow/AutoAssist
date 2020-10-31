@@ -12,6 +12,9 @@ local MagickaPercent = 1.00
 local StaminaPercent = 1.00
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
+local MustDodge = false
+local MustInterrupt = false
+local MustBlock = false
 
 
 local function PD_SetPixel(x)
@@ -32,6 +35,18 @@ local function UpdatePixel()
 	end
 	if LowestGroupHealthPercentWithRegen < 0.40 then
 		PD_SetPixel(1)
+		return
+	end
+	if MustInterrupt then
+		PD_SetPixel(8)
+		return
+	end
+	if MustDodge then
+		PD_SetPixel(7)
+		return
+	end
+	if MustBlock then
+		PD_SetPixel(9)
 		return
 	end
 	if LowestGroupHealthPercentWithoutRegen < 0.40 then
@@ -58,7 +73,7 @@ local function UpdatePixel()
 		PD_SetPixel(4)
 		return
 	end
-	if InCombat == true and ElementalWeapon == false then
+	if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
 		PD_SetPixel(5)
 		return
 	end
@@ -177,6 +192,33 @@ local function OnEventGroupSupportRangeUpdate()
 	UpdatePixel()
 end
 
+local function OnEventCombatTipDisplay(_, tipId)
+	if tipId == 2 then
+		return
+	elseif tipId == 4 then
+		MustDodge = true
+		UpdatePixel()
+	elseif tipId == 3 or tipId == 18 then
+		MustInterrupt = true
+		UpdatePixel()
+	elseif tipId == 1 then
+		MustBlock = true
+		UpdatePixel()
+	else
+		local name, tipText, iconPath = GetActiveCombatTipInfo(tipId)
+		d(name)
+		d(tipText)
+		d(tipId)
+	end
+	
+end
+
+local function OnEventCombatTipRemove()
+	MustDodge = false
+	MustInterrupt = false
+	MustBlock = false
+	UpdatePixel()
+end
 
 
 
@@ -239,6 +281,8 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_POWER_UPDATE, OnEventPowerUpdate)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_GROUP_SUPPORT_RANGE_UPDATE, OnEventGroupSupportRangeUpdate)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_DISPLAY_ACTIVE_COMBAT_TIP, OnEventCombatTipDisplay)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_REMOVE_ACTIVE_COMBAT_TIP, OnEventCombatTipRemove)
 	
 	end
 end
