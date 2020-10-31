@@ -34,8 +34,16 @@ local function UpdatePixel()
 		PD_SetPixel(0)
 		return
 	end
-	if LowestGroupHealthPercentWithRegen < 0.40 then
+	if LowestGroupHealthPercentWithRegen < 0.60 then
 		PD_SetPixel(1)
+		return
+	end
+	if LowestGroupHealthPercentWithoutRegen < 0.60 then
+		PD_SetPixel(1)
+		return
+	end
+	if LowestGroupHealthPercentWithoutRegen < 0.90 then
+		PD_SetPixel(2)
 		return
 	end
 	if MustBreakFree then
@@ -43,23 +51,15 @@ local function UpdatePixel()
 		return
 	end
 	if MustInterrupt then
-		PD_SetPixel(8)
+		PD_SetPixel(5)
 		return
 	end
-	if MustDodge then
+	if MustDodge and DeepThoughts == false then
 		PD_SetPixel(7)
 		return
 	end
 	if MustBlock then
 		PD_SetPixel(9)
-		return
-	end
-	if LowestGroupHealthPercentWithoutRegen < 0.40 then
-		PD_SetPixel(1)
-		return
-	end
-	if LowestGroupHealthPercentWithoutRegen < 0.90 then
-		PD_SetPixel(2)
 		return
 	end
 	if InCombat == true and ElementalWeapon == true then
@@ -78,10 +78,10 @@ local function UpdatePixel()
 		PD_SetPixel(4)
 		return
 	end
-	if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
-		PD_SetPixel(5)
-		return
-	end
+	-- if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
+	-- 	PD_SetPixel(5)
+	-- 	return
+	-- end
 	if InCombat == true then
 		PD_SetPixel(6)
 		return
@@ -153,6 +153,7 @@ end
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
 		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon = false, false, false, false, false, false, false
+		MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
 			for i = 1, numBuffs do
@@ -171,6 +172,8 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DeepThoughts = true
 				elseif name=="Elemental Weapon" then
 					ElementalWeapon = true
+				elseif name=="Rending Leap Ranged" then
+					MustBreakFree = true
 				end
 			end
 		end
@@ -200,13 +203,13 @@ end
 local function OnEventCombatTipDisplay(_, tipId)
 	if tipId == 2 then
 		return
-	elseif tipId == 4 then
+	elseif tipId == 4 or tipId == 19 then
 		MustDodge = true
 		UpdatePixel()
+	-- elseif tipId == 18 then
+		-- MustBreakFree = true
+		-- UpdatePixel()
 	elseif tipId == 3 then
-		MustBreakFree = true
-		UpdatePixel()
-	elseif tipId == 18 then
 		MustInterrupt = true
 		UpdatePixel()
 	elseif tipId == 1 then
@@ -218,14 +221,14 @@ local function OnEventCombatTipDisplay(_, tipId)
 		d(tipText)
 		d(tipId)
 	end
-	
+	UpdateLowestGroupHealth()
+	UpdatePixel()
 end
 
 local function OnEventCombatTipRemove()
 	MustDodge = false
 	MustInterrupt = false
 	MustBlock = false
-	MustBreakFree = false
 	UpdatePixel()
 end
 
