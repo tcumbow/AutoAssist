@@ -82,10 +82,14 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if InCombat == true then
-		PD_SetPixel(6)
+	if InCombat == true and MagickaPercent > 0.90 then
+		PD_SetPixel(5)
 		return
 	end
+	-- if InCombat == true then
+	-- 	PD_SetPixel(6)
+	-- 	return
+	-- end
 	PD_SetPixel(0)
 end
 
