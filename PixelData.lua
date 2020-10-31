@@ -14,6 +14,7 @@ local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
 local MustDodge = false
 local MustInterrupt = false
+local MustBreakFree = false
 local MustBlock = false
 
 
@@ -35,6 +36,10 @@ local function UpdatePixel()
 	end
 	if LowestGroupHealthPercentWithRegen < 0.40 then
 		PD_SetPixel(1)
+		return
+	end
+	if MustBreakFree then
+		PD_SetPixel(8)
 		return
 	end
 	if MustInterrupt then
@@ -198,7 +203,10 @@ local function OnEventCombatTipDisplay(_, tipId)
 	elseif tipId == 4 then
 		MustDodge = true
 		UpdatePixel()
-	elseif tipId == 3 or tipId == 18 then
+	elseif tipId == 3 then
+		MustBreakFree = true
+		UpdatePixel()
+	elseif tipId == 18 then
 		MustInterrupt = true
 		UpdatePixel()
 	elseif tipId == 1 then
@@ -217,6 +225,7 @@ local function OnEventCombatTipRemove()
 	MustDodge = false
 	MustInterrupt = false
 	MustBlock = false
+	MustBreakFree = false
 	UpdatePixel()
 end
 
