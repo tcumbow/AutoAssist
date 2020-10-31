@@ -9,6 +9,7 @@ local InCombat = false
 local InputReady = true
 local HealingNeeded = false
 local MagickaPercent = 1.00
+local StaminaPercent = 1.00
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
 
@@ -45,11 +46,11 @@ local function UpdatePixel()
 		PD_SetPixel(6)
 		return
 	end
-	if InCombat and MagickaPercent < 0.50 and DeepThoughts == false then
+	if InCombat and (MagickaPercent<0.50 or StaminaPercent < 0.50) and DeepThoughts == false then
 		PD_SetPixel(3)
 		return
 	end
-	if InCombat and MagickaPercent < 0.95 and DeepThoughts == true then
+	if InCombat and (MagickaPercent < 0.95 or StaminaPercent < 0.95) and DeepThoughts == true then
 		PD_SetPixel(0)
 		return
 	end
@@ -158,9 +159,17 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 	UpdatePixel()
 end
 
-local function OnEventPowerUpdate()
-	UpdateLowestGroupHealth()
-	UpdatePixel()
+local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
+	if unitTag=="player" and powerType==POWERTYPE_STAMINA then
+		StaminaPercent = powerValue / powerMax
+		UpdatePixel()
+		return
+	end
+	if powerType==POWERTYPE_HEALTH then
+		UpdateLowestGroupHealth()
+		UpdatePixel()
+		return
+	end
 end
 
 local function OnEventGroupSupportRangeUpdate()
