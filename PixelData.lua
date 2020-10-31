@@ -41,11 +41,15 @@ local function UpdatePixel()
 		PD_SetPixel(2)
 		return
 	end
+	if InCombat == true and ElementalWeapon == true then
+		PD_SetPixel(6)
+		return
+	end
 	if InCombat and MagickaPercent < 0.50 and DeepThoughts == false then
 		PD_SetPixel(3)
 		return
 	end
-	if InCombat and MagickaPercent < 0.90 and DeepThoughts == true then
+	if InCombat and MagickaPercent < 0.95 and DeepThoughts == true then
 		PD_SetPixel(0)
 		return
 	end
