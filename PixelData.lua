@@ -210,7 +210,7 @@ local function OnEventCombatTipDisplay(_, tipId)
 	elseif tipId == 4 or tipId == 19 then
 		MustDodge = true
 		UpdatePixel()
-	-- elseif tipId == 18 then
+	elseif tipId == 18 then
 		-- MustBreakFree = true
 		-- UpdatePixel()
 	elseif tipId == 3 then
