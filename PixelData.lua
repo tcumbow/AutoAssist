@@ -176,7 +176,7 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DeepThoughts = true
 				elseif name=="Elemental Weapon" then
 					ElementalWeapon = true
-				elseif name=="Rending Leap Ranged" or name=="Skeletal Smash" then
+				elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 					MustBreakFree = true
 				end
 			end
