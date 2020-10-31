@@ -54,7 +54,7 @@ local function UpdatePixel()
 		PD_SetPixel(5)
 		return
 	end
-	if MustDodge and DeepThoughts == false and StaminaPercent > 49 then
+	if MustDodge and DeepThoughts == false and StaminaPercent > 0.49 then
 		PD_SetPixel(7)
 		return
 	end
