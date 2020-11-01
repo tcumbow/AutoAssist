@@ -12,11 +12,15 @@ local MagickaPercent = 1.00
 local StaminaPercent = 1.00
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
+local Feared = false
 local Stunned = false
 local MustDodge = false
 local MustInterrupt = false
 local MustBreakFree = false
 local MustBlock = false
+
+
+local RawPlayerName = GetRawUnitName("player")
 
 
 local function PD_SetPixel(x)
@@ -52,10 +56,10 @@ local function UpdatePixel()
 		return
 	end
 	if MustInterrupt then
-		PD_SetPixel(5)
+		PD_SetPixel(8)
 		return
 	end
-	if MustDodge and DeepThoughts == false and StaminaPercent > 0.49 then
+	if MustDodge and DeepThoughts == false and StaminaPercent > 0.99 then
 		PD_SetPixel(7)
 		return
 	end
@@ -83,14 +87,14 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if InCombat == true and MagickaPercent > 0.90 then
+	if InCombat == true and MagickaPercent > 0.70 then
 		PD_SetPixel(5)
 		return
 	end
-	-- if InCombat == true then
-	-- 	PD_SetPixel(6)
-	-- 	return
-	-- end
+	if InCombat == true then
+		PD_SetPixel(6)
+		return
+	end
 	PD_SetPixel(0)
 end
 
@@ -231,7 +235,16 @@ local function OnEventCombatTipRemove()
 	MustDodge = false
 	MustInterrupt = false
 	MustBlock = false
+	Feared = false
 	UpdatePixel()
+end
+
+function OnEventCombatEvent(_,result,_,_,_,_,_,_,targetName)
+	if targetName == RawPlayerName then 
+		if result == ACTION_RESULT_FEARED then
+			Feared = true
+		end
+	end
 end
 
 function OnEventStunStateChanged(_,StunState)
@@ -303,6 +316,7 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_DISPLAY_ACTIVE_COMBAT_TIP, OnEventCombatTipDisplay)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_REMOVE_ACTIVE_COMBAT_TIP, OnEventCombatTipRemove)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_PLAYER_STUNNED_STATE_CHANGED, OnEventStunStateChanged)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
 		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 	end
