@@ -34,6 +34,10 @@ local function UpdatePixel()
 		PD_SetPixel(0)
 		return
 	end
+	if Stunned or Feared then
+		PD_SetPixel(8)
+		return
+	end
 	if LowestGroupHealthPercentWithRegen < 0.60 then
 		PD_SetPixel(1)
 		return
@@ -237,12 +241,9 @@ local function OnEventCombatTipRemove()
 	UpdatePixel()
 end
 
-local function OnEventCombatEvent(a,b,c,d,e)
-	d(a)
-	d(b)
-	d(c)
-	d(d)
-	d(e)
+function OnEventStunStateChanged(_,StunState)
+	Stunned = StunState
+	UpdatePixel()
 end
 
 
@@ -308,6 +309,7 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_GROUP_SUPPORT_RANGE_UPDATE, OnEventGroupSupportRangeUpdate)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_DISPLAY_ACTIVE_COMBAT_TIP, OnEventCombatTipDisplay)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_REMOVE_ACTIVE_COMBAT_TIP, OnEventCombatTipRemove)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_PLAYER_STUNNED_STATE_CHANGED, OnEventStunStateChanged)
 		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 	end
