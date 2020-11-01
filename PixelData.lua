@@ -12,6 +12,7 @@ local MagickaPercent = 1.00
 local StaminaPercent = 1.00
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
+local Stunned = false
 local MustDodge = false
 local MustInterrupt = false
 local MustBreakFree = false
@@ -48,10 +49,6 @@ local function UpdatePixel()
 	end
 	if LowestGroupHealthPercentWithoutRegen < 0.90 then
 		PD_SetPixel(2)
-		return
-	end
-	if MustBreakFree then
-		PD_SetPixel(8)
 		return
 	end
 	if MustInterrupt then
@@ -162,7 +159,7 @@ end
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
 		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon = false, false, false, false, false, false, false
-		MustBreakFree = false
+		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
 			for i = 1, numBuffs do
@@ -181,8 +178,8 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DeepThoughts = true
 				elseif name=="Elemental Weapon" then
 					ElementalWeapon = true
-				elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
-					MustBreakFree = true
+				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
+				-- 	MustBreakFree = true
 				end
 			end
 		end
@@ -215,9 +212,6 @@ local function OnEventCombatTipDisplay(_, tipId)
 	elseif tipId == 4 or tipId == 19 then
 		MustDodge = true
 		UpdatePixel()
-	elseif tipId == 18 then
-		-- MustBreakFree = true
-		-- UpdatePixel()
 	elseif tipId == 3 then
 		MustInterrupt = true
 		UpdatePixel()
@@ -230,8 +224,7 @@ local function OnEventCombatTipDisplay(_, tipId)
 		d(tipText)
 		d(tipId)
 	end
-	UpdateLowestGroupHealth()
-	UpdatePixel()
+
 end
 
 local function OnEventCombatTipRemove()
