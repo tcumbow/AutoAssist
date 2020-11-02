@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, RadiantWard = false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -18,6 +18,8 @@ local MustDodge = false
 local MustInterrupt = false
 local MustBreakFree = false
 local MustBlock = false
+local TargetNotTaunted = false
+local TargetMaxHealth = 0
 
 
 local RawPlayerName = GetRawUnitName("player")
@@ -39,15 +41,15 @@ local function UpdatePixel()
 		PD_SetPixel(0)
 		return
 	end
-	if Stunned or Feared and StaminaPercent > 0.25 then
+	if Stunned or Feared and StaminaPercent > 0.49 then
 		PD_SetPixel(8)
 		return
 	end
-	if LowestGroupHealthPercentWithRegen < 0.60 then
+	if LowestGroupHealthPercentWithRegen < 0.40 then
 		PD_SetPixel(1)
 		return
 	end
-	if LowestGroupHealthPercentWithoutRegen < 0.60 then
+	if LowestGroupHealthPercentWithoutRegen < 0.40 then
 		PD_SetPixel(1)
 		return
 	end
@@ -55,15 +57,19 @@ local function UpdatePixel()
 		PD_SetPixel(2)
 		return
 	end
-	if MustInterrupt and StaminaPercent > 0.25 then
+	if MustInterrupt and StaminaPercent > 0.49 then
 		PD_SetPixel(8)
 		return
 	end
-	if MustDodge and DeepThoughts == false and StaminaPercent > 0.99 then
-		PD_SetPixel(7)
+	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and InCombat then
+		PD_SetPixel(3)
 		return
 	end
-	if MustBlock and StaminaPercent > 0.25 then
+	if MustBlock and StaminaPercent > 0.50 then
+		PD_SetPixel(9)
+		return
+	end
+	if MustDodge and DeepThoughts == false and StaminaPercent > 0.99 then
 		PD_SetPixel(9)
 		return
 	end
@@ -71,15 +77,15 @@ local function UpdatePixel()
 		PD_SetPixel(6)
 		return
 	end
-	if InCombat and (MagickaPercent<0.50 or StaminaPercent < 0.50) and DeepThoughts == false then
-		PD_SetPixel(3)
-		return
-	end
+	-- if InCombat and (MagickaPercent<0.50 or StaminaPercent < 0.50) and DeepThoughts == false then
+	-- 	PD_SetPixel(3)
+	-- 	return
+	-- end
 	if InCombat and (MagickaPercent < 0.95 or StaminaPercent < 0.95) and DeepThoughts == true then
 		PD_SetPixel(0)
 		return
 	end
-	if InCombat == true and MinorMending == false then
+	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 then
 		PD_SetPixel(4)
 		return
 	end
@@ -87,14 +93,18 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if InCombat == true and RadiantWard == false and MagickaPercent > 0.70 then
+	if InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
 		PD_SetPixel(5)
 		return
 	end
-	if InCombat == true and MagickaPercent > 0.90 then
-		PD_SetPixel(5)
+	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.90 and InCombat then
+		PD_SetPixel(3)
 		return
 	end
+	-- if InCombat == true and MagickaPercent > 0.90 then
+	-- 	PD_SetPixel(5)
+	-- 	return
+	-- end
 	-- if InCombat == true then
 	-- 	PD_SetPixel(6)
 	-- 	return
@@ -156,6 +166,30 @@ end
 
 
 
+local function UpdateTargetInfo()
+	if (DoesUnitExist('reticleover') and not (IsUnitDead('reticleover'))) then -- have a target, scan for auras
+		-- local unitName = zo_strformat("<<t:1>>",GetUnitName('reticleover'))
+
+		numAuras = GetNumBuffs('reticleover')
+
+		if (numAuras > 0) then -- target has auras, scan and send to handler
+			for i = 1, numAuras do
+				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
+				if name=="Taunt" then
+					TargetNotTaunted = false
+					return
+				end
+			end
+		end
+		TargetNotTaunted = true
+		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+		TargetMaxHealth = maxHp
+	else
+		TargetNotTaunted = false
+	end
+end
+
+
 
 
 
@@ -166,7 +200,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, RadiantWard = false, false, false, false, false, false, false, false
+		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
 		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
@@ -186,8 +220,10 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DeepThoughts = true
 				elseif name=="Elemental Weapon" then
 					ElementalWeapon = true
-				elseif name=="Radiant Ward" then
-					RadiantWard = true
+				elseif name=="Blazing Shield" then
+					DamageShield = true
+				elseif name=="Dampen Magic" then
+					DamageShield = true
 				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 				-- 	MustBreakFree = true
 				end
@@ -195,6 +231,7 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 		end
 	end
 	UpdateLowestGroupHealth()
+	UpdateTargetInfo()
 	UpdatePixel()
 end
 
@@ -228,6 +265,7 @@ local function OnEventCombatTipDisplay(_, tipId)
 	elseif tipId == 1 then
 		MustBlock = true
 		UpdatePixel()
+	elseif tipId == 18 then
 	else
 		local name, tipText, iconPath = GetActiveCombatTipInfo(tipId)
 		d(name)
@@ -255,6 +293,14 @@ end
 
 function OnEventStunStateChanged(_,StunState)
 	Stunned = StunState
+	UpdatePixel()
+end
+
+
+
+
+function OnEventReticleChanged()
+	UpdateTargetInfo()
 	UpdatePixel()
 end
 
@@ -323,6 +369,7 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_REMOVE_ACTIVE_COMBAT_TIP, OnEventCombatTipRemove)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_PLAYER_STUNNED_STATE_CHANGED, OnEventStunStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED, OnEventReticleChanged)
 		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 	end
