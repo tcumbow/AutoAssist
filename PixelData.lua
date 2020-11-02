@@ -97,14 +97,14 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and DeepThoughts == true then
-		PD_SetPixel(0)
-		return
-	end
-	if (MagickaPercent < 0.93 or StaminaPercent < 0.93) and DeepThoughts == false and InCombat then
-		PD_SetPixel(4)
-		return
-	end
+	-- if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and DeepThoughts == true then
+	-- 	PD_SetPixel(0)
+	-- 	return
+	-- end
+	-- if (MagickaPercent < 0.93 or StaminaPercent < 0.93) and DeepThoughts == false and InCombat then
+	-- 	PD_SetPixel(4)
+	-- 	return
+	-- end
 	if InCombat == true then
 		PD_SetPixel(6)
 		return
