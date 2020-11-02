@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon = false, false, false, false, false, false, false
+local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, RadiantWard = false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -79,7 +79,7 @@ local function UpdatePixel()
 		PD_SetPixel(0)
 		return
 	end
-	if InCombat == true and MajorResolve == false then
+	if InCombat == true and MinorMending == false then
 		PD_SetPixel(4)
 		return
 	end
@@ -87,14 +87,18 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if InCombat == true and MagickaPercent > 0.70 then
+	if InCombat == true and RadiantWard == false and MagickaPercent > 0.70 then
 		PD_SetPixel(5)
 		return
 	end
-	if InCombat == true then
-		PD_SetPixel(6)
+	if InCombat == true and MagickaPercent > 0.90 then
+		PD_SetPixel(5)
 		return
 	end
+	-- if InCombat == true then
+	-- 	PD_SetPixel(6)
+	-- 	return
+	-- end
 	PD_SetPixel(0)
 end
 
@@ -162,7 +166,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon = false, false, false, false, false, false, false
+		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, RadiantWard = false, false, false, false, false, false, false, false
 		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
@@ -182,6 +186,8 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DeepThoughts = true
 				elseif name=="Elemental Weapon" then
 					ElementalWeapon = true
+				elseif name=="Radiant Ward" then
+					RadiantWard = true
 				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 				-- 	MustBreakFree = true
 				end
