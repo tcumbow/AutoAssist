@@ -77,18 +77,18 @@ local function UpdatePixel()
 		PD_SetPixel(6)
 		return
 	end
-	-- if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 then
-	-- 	PD_SetPixel(4)
-	-- 	return
-	-- end
+	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 then
+		PD_SetPixel(5)
+		return
+	end
 	-- if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
-		PD_SetPixel(5)
-		return
-	end
+	-- if InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
+	-- 	PD_SetPixel(5)
+	-- 	return
+	-- end
 	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.90 and InCombat then
 		PD_SetPixel(3)
 		return
