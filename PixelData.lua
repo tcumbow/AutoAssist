@@ -65,11 +65,11 @@ local function UpdatePixel()
 		PD_SetPixel(3)
 		return
 	end
-	if MustBlock and StaminaPercent > 0.50 then
+	if MustBlock and StaminaPercent > 0.99 then
 		PD_SetPixel(9)
 		return
 	end
-	if MustDodge and DeepThoughts == false and StaminaPercent > 0.99 then
+	if MustDodge and StaminaPercent > 0.99 then
 		PD_SetPixel(9)
 		return
 	end
@@ -77,18 +77,10 @@ local function UpdatePixel()
 		PD_SetPixel(6)
 		return
 	end
-	-- if InCombat and (MagickaPercent<0.50 or StaminaPercent < 0.50) and DeepThoughts == false then
-	-- 	PD_SetPixel(3)
+	-- if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 then
+	-- 	PD_SetPixel(4)
 	-- 	return
 	-- end
-	if InCombat and (MagickaPercent < 0.95 or StaminaPercent < 0.95) and DeepThoughts == true then
-		PD_SetPixel(0)
-		return
-	end
-	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 then
-		PD_SetPixel(4)
-		return
-	end
 	-- if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
 	-- 	PD_SetPixel(5)
 	-- 	return
@@ -105,8 +97,16 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	-- if InCombat == true then
-	-- 	PD_SetPixel(6)
+	if (MagickaPercent < 0.98 or StaminaPercent < 0.98) and DeepThoughts == false and InCombat then
+		PD_SetPixel(4)
+		return
+	end
+	if InCombat == true then
+		PD_SetPixel(6)
+		return
+	end
+	-- if InCombat and (MagickaPercent < 0.95 or StaminaPercent < 0.95) and DeepThoughts == true then
+	-- 	PD_SetPixel(0)
 	-- 	return
 	-- end
 	PD_SetPixel(0)
