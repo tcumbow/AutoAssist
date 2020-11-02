@@ -39,7 +39,7 @@ local function UpdatePixel()
 		PD_SetPixel(0)
 		return
 	end
-	if Stunned or Feared then
+	if Stunned or Feared and StaminaPercent > 0.25 then
 		PD_SetPixel(8)
 		return
 	end
@@ -55,7 +55,7 @@ local function UpdatePixel()
 		PD_SetPixel(2)
 		return
 	end
-	if MustInterrupt then
+	if MustInterrupt and StaminaPercent > 0.25 then
 		PD_SetPixel(8)
 		return
 	end
@@ -63,7 +63,7 @@ local function UpdatePixel()
 		PD_SetPixel(7)
 		return
 	end
-	if MustBlock then
+	if MustBlock and StaminaPercent > 0.25 then
 		PD_SetPixel(9)
 		return
 	end
