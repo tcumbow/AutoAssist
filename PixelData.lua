@@ -62,11 +62,15 @@ local function UpdatePixel()
 		PD_SetPixel(2)
 		return
 	end
+	if MustInterrupt and FrontBar and MagickaPercent > 0.49 then
+		PD_SetPixel(3)
+		return
+	end
 	if MustInterrupt and StaminaPercent > 0.49 then
 		PD_SetPixel(8)
 		return
 	end
-	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	if TargetMaxHealth > 100000 and TargetNotTaunted and MagickaPercent > 0.30 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -78,14 +82,14 @@ local function UpdatePixel()
 		PD_SetPixel(9)
 		return
 	end
-	if InCombat == true and ElementalWeapon == true then
-		PD_SetPixel(6)
-		return
-	end
-	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 and BackBar then
-		PD_SetPixel(5)
-		return
-	end
+	-- if InCombat == true and ElementalWeapon == true then
+	-- 	PD_SetPixel(6)
+	-- 	return
+	-- end
+	-- if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 and BackBar then
+	-- 	PD_SetPixel(5)
+	-- 	return
+	-- end
 	-- if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
 	-- 	PD_SetPixel(5)
 	-- 	return
@@ -94,11 +98,11 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
-		PD_SetPixel(3)
-		return
-	end
-	if InCombat == true and MagickaPercent > 0.80 and FrontBar then
+	-- if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	-- 	PD_SetPixel(3)
+	-- 	return
+	-- end
+	if MagickaPercent > 0.80 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(5)
 		return
 	end
