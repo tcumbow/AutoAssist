@@ -42,7 +42,7 @@ end
 
 
 local function UpdatePixel()
-	if InputReady == false or Mounted == true then
+	if InputReady == false or Mounted == true or IsUnitDead("player") then
 		PD_SetPixel(0)
 		return
 	end
