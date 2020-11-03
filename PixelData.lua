@@ -286,7 +286,7 @@ local function OnEventCombatTipRemove()
 	UpdatePixel()
 end
 
-function OnEventCombatEvent(_,result,_,_,_,_,_,_,targetName)
+local function OnEventCombatEvent(_,result,_,_,_,_,_,_,targetName)
 	if targetName == RawPlayerName then 
 		if result == ACTION_RESULT_FEARED then
 			Feared = true
@@ -294,7 +294,7 @@ function OnEventCombatEvent(_,result,_,_,_,_,_,_,targetName)
 	end
 end
 
-function OnEventStunStateChanged(_,StunState)
+local function OnEventStunStateChanged(_,StunState)
 	Stunned = StunState
 	UpdatePixel()
 end
@@ -302,7 +302,7 @@ end
 
 
 
-function OnEventReticleChanged()
+local function OnEventReticleChanged()
 	UpdateTargetInfo()
 	UpdatePixel()
 end
@@ -310,7 +310,7 @@ end
 
 
 
-function OnEventBarSwap()
+local function OnEventBarSwap()
 	local BarNum = GetActiveWeaponPairInfo()
 	if BarNum == 1 then
 		DpsBar = true
