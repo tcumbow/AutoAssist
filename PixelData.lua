@@ -69,10 +69,10 @@ local function UpdatePixel()
 		PD_SetPixel(9)
 		return
 	end
-	if MustDodge and StaminaPercent > 0.99 then
-		PD_SetPixel(9)
-		return
-	end
+	-- if MustDodge and StaminaPercent > 0.99 then
+	-- 	PD_SetPixel(9)
+	-- 	return
+	-- end
 	if InCombat == true and ElementalWeapon == true then
 		PD_SetPixel(6)
 		return
@@ -89,7 +89,7 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.90 and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and InCombat then
 		PD_SetPixel(3)
 		return
 	end
