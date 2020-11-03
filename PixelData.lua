@@ -208,6 +208,8 @@ local function UpdateTargetInfo()
 		TargetNotTaunted = true
 	else
 		TargetNotTaunted = false
+		TargetIsEnemy = false
+		TargetIsNotPlayer = false
 	end
 end
 
