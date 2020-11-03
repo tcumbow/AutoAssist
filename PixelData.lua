@@ -23,6 +23,7 @@ local TargetMaxHealth = 0
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
 local FrontBar, BackBar = false, false
+local InBossBattle = false
 
 
 
@@ -187,6 +188,11 @@ local function UpdateTargetInfo()
 			TargetIsEnemy = false
 		end
 
+		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+		TargetMaxHealth = maxHp
+		if TargetMaxHealth > 100000 then
+			InBossBattle = true
+		end
 
 		numAuras = GetNumBuffs('reticleover')
 
@@ -200,8 +206,6 @@ local function UpdateTargetInfo()
 			end
 		end
 		TargetNotTaunted = true
-		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
-		TargetMaxHealth = maxHp
 	else
 		TargetNotTaunted = false
 	end
@@ -354,6 +358,7 @@ end
 
 function PD_NotInCombat()
 	InCombat = false
+	InBossBattle = false
 	UpdatePixel()
 end
 
