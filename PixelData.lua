@@ -20,6 +20,8 @@ local MustBreakFree = false
 local MustBlock = false
 local TargetNotTaunted = false
 local TargetMaxHealth = 0
+local TargetIsNotPlayer = false
+local TargetIsEnemy = false
 local DpsBar, TankBar = false, false
 
 
@@ -63,7 +65,7 @@ local function UpdatePixel()
 		PD_SetPixel(8)
 		return
 	end
-	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and TankBar and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and TankBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -91,7 +93,7 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and TankBar and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and TankBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -172,6 +174,19 @@ end
 local function UpdateTargetInfo()
 	if (DoesUnitExist('reticleover') and not (IsUnitDead('reticleover'))) then -- have a target, scan for auras
 		-- local unitName = zo_strformat("<<t:1>>",GetUnitName('reticleover'))
+
+		if GetUnitType('reticleover') == 1 then
+			TargetIsNotPlayer = false
+		else
+			TargetIsNotPlayer = true
+		end
+
+		if GetUnitReaction('reticleover') == 1 then
+			TargetIsEnemy = true
+		else
+			TargetIsEnemy = false
+		end
+
 
 		numAuras = GetNumBuffs('reticleover')
 
