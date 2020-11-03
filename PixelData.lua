@@ -22,7 +22,7 @@ local TargetNotTaunted = false
 local TargetMaxHealth = 0
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
-local DpsBar, TankBar = false, false
+local FrontBar, BackBar = false, false
 
 
 
@@ -65,7 +65,7 @@ local function UpdatePixel()
 		PD_SetPixel(8)
 		return
 	end
-	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and TankBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -73,7 +73,7 @@ local function UpdatePixel()
 		PD_SetPixel(9)
 		return
 	end
-	if MustDodge and StaminaPercent > 0.99 and DpsBar then
+	if MustDodge and StaminaPercent > 0.99 and FrontBar then
 		PD_SetPixel(9)
 		return
 	end
@@ -81,7 +81,7 @@ local function UpdatePixel()
 		PD_SetPixel(6)
 		return
 	end
-	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 and TankBar then
+	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 and BackBar then
 		PD_SetPixel(5)
 		return
 	end
@@ -93,11 +93,11 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and TankBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(3)
 		return
 	end
-	if InCombat == true and MagickaPercent > 0.80 and DpsBar then
+	if InCombat == true and MagickaPercent > 0.80 and FrontBar then
 		PD_SetPixel(5)
 		return
 	end
@@ -328,11 +328,11 @@ end
 local function OnEventBarSwap()
 	local BarNum = GetActiveWeaponPairInfo()
 	if BarNum == 1 then
-		DpsBar = true
-		TankBar = false
+		FrontBar = true
+		BackBar = false
 	elseif BarNum == 2 then
-		TankBar = true
-		DpsBar = false
+		BackBar = true
+		FrontBar = false
 	end
 	UpdatePixel()
 end
