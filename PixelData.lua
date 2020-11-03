@@ -20,6 +20,8 @@ local MustBreakFree = false
 local MustBlock = false
 local TargetNotTaunted = false
 local TargetMaxHealth = 0
+local DpsBar, TankBar = false, false
+
 
 
 local RawPlayerName = GetRawUnitName("player")
@@ -61,7 +63,7 @@ local function UpdatePixel()
 		PD_SetPixel(8)
 		return
 	end
-	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 100000 and MagickaPercent > 0.30 and TankBar and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -69,15 +71,15 @@ local function UpdatePixel()
 		PD_SetPixel(9)
 		return
 	end
-	-- if MustDodge and StaminaPercent > 0.99 then
-	-- 	PD_SetPixel(9)
-	-- 	return
-	-- end
+	if MustDodge and StaminaPercent > 0.99 and DpsBar then
+		PD_SetPixel(9)
+		return
+	end
 	if InCombat == true and ElementalWeapon == true then
 		PD_SetPixel(6)
 		return
 	end
-	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 then
+	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 and TankBar then
 		PD_SetPixel(5)
 		return
 	end
@@ -89,7 +91,7 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and InCombat then
+	if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and TankBar and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -308,6 +310,21 @@ end
 
 
 
+function OnEventBarSwap()
+	local BarNum = GetActiveWeaponPairInfo()
+	if BarNum == 1 then
+		DpsBar = true
+		TankBar = false
+	elseif BarNum == 2 then
+		TankBar = true
+		DpsBar = false
+	end
+	UpdatePixel()
+end
+
+
+
+
 
 
 function PD_InputReady()
@@ -360,7 +377,7 @@ local function OnAddonLoaded(event, name)
 		PDL = CreateControl(nil, PixelDataWindow,  CT_LINE)
 		PDL:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 0, 0)
 		PDL:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
-		PD_SetPixel(5)
+		PD_SetPixel(0)
 
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
@@ -371,8 +388,10 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_PLAYER_STUNNED_STATE_CHANGED, OnEventStunStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED, OnEventReticleChanged)
-		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_WEAPON_PAIR_LOCK_CHANGED, OnEventBarSwap)
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
+
+		OnEventBarSwap()
 	end
 end
 
