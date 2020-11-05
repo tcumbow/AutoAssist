@@ -102,7 +102,7 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(3)
 	-- 	return
 	-- end
-	if MagickaPercent > 0.80 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	if MagickaPercent > 0.80 and InCombat then
 		PD_SetPixel(5)
 		return
 	end
