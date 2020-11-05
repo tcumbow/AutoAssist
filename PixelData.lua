@@ -103,7 +103,11 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(3)
 	-- 	return
 	-- end
-	if MagickaPercent > 0.80 and InCombat then
+	if FrontBar and (TargetNotVampBane or MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.80 and InCombat then
+		PD_SetPixel(5)
+		return
+	end
+	if BackBar and MagickaPercent > 0.80 and InCombat then
 		PD_SetPixel(5)
 		return
 	end
