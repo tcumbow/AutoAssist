@@ -22,6 +22,7 @@ local TargetNotTaunted = false
 local TargetMaxHealth = 0
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
+local TargetNotVampBane = false
 local FrontBar, BackBar = false, false
 local InBossBattle = false
 
@@ -201,20 +202,25 @@ local function UpdateTargetInfo()
 
 		numAuras = GetNumBuffs('reticleover')
 
+		TargetNotVampBane = true
+		TargetNotTaunted = true
+
 		if (numAuras > 0) then -- target has auras, scan and send to handler
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
 				if name=="Taunt" then
 					TargetNotTaunted = false
-					return
+				end
+				if name=="Vampire's Bane" then
+					TargetNotVampBane = false
 				end
 			end
 		end
-		TargetNotTaunted = true
 	else
 		TargetNotTaunted = false
 		TargetIsEnemy = false
 		TargetIsNotPlayer = false
+		TargetNotVampBane = false
 	end
 end
 
