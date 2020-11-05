@@ -70,7 +70,7 @@ local function UpdatePixel()
 		PD_SetPixel(8)
 		return
 	end
-	if TargetMaxHealth > 100000 and TargetNotTaunted and MagickaPercent > 0.30 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	if BackBar and TargetMaxHealth > 100000 and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(3)
 		return
 	end
@@ -78,7 +78,7 @@ local function UpdatePixel()
 		PD_SetPixel(9)
 		return
 	end
-	if MustDodge and StaminaPercent > 0.99 and FrontBar then
+	if MustDodge and FrontBar and StaminaPercent > 0.99 then
 		PD_SetPixel(9)
 		return
 	end
