@@ -80,7 +80,7 @@ local function UpdatePixel()
 		return
 	end
 	if MustDodge and FrontBar and StaminaPercent > 0.99 then
-		PD_SetPixel(9)
+		PD_SetPixel(7)
 		return
 	end
 	-- if InCombat == true and ElementalWeapon == true then
