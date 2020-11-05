@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -239,7 +239,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphesy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
+		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
 		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
@@ -247,8 +247,8 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
 				if name=="Major Sorcery" then
 					MajorSorcery = true
-				elseif name=="Major Prophesy" then
-					MajorProphesy = true
+				elseif name=="Major Prophecy" then
+					MajorProphecy = true
 				elseif name=="Minor Sorcery" then
 					MinorSorcery = true
 				elseif name=="Major Resolve" then
