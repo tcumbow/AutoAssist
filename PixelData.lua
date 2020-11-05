@@ -257,6 +257,8 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					ElementalWeapon = true
 				elseif name=="Blazing Shield" then
 					DamageShield = true
+				elseif name=="Radiant Ward" then
+					DamageShield = true
 				elseif name=="Dampen Magic" then
 					DamageShield = true
 				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
