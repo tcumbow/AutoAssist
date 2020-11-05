@@ -155,9 +155,10 @@ local function UpdateLowestGroupHealth()
 			local HasRegen = UnitHasRegen(unitTag)
 			local InHealingRange = IsUnitInGroupSupportRange(unitTag)
 			local IsAlive = not IsUnitDead(unitTag)
-			if HpPercent < LowestGroupHealthPercentWithoutRegen and HasRegen == false and InHealingRange and IsAlive then
+			local IsPlayer = GetUnitType(unitTag) == 1
+			if HpPercent < LowestGroupHealthPercentWithoutRegen and HasRegen == false and InHealingRange and IsAlive and IsPlayer then
 				LowestGroupHealthPercentWithoutRegen = HpPercent
-			elseif HpPercent < LowestGroupHealthPercentWithRegen and HasRegen and InHealingRange and IsAlive then
+			elseif HpPercent < LowestGroupHealthPercentWithRegen and HasRegen and InHealingRange and IsAlive and IsPlayer then
 				LowestGroupHealthPercentWithRegen = HpPercent
 			end
 		end
