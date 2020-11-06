@@ -7,7 +7,7 @@
 ## Title: PixelData
 ## Version: 1.0
 ## AddOnVersion: 1060
-## APIVersion: 100031 100032
+## APIVersion: 100032 100032
 ## Author: Tom Cumbow
 ## Description: PixelData
 ## SavedVariables: 
