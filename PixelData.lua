@@ -25,6 +25,7 @@ local TargetIsEnemy = false
 local TargetNotVampBane = false
 local FrontBar, BackBar = false, false
 local InBossBattle = false
+local ReelInFish = false
 
 
 
@@ -123,7 +124,11 @@ local function UpdatePixel()
 		PD_SetPixel(6)
 		return
 	end
-
+	if ReelInFish and not InCombat then
+		PD_SetPixel(10)
+		zo_callLater(PD_StopReelInFish, 2000)
+		return
+	end
 	PD_SetPixel(0)
 end
 
@@ -398,6 +403,16 @@ end
 
 function PD_MagickaPercent(x)
 	MagickaPercent = x
+	UpdatePixel()
+end
+
+function PD_ReelInFish()
+	ReelInFish = true
+	UpdatePixel()
+end
+
+function PD_StopReelInFish()
+	ReelInFish = false
 	UpdatePixel()
 end
 
