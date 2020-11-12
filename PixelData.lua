@@ -84,10 +84,10 @@ local function UpdatePixel()
 		PD_SetPixel(7)
 		return
 	end
-	-- if FrontBar and not MajorSorcery and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
-	-- 	PD_SetPixel(3)
-	-- 	return
-	-- end
+	if FrontBar and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+		PD_SetPixel(4)
+		return
+	end
 	-- if InCombat == true and ElementalWeapon == true then
 	-- 	PD_SetPixel(6)
 	-- 	return
@@ -108,10 +108,14 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(3)
 	-- 	return
 	-- end
-	-- if FrontBar and (TargetNotVampBane or MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.80 and InCombat then
-	-- 	PD_SetPixel(5)
-	-- 	return
-	-- end
+	if FrontBar and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
+		PD_SetPixel(5)
+		return
+	end
+	if FrontBar and MagickaPercent > 0.70 and InCombat then
+		PD_SetPixel(11)
+		return
+	end
 	-- if BackBar and MagickaPercent > 0.80 and InCombat then
 	-- 	PD_SetPixel(5)
 	-- 	return
