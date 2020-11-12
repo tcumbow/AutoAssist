@@ -64,10 +64,10 @@ local function UpdatePixel()
 		PD_SetPixel(2)
 		return
 	end
-	if MustInterrupt and FrontBar and MagickaPercent > 0.49 then
-		PD_SetPixel(3)
-		return
-	end
+	-- if MustInterrupt and FrontBar and MagickaPercent > 0.49 then
+	-- 	PD_SetPixel(3)
+	-- 	return
+	-- end
 	if MustInterrupt and StaminaPercent > 0.49 then
 		PD_SetPixel(8)
 		return
@@ -104,10 +104,10 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(3)
 	-- 	return
 	-- end
-	if FrontBar and (TargetNotVampBane or MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.80 and InCombat then
-		PD_SetPixel(5)
-		return
-	end
+	-- if FrontBar and (TargetNotVampBane or MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.80 and InCombat then
+	-- 	PD_SetPixel(5)
+	-- 	return
+	-- end
 	-- if BackBar and MagickaPercent > 0.80 and InCombat then
 	-- 	PD_SetPixel(5)
 	-- 	return
