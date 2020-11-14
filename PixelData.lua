@@ -92,7 +92,7 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(6)
 	-- 	return
 	-- end
-	if InCombat == true and MajorResolve == false and MagickaPercent > 0.50 and BackBar then
+	if BackBar == true and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
 		PD_SetPixel(5)
 		return
 	end
@@ -112,10 +112,10 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	if FrontBar and MagickaPercent > 0.70 and InCombat then
-		PD_SetPixel(11)
-		return
-	end
+	-- if FrontBar and MagickaPercent > 0.70 and InCombat then
+	-- 	PD_SetPixel(3)
+	-- 	return
+	-- end
 	-- if BackBar and MagickaPercent > 0.80 and InCombat then
 	-- 	PD_SetPixel(5)
 	-- 	return
