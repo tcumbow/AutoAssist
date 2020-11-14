@@ -27,6 +27,18 @@ local FrontBar, BackBar = false, false
 local InBossBattle = false
 local ReelInFish = false
 
+local BurstHealSlotted = 0
+local HealOverTimeSlotted = 0
+local DegenerationSlotted = 0
+local RitualSlotted = 0
+local RemoteInterruptSlotted = 0
+local TauntSlotted = 0
+local SunFireSlotted = 0
+local FocusSlotted = 0
+local MeditateSlotted = 0
+local ImbueWeaponSlotted = 0
+
+
 
 
 local RawPlayerName = GetRawUnitName("player")
