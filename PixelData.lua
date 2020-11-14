@@ -84,6 +84,10 @@ local function UpdatePixel()
 		PD_SetPixel(7)
 		return
 	end
+	if not MinorMending and InCombat and MagickaPercent > 0.55 then
+		PD_SetPixel(3)
+		return
+	end
 	if FrontBar and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		PD_SetPixel(4)
 		return
