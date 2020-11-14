@@ -7,6 +7,12 @@ Loop{
     PixelGetColor, PixelColor, 0, 0, RGB
     if (GetKeyState("F10"))
         Sleep 10
+    else if (GetKeyState("F9"))
+    {
+        if (GetKeyState("6"))
+            Send {6 up}
+        Send 3
+    }
     else
     {
         Switch PixelColor
@@ -58,11 +64,6 @@ Loop{
                 Sleep 2000
                 Send e
                 Sleep 2000
-            Case "0x00000b":
-                if (GetKeyState("F9"))
-                    Send 3
-                else
-                    Send {6 down}
             Default:
                 if (GetKeyState("6"))
                     Send {6 up}
