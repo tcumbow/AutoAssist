@@ -140,7 +140,7 @@ local function UpdatePixel()
 		PD_SetPixel(DoNothing)
 		return
 	end
-	if MeditationSlotted and (MagickaPercent < 0.93 or StaminaPercent < 0.93) and MeditationActive == false and InCombat then
+	if MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		PD_SetPixel(MeditationSlotted)
 		return
 	end
