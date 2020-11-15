@@ -136,7 +136,7 @@ local function UpdatePixel()
 		PD_SetPixel(SunFireSlotted)
 		return
 	end
-	if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and MeditationActive == true then
+	if MeditationActive == true and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 		PD_SetPixel(DoNothing)
 		return
 	end
