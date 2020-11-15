@@ -18,10 +18,13 @@ local MustDodge = false
 local MustInterrupt = false
 local MustBreakFree = false
 local MustBlock = false
+
 local TargetNotTaunted = false
 local TargetMaxHealth = 0
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
+local TargetIsBoss
+
 local TargetNotVampBane = false
 local FrontBar, BackBar = false, false
 local InBossBattle = false
@@ -84,7 +87,7 @@ local function UpdatePixel()
 		PD_SetPixel(8)
 		return
 	end
-	if TauntSlotted and TargetMaxHealth > 500000 and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	if TauntSlotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(TauntSlotted)
 		return
 	end
@@ -120,10 +123,6 @@ local function UpdatePixel()
 		PD_SetPixel(DamageShieldSlotted)
 		return
 	end
-	-- if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
-	-- 	PD_SetPixel(3)
-	-- 	return
-	-- end
 	if SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
 		PD_SetPixel(SunFireSlotted)
 		return
@@ -219,18 +218,21 @@ local function UpdateTargetInfo()
 			TargetIsEnemy = false
 		end
 
-		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
-		TargetMaxHealth = maxHp
-		if TargetMaxHealth > 100000 then
+		if GetUnitDifficulty("reticleover") == MONSTER_DIFFICULTY_DEADLY then
+			TargetIsBoss = true
 			InBossBattle = true
+		else
+			TargetIsBoss = false
 		end
 
+		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+		TargetMaxHealth = maxHp
+		
 		numAuras = GetNumBuffs('reticleover')
 
 		TargetNotVampBane = true
 		TargetNotTaunted = true
-
-		if (numAuras > 0) then -- target has auras, scan and send to handler
+		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
 				if name=="Taunt" then
@@ -246,6 +248,7 @@ local function UpdateTargetInfo()
 		TargetIsEnemy = false
 		TargetIsNotPlayer = false
 		TargetNotVampBane = false
+		TargetIsBoss = false
 	end
 end
 
