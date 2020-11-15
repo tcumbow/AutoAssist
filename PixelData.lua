@@ -106,7 +106,7 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-	elseif InCombat == true then
+	elseif InCombat == true and not ImbueWeaponActive then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
