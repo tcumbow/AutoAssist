@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield = false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -104,18 +104,18 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(4)
 	-- 	return
 	-- end
-	-- if InCombat == true and ElementalWeapon == true then
-	-- 	PD_SetPixel(6)
-	-- 	return
-	-- end
+	if ImbueWeaponActive == true and InCombat and TargetIsEnemy then
+		PD_SetPixel(6) -- todo, this needs to be a light attack, not a heavy attack
+		return
+	end
 	-- if BackBar == true and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	-- if InCombat == true and ElementalWeapon == false and MagickaPercent > 0.70 then
-	-- 	PD_SetPixel(5)
-	-- 	return
-	-- end
+	if ImbueWeaponSlotted and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+		PD_SetPixel(ImbueWeaponSlotted)
+		return
+	end
 	-- if InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
 	-- 	PD_SetPixel(5)
 	-- 	return
@@ -286,6 +286,8 @@ local function UpdateAbilitySlotInfo()
 			TauntSlotted = i-2
 		elseif AbilityName == "Deep Thoughts" then
 			MeditationSlotted = i-2
+		elseif AbilityName == "Elemental Weapon" then
+			ImbueWeaponSlotted = i-2
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
@@ -329,7 +331,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
+		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield = false, false, false, false, false, false, false, false
 		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
@@ -348,7 +350,7 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 				elseif name=="Deep Thoughts" then
 					MeditationActive = true
 				elseif name=="Elemental Weapon" then
-					ElementalWeapon = true
+					ImbueWeaponActive = true
 				elseif name=="Blazing Shield" then
 					DamageShield = true
 				elseif name=="Radiant Ward" then
