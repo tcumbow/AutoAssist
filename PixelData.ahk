@@ -64,6 +64,8 @@ Loop{
                 Sleep 2000
                 Send e
                 Sleep 2000
+            Case "0x00000b": ;LightAttack
+                Send 6
             Default:
                 if (GetKeyState("6"))
                     Send {6 up}
