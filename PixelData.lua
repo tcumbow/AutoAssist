@@ -41,6 +41,15 @@ local FocusSlotted = false
 local MeditationSlotted = false
 local ImbueWeaponSlotted = false
 
+local DoNothing = 0
+-- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
+local DoHeavyAttack = 6
+local DoRollDodge = 7
+local DoBreakFreeInterrupt = 8
+local DoBlock = 9
+local DoReelInFish = 10
+local DoLightAttack = 11
+
 
 
 
@@ -60,11 +69,11 @@ end
 
 local function UpdatePixel()
 	if InputReady == false or Mounted == true or IsUnitDead("player") then
-		PD_SetPixel(0)
+		PD_SetPixel(DoNothing)
 		return
 	end
 	if Stunned or Feared and StaminaPercent > 0.49 then
-		PD_SetPixel(8)
+		PD_SetPixel(DoBreakFreeInterrupt)
 		return
 	end
 	if BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.40 then
@@ -84,7 +93,7 @@ local function UpdatePixel()
 		return
 	end
 	if MustInterrupt and StaminaPercent > 0.49 then
-		PD_SetPixel(8)
+		PD_SetPixel(DoBreakFreeInterrupt)
 		return
 	end
 	if TauntSlotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
@@ -92,11 +101,11 @@ local function UpdatePixel()
 		return
 	end
 	if MustBlock and StaminaPercent > 0.99 then
-		PD_SetPixel(9)
+		PD_SetPixel(DoBlock)
 		return
 	end
 	if MustDodge and FrontBar and StaminaPercent > 0.99 then
-		PD_SetPixel(7)
+		PD_SetPixel(DoRollDodge)
 		return
 	end
 	if RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
@@ -108,7 +117,7 @@ local function UpdatePixel()
 		return
 	end
 	if ImbueWeaponActive == true and InCombat and TargetIsEnemy then
-		PD_SetPixel(6) -- todo, this needs to be a light attack, not a heavy attack
+		PD_SetPixel(DoLightAttack)
 		return
 	end
 	if FocusSlotted and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
@@ -128,7 +137,7 @@ local function UpdatePixel()
 		return
 	end
 	if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and MeditationActive == true then
-		PD_SetPixel(0)
+		PD_SetPixel(DoNothing)
 		return
 	end
 	if MeditationSlotted and (MagickaPercent < 0.93 or StaminaPercent < 0.93) and MeditationActive == false and InCombat then
@@ -136,15 +145,15 @@ local function UpdatePixel()
 		return
 	end
 	if InCombat == true then
-		PD_SetPixel(6)
+		PD_SetPixel(DoHeavyAttack)
 		return
 	end
 	if ReelInFish and not InCombat then
-		PD_SetPixel(10)
+		PD_SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
 		return
 	end
-	PD_SetPixel(0)
+	PD_SetPixel(DoNothing)
 end
 
 
@@ -518,7 +527,7 @@ local function OnAddonLoaded(event, name)
 		PDL = CreateControl(nil, PixelDataWindow,  CT_LINE)
 		PDL:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 0, 0)
 		PDL:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
-		PD_SetPixel(0)
+		PD_SetPixel(DoNothing)
 
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
