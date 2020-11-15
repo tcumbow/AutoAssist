@@ -303,6 +303,8 @@ local function UpdateAbilitySlotInfo()
 			SunFireSlotted = i-2
 		elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
 			DamageShieldSlotted = i-2
+		elseif AbilityName == "Explosive Charge" then
+			RemoteInterruptSlotted = i-2
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
