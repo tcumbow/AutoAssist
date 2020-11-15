@@ -70,90 +70,50 @@ end
 local function UpdatePixel()
 	if InputReady == false or Mounted == true or IsUnitDead("player") then
 		PD_SetPixel(DoNothing)
-		return
-	end
-	if Stunned or Feared and StaminaPercent > 0.49 then
+	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		PD_SetPixel(DoBreakFreeInterrupt)
-		return
-	end
-	if BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.40 then
+	elseif BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.40 then
 		PD_SetPixel(BurstHealSlotted)
-		return
-	end
-	if BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
+	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
 		PD_SetPixel(BurstHealSlotted)
-		return
-	end
-	if HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 then
+	elseif HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 then
 		PD_SetPixel(HealOverTimeSlotted)
-		return
-	end
-	if RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
+	elseif RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
 		PD_SetPixel(RemoteInterruptSlotted)
-		return
-	end
-	if MustInterrupt and StaminaPercent > 0.49 then
+	elseif MustInterrupt and StaminaPercent > 0.49 then
 		PD_SetPixel(DoBreakFreeInterrupt)
-		return
-	end
-	if TauntSlotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	elseif TauntSlotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		PD_SetPixel(TauntSlotted)
-		return
-	end
-	if MustBlock and StaminaPercent > 0.99 then
+	elseif MustBlock and StaminaPercent > 0.99 then
 		PD_SetPixel(DoBlock)
-		return
-	end
-	if MustDodge and FrontBar and StaminaPercent > 0.99 then
+	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
 		PD_SetPixel(DoRollDodge)
-		return
-	end
-	if RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+	elseif RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 		PD_SetPixel(RitualSlotted)
-		return
-	end
-	if DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		PD_SetPixel(DegenerationSlotted)
-		return
-	end
-	if ImbueWeaponActive == true and InCombat and TargetIsEnemy then
+	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 		PD_SetPixel(DoLightAttack)
-		return
-	end
-	if FocusSlotted and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
+	elseif FocusSlotted and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
 		PD_SetPixel(FocusSlotted)
-		return
-	end
-	if ImbueWeaponSlotted and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+	elseif ImbueWeaponSlotted and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		PD_SetPixel(ImbueWeaponSlotted)
-		return
-	end
-	if DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
+	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
 		PD_SetPixel(DamageShieldSlotted)
-		return
-	end
-	if SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
+	elseif SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
 		PD_SetPixel(SunFireSlotted)
-		return
-	end
-	if MeditationActive == true and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
+	elseif MeditationActive == true and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 		PD_SetPixel(DoNothing)
-		return
-	end
-	if MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
+	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		PD_SetPixel(MeditationSlotted)
-		return
-	end
-	if InCombat == true then
+	elseif InCombat == true then
 		PD_SetPixel(DoHeavyAttack)
-		return
-	end
-	if ReelInFish and not InCombat then
+	elseif ReelInFish and not InCombat then
 		PD_SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-		return
+	else
+		PD_SetPixel(DoNothing)
 	end
-	PD_SetPixel(DoNothing)
 end
 
 
