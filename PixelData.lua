@@ -27,16 +27,16 @@ local FrontBar, BackBar = false, false
 local InBossBattle = false
 local ReelInFish = false
 
-local BurstHealSlotted = 0
-local HealOverTimeSlotted = 0
-local DegenerationSlotted = 0
-local RitualSlotted = 0
-local RemoteInterruptSlotted = 0
-local TauntSlotted = 0
-local SunFireSlotted = 0
-local FocusSlotted = 0
-local MeditateSlotted = 0
-local ImbueWeaponSlotted = 0
+local BurstHealSlotted = false
+local HealOverTimeSlotted = false
+local DegenerationSlotted = false
+local RitualSlotted = false
+local RemoteInterruptSlotted = false
+local TauntSlotted = false
+local SunFireSlotted = false
+local FocusSlotted = false
+local MeditateSlotted = false
+local ImbueWeaponSlotted = false
 
 
 
@@ -64,28 +64,28 @@ local function UpdatePixel()
 		PD_SetPixel(8)
 		return
 	end
-	if LowestGroupHealthPercentWithRegen < 0.40 then
-		PD_SetPixel(1)
+	if BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.40 then
+		PD_SetPixel(BurstHealSlotted)
 		return
 	end
-	if LowestGroupHealthPercentWithoutRegen < 0.40 then
-		PD_SetPixel(1)
+	if BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
+		PD_SetPixel(BurstHealSlotted)
 		return
 	end
-	if LowestGroupHealthPercentWithoutRegen < 0.90 then
-		PD_SetPixel(2)
+	if HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 then
+		PD_SetPixel(HealOverTimeSlotted)
 		return
 	end
-	-- if MustInterrupt and FrontBar and MagickaPercent > 0.49 then
-	-- 	PD_SetPixel(3)
-	-- 	return
-	-- end
+	if RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
+		PD_SetPixel(RemoteInterruptSlotted)
+		return
+	end
 	if MustInterrupt and StaminaPercent > 0.49 then
 		PD_SetPixel(8)
 		return
 	end
-	if BackBar and TargetMaxHealth > 500000 and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
-		PD_SetPixel(3)
+	if TauntSlotted and TargetMaxHealth > 500000 and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+		PD_SetPixel(TauntSlotted)
 		return
 	end
 	if MustBlock and StaminaPercent > 0.99 then
@@ -261,6 +261,65 @@ end
 
 
 
+local function UpdateAbilitySlotInfo()
+
+	d("Updating abilities")
+
+	BurstHealSlotted = false
+	HealOverTimeSlotted = false
+	DegenerationSlotted = false
+	RitualSlotted = false
+	RemoteInterruptSlotted = false
+	TauntSlotted = false
+	SunFireSlotted = false
+	FocusSlotted = false
+	MeditateSlotted = false
+	ImbueWeaponSlotted = false
+
+	for i = 3, 7 do
+		local AbilityName = GetAbilityName(GetSlotBoundId(i))
+		if AbilityName == "Ritual of Rebirth" then
+			BurstHealSlotted = i-2
+		elseif AbilityName == "Rapid Regeneration" then
+			HealOverTimeSlotted = i-2
+		elseif AbilityName == "Inner Rage" then
+			TauntSlotted = i-2
+		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
+		else 
+			d("Unrecognized ability:"..AbilityName)
+		end
+	end
+
+end
+
+
+
+
+
+local function UpdateBarState()
+	local BarNum = GetActiveWeaponPairInfo()
+	if BarNum == 1 then
+		FrontBar = true
+		BackBar = false
+	elseif BarNum == 2 then
+		BackBar = true
+		FrontBar = false
+	end
+end
+
+
+
+function InitialInfoGathering()
+	InCombat = IsUnitInCombat("player")
+	UpdateBarState()
+	UpdateAbilitySlotInfo()
+
+end
+
+
+
+
+
 local function OnEventMountedStateChanged(eventCode,mounted)
 	Mounted = mounted
 	UpdatePixel()
@@ -378,18 +437,14 @@ end
 
 
 local function OnEventBarSwap()
-	local BarNum = GetActiveWeaponPairInfo()
-	if BarNum == 1 then
-		FrontBar = true
-		BackBar = false
-	elseif BarNum == 2 then
-		BackBar = true
-		FrontBar = false
-	end
+	UpdateBarState()
+	UpdateAbilitySlotInfo()
 	UpdatePixel()
 end
 
-
+local function OnEventAbilityChange()
+	UpdateAbilitySlotInfo()
+end
 
 
 
@@ -467,9 +522,13 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, OnEventCombatEvent)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED, OnEventReticleChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_WEAPON_PAIR_LOCK_CHANGED, OnEventBarSwap)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACTION_SLOT_UPDATED, OnEventBarSwap)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_SKILL_BUILD_SELECTION_UPDATED, OnEventAbilityChange)
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 
-		OnEventBarSwap()
+		
+		zo_callLater(InitialInfoGathering, 1000)
+		
 	end
 end
 
