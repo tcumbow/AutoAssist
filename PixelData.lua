@@ -164,16 +164,16 @@ end
 
 
 local function UnitHasRegen(unitTag)
-		local numBuffs = GetNumBuffs(unitTag)
-		if numBuffs > 0 then
-			for i = 1, numBuffs do
-				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo(unitTag, i)
-				if name=="Rapid Regeneration" then
-					return true
-				end
+	local numBuffs = GetNumBuffs(unitTag)
+	if numBuffs > 0 then
+		for i = 1, numBuffs do
+			local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo(unitTag, i)
+			if name=="Rapid Regeneration" then
+				return true
 			end
 		end
-		return false
+	end
+	return false
 end
 
 local function UpdateLowestGroupHealth()
