@@ -58,6 +58,7 @@ local RawPlayerName = GetRawUnitName("player")
 
 local function PD_SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
+	d(x)
 end
 
 
@@ -113,7 +114,7 @@ local function UpdatePixel()
 		return
 	end
 	if DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
-		PD_SetPixel(4)
+		PD_SetPixel(DegenerationSlotted)
 		return
 	end
 	if ImbueWeaponActive == true and InCombat and TargetIsEnemy then
@@ -141,7 +142,7 @@ local function UpdatePixel()
 		return
 	end
 	if MeditationSlotted and (MagickaPercent < 0.93 or StaminaPercent < 0.93) and MeditationActive == false and InCombat then
-		PD_SetPixel(4)
+		PD_SetPixel(MeditationSlotted)
 		return
 	end
 	if InCombat == true then
