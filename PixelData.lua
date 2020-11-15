@@ -96,46 +96,38 @@ local function UpdatePixel()
 		PD_SetPixel(7)
 		return
 	end
-	-- if not MinorMending and InCombat and MagickaPercent > 0.55 then
-	-- 	PD_SetPixel(3)
-	-- 	return
-	-- end
-	-- if not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
-	-- 	PD_SetPixel(4)
-	-- 	return
-	-- end
+	if RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+		PD_SetPixel(RitualSlotted)
+		return
+	end
+	if DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+		PD_SetPixel(4)
+		return
+	end
 	if ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 		PD_SetPixel(6) -- todo, this needs to be a light attack, not a heavy attack
 		return
 	end
-	-- if BackBar == true and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
-	-- 	PD_SetPixel(5)
-	-- 	return
-	-- end
+	if FocusSlotted and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
+		PD_SetPixel(FocusSlotted)
+		return
+	end
 	if ImbueWeaponSlotted and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		PD_SetPixel(ImbueWeaponSlotted)
 		return
 	end
-	-- if InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
-	-- 	PD_SetPixel(5)
-	-- 	return
-	-- end
+	if DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
+		PD_SetPixel(DamageShieldSlotted)
+		return
+	end
 	-- if TargetNotTaunted and TargetMaxHealth > 1 and MagickaPercent > 0.80 and BackBar and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 	-- 	PD_SetPixel(3)
 	-- 	return
 	-- end
-	-- if FrontBar and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
-	-- 	PD_SetPixel(5)
-	-- 	return
-	-- end
-	-- if FrontBar and MagickaPercent > 0.70 and InCombat then
-	-- 	PD_SetPixel(3)
-	-- 	return
-	-- end
-	-- if BackBar and MagickaPercent > 0.80 and InCombat then
-	-- 	PD_SetPixel(5)
-	-- 	return
-	-- end
+	if SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
+		PD_SetPixel(SunFireSlotted)
+		return
+	end
 	if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and MeditationActive == true then
 		PD_SetPixel(0)
 		return
@@ -275,6 +267,7 @@ local function UpdateAbilitySlotInfo()
 	FocusSlotted = false
 	MeditationSlotted = false
 	ImbueWeaponSlotted = false
+	DamageShieldSlotted = false
 
 	for i = 3, 7 do
 		local AbilityName = GetAbilityName(GetSlotBoundId(i))
@@ -288,6 +281,16 @@ local function UpdateAbilitySlotInfo()
 			MeditationSlotted = i-2
 		elseif AbilityName == "Elemental Weapon" then
 			ImbueWeaponSlotted = i-2
+		elseif AbilityName == "Channeled Focus" then
+			FocusSlotted = i-2
+		elseif AbilityName == "Extended Ritual" then
+			RitualSlotted = i-2
+		elseif AbilityName == "Degeneration" then
+			DegenerationSlotted = i-2
+		elseif AbilityName == "Vampire's Bane" then
+			SunFireSlotted = i-2
+		elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
+			DamageShieldSlotted = i-2
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
@@ -351,9 +354,7 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					MeditationActive = true
 				elseif name=="Elemental Weapon" then
 					ImbueWeaponActive = true
-				elseif name=="Blazing Shield" then
-					DamageShield = true
-				elseif name=="Radiant Ward" then
+				elseif name=="Blazing Shield" or name=="Radiant Ward" then
 					DamageShield = true
 				elseif name=="Dampen Magic" then
 					DamageShield = true
