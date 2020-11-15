@@ -56,7 +56,7 @@ local DoLightAttack = 11
 local RawPlayerName = GetRawUnitName("player")
 
 
-local function PD_SetPixel(x)
+local function SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
 end
 
@@ -67,52 +67,52 @@ end
 
 
 
-local function UpdatePixel()
+local function BigLogicRoutine()
 	if InputReady == false or Mounted == true or IsUnitDead("player") then
-		PD_SetPixel(DoNothing)
+		SetPixel(DoNothing)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
-		PD_SetPixel(DoBreakFreeInterrupt)
+		SetPixel(DoBreakFreeInterrupt)
 	elseif BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.40 then
-		PD_SetPixel(BurstHealSlotted)
+		SetPixel(BurstHealSlotted)
 	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
-		PD_SetPixel(BurstHealSlotted)
+		SetPixel(BurstHealSlotted)
 	elseif HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 then
-		PD_SetPixel(HealOverTimeSlotted)
+		SetPixel(HealOverTimeSlotted)
 	elseif RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
-		PD_SetPixel(RemoteInterruptSlotted)
+		SetPixel(RemoteInterruptSlotted)
 	elseif MustInterrupt and StaminaPercent > 0.49 then
-		PD_SetPixel(DoBreakFreeInterrupt)
+		SetPixel(DoBreakFreeInterrupt)
 	elseif TauntSlotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
-		PD_SetPixel(TauntSlotted)
+		SetPixel(TauntSlotted)
 	elseif MustBlock and StaminaPercent > 0.99 then
-		PD_SetPixel(DoBlock)
+		SetPixel(DoBlock)
 	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
-		PD_SetPixel(DoRollDodge)
+		SetPixel(DoRollDodge)
 	elseif RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
-		PD_SetPixel(RitualSlotted)
+		SetPixel(RitualSlotted)
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
-		PD_SetPixel(DegenerationSlotted)
+		SetPixel(DegenerationSlotted)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
-		PD_SetPixel(DoLightAttack)
+		SetPixel(DoLightAttack)
 	elseif FocusSlotted and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
-		PD_SetPixel(FocusSlotted)
+		SetPixel(FocusSlotted)
 	elseif ImbueWeaponSlotted and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
-		PD_SetPixel(ImbueWeaponSlotted)
+		SetPixel(ImbueWeaponSlotted)
 	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
-		PD_SetPixel(DamageShieldSlotted)
+		SetPixel(DamageShieldSlotted)
 	elseif SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
-		PD_SetPixel(SunFireSlotted)
+		SetPixel(SunFireSlotted)
 	elseif MeditationActive == true and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
-		PD_SetPixel(DoNothing)
+		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
-		PD_SetPixel(MeditationSlotted)
+		SetPixel(MeditationSlotted)
 	elseif InCombat == true then
-		PD_SetPixel(DoHeavyAttack)
+		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
-		PD_SetPixel(DoReelInFish)
+		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
 	else
-		PD_SetPixel(DoNothing)
+		SetPixel(DoNothing)
 	end
 end
 
@@ -303,7 +303,7 @@ end
 
 local function OnEventMountedStateChanged(eventCode,mounted)
 	Mounted = mounted
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
@@ -340,25 +340,25 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 	end
 	UpdateLowestGroupHealth()
 	UpdateTargetInfo()
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
 	if unitTag=="player" and powerType==POWERTYPE_STAMINA then
 		StaminaPercent = powerValue / powerMax
-		UpdatePixel()
+		BigLogicRoutine()
 		return
 	end
 	if powerType==POWERTYPE_HEALTH then
 		UpdateLowestGroupHealth()
-		UpdatePixel()
+		BigLogicRoutine()
 		return
 	end
 end
 
 local function OnEventGroupSupportRangeUpdate()
 	UpdateLowestGroupHealth()
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 local function OnEventCombatTipDisplay(_, tipId)
@@ -366,13 +366,13 @@ local function OnEventCombatTipDisplay(_, tipId)
 		return
 	elseif tipId == 4 or tipId == 19 then
 		MustDodge = true
-		UpdatePixel()
+		BigLogicRoutine()
 	elseif tipId == 3 then
 		MustInterrupt = true
-		UpdatePixel()
+		BigLogicRoutine()
 	elseif tipId == 1 then
 		MustBlock = true
-		UpdatePixel()
+		BigLogicRoutine()
 	elseif tipId == 18 then
 	else
 		local name, tipText, iconPath = GetActiveCombatTipInfo(tipId)
@@ -388,7 +388,7 @@ local function OnEventCombatTipRemove()
 	MustInterrupt = false
 	MustBlock = false
 	Feared = false
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 local function OnEventCombatEvent(_,result,_,_,_,_,_,_,targetName)
@@ -401,7 +401,7 @@ end
 
 local function OnEventStunStateChanged(_,StunState)
 	Stunned = StunState
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 
@@ -409,7 +409,7 @@ end
 
 local function OnEventReticleChanged()
 	UpdateTargetInfo()
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 
@@ -418,7 +418,7 @@ end
 local function OnEventBarSwap()
 	UpdateBarState()
 	UpdateAbilitySlotInfo()
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 local function OnEventAbilityChange()
@@ -430,49 +430,49 @@ end
 
 function PD_InputReady()
 	InputReady = true
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_InputNotReady()
 	InputReady = false
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_NotInCombat()
 	InCombat = false
 	InBossBattle = false
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_InCombat()
 	InCombat = true
 	UpdateAbilitySlotInfo()
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_NotMounted()
 	Mounted = false
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_Mounted()
 	Mounted = true
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_MagickaPercent(x)
 	MagickaPercent = x
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_ReelInFish()
 	ReelInFish = true
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 function PD_StopReelInFish()
 	ReelInFish = false
-	UpdatePixel()
+	BigLogicRoutine()
 end
 
 
@@ -490,7 +490,7 @@ local function OnAddonLoaded(event, name)
 		PDL = CreateControl(nil, PixelDataWindow,  CT_LINE)
 		PDL:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 0, 0)
 		PDL:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
-		PD_SetPixel(DoNothing)
+		SetPixel(DoNothing)
 
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
