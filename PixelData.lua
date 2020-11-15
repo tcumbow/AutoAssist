@@ -58,7 +58,6 @@ local RawPlayerName = GetRawUnitName("player")
 
 local function PD_SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
-	d(x)
 end
 
 
