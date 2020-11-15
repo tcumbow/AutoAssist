@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -35,7 +35,7 @@ local RemoteInterruptSlotted = false
 local TauntSlotted = false
 local SunFireSlotted = false
 local FocusSlotted = false
-local MeditateSlotted = false
+local MeditationSlotted = false
 local ImbueWeaponSlotted = false
 
 
@@ -136,14 +136,14 @@ local function UpdatePixel()
 	-- 	PD_SetPixel(5)
 	-- 	return
 	-- end
-	-- if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and DeepThoughts == true then
-	-- 	PD_SetPixel(0)
-	-- 	return
-	-- end
-	-- if (MagickaPercent < 0.93 or StaminaPercent < 0.93) and DeepThoughts == false and InCombat then
-	-- 	PD_SetPixel(4)
-	-- 	return
-	-- end
+	if InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) and MeditationActive == true then
+		PD_SetPixel(0)
+		return
+	end
+	if MeditationSlotted and (MagickaPercent < 0.93 or StaminaPercent < 0.93) and MeditationActive == false and InCombat then
+		PD_SetPixel(4)
+		return
+	end
 	if InCombat == true then
 		PD_SetPixel(6)
 		return
@@ -273,7 +273,7 @@ local function UpdateAbilitySlotInfo()
 	TauntSlotted = false
 	SunFireSlotted = false
 	FocusSlotted = false
-	MeditateSlotted = false
+	MeditationSlotted = false
 	ImbueWeaponSlotted = false
 
 	for i = 3, 7 do
@@ -284,6 +284,8 @@ local function UpdateAbilitySlotInfo()
 			HealOverTimeSlotted = i-2
 		elseif AbilityName == "Inner Rage" then
 			TauntSlotted = i-2
+		elseif AbilityName == "Deep Thoughts" then
+			MeditationSlotted = i-2
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
@@ -327,7 +329,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, DeepThoughts, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
+		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ElementalWeapon, DamageShield = false, false, false, false, false, false, false, false
 		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
@@ -344,7 +346,7 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 				elseif name=="Minor Mending" then
 					MinorMending = true
 				elseif name=="Deep Thoughts" then
-					DeepThoughts = true
+					MeditationActive = true
 				elseif name=="Elemental Weapon" then
 					ElementalWeapon = true
 				elseif name=="Blazing Shield" then
