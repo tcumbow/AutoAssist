@@ -6,7 +6,6 @@ local Mounted = false
 local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
-local HealingNeeded = false
 local MagickaPercent = 1.00
 local StaminaPercent = 1.00
 local LowestGroupHealthPercentWithoutRegen = 1.00
