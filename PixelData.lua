@@ -71,7 +71,7 @@ end
 local function BigLogicRoutine()
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
-	elseif RapidManeuverSlotted and Mounted and not MajorGallop then
+	elseif RapidManeuverSlotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
 		SetPixel(RapidManeuverSlotted)
 	elseif Mounted then
 		SetPixel(DoNothing)
