@@ -3,7 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield = false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop = false, false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local InputReady = true
@@ -312,7 +312,7 @@ end
 
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
 	if unitTag=="player" then
-		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield = false, false, false, false, false, false, false, false
+		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop = false, false, false, false, false, false, false, false, false
 		-- MustBreakFree = false
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
@@ -336,6 +336,8 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DamageShield = true
 				elseif name=="Dampen Magic" then
 					DamageShield = true
+				elseif name=="Major Gallop" then
+					MajorGallop = true
 				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 				-- 	MustBreakFree = true
 				end
