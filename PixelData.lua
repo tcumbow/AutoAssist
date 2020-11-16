@@ -40,6 +40,7 @@ local SunFireSlotted = false
 local FocusSlotted = false
 local MeditationSlotted = false
 local ImbueWeaponSlotted = false
+local RapidManeuverSlotted = false
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -240,6 +241,7 @@ local function UpdateAbilitySlotInfo()
 	MeditationSlotted = false
 	ImbueWeaponSlotted = false
 	DamageShieldSlotted = false
+	RapidManeuverSlotted = false
 
 	for i = 3, 7 do
 		local AbilityName = GetAbilityName(GetSlotBoundId(i))
@@ -265,6 +267,8 @@ local function UpdateAbilitySlotInfo()
 			DamageShieldSlotted = i-2
 		elseif AbilityName == "Explosive Charge" then
 			RemoteInterruptSlotted = i-2
+		elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
+			RapidManeuverSlotted = true
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
