@@ -272,7 +272,7 @@ local function UpdateAbilitySlotInfo()
 		elseif AbilityName == "Explosive Charge" then
 			RemoteInterruptSlotted = i-2
 		elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
-			RapidManeuverSlotted = true
+			RapidManeuverSlotted = i-2
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
