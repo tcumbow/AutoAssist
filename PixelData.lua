@@ -327,7 +327,7 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 		local numBuffs = GetNumBuffs("player")
 		if numBuffs > 0 then
 			for i = 1, numBuffs do
-				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
+				local name, _, _, endTime, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
 				if name=="Major Sorcery" then
 					MajorSorcery = true
 				elseif name=="Major Prophecy" then
