@@ -328,6 +328,9 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 		if numBuffs > 0 then
 			for i = 1, numBuffs do
 				local name, _, _, endTime, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
+				local now = GetGameTimeMilliseconds()
+				local timeLeft = endTime - now
+				d(name.." "..timeLeft)
 				if name=="Major Sorcery" then
 					MajorSorcery = true
 				elseif name=="Major Prophecy" then
@@ -346,9 +349,9 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 					DamageShield = true
 				elseif name=="Dampen Magic" then
 					DamageShield = true
-				elseif name=="Major Expedition" then
+				elseif name=="Major Expedition" and timeLeft>250 then
 					MajorExpedition = true
-				elseif name=="Major Gallop" then
+				elseif name=="Major Gallop" and timeLeft>250 then
 					MajorGallop = true
 				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 				-- 	MustBreakFree = true
