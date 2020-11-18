@@ -18,10 +18,9 @@ local MustBreakFree = false
 local MustBlock = false
 
 local TargetNotTaunted = false
-local TargetMaxHealth = 0
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
-local TargetIsBoss
+local TargetIsBoss = false
 local TargetNotVampBane = false
 
 local FrontBar, BackBar = false, false
@@ -80,7 +79,7 @@ local function BigLogicRoutine()
 		SetPixel(BurstHealSlotted)
 	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
 		SetPixel(BurstHealSlotted)
-	elseif HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 then
+	elseif HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 		SetPixel(HealOverTimeSlotted)
 	elseif RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
 		SetPixel(RemoteInterruptSlotted)
@@ -98,15 +97,15 @@ local function BigLogicRoutine()
 		SetPixel(DegenerationSlotted)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 		SetPixel(DoLightAttack)
-	elseif FocusSlotted and MajorResolve == false and MagickaPercent > 0.50 and InCombat then
+	elseif FocusSlotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
 		SetPixel(FocusSlotted)
-	elseif ImbueWeaponSlotted and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(ImbueWeaponSlotted)
 	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
 		SetPixel(DamageShieldSlotted)
 	elseif SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
 		SetPixel(SunFireSlotted)
-	elseif MeditationActive == true and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
+	elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
@@ -201,9 +200,6 @@ local function UpdateTargetInfo()
 		else
 			TargetIsBoss = false
 		end
-
-		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
-		TargetMaxHealth = maxHp
 		
 		numAuras = GetNumBuffs('reticleover')
 
