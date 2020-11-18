@@ -110,10 +110,12 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-	elseif RapidManeuverSlotted and not MajorExpedition and IsPlayerMoving() and StaminaPercent > 0.90 then
-		SetPixel(RapidManeuverSlotted)
-	elseif AccelerateSlotted and not MajorExpedition and IsPlayerMoving() and MagickaPercent > 0.90 then
-		SetPixel(AccelerateSlotted)
+	elseif RapidManeuverSlotted and not MajorExpedition and StaminaPercent > 0.90 then
+		if IsPlayerMoving() then SetPixel(RapidManeuverSlotted)
+		else zo_callLater(BigLogicRoutine, 500) end
+	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 then
+		if IsPlayerMoving() then SetPixel(AccelerateSlotted)
+		else zo_callLater(BigLogicRoutine, 500) end
 	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
