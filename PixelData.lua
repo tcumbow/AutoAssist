@@ -456,7 +456,6 @@ end
 
 local function OnEventBarSwap()
 	UpdateBarState()
-	OnEventEffectChanged()
 	UpdateAbilitySlotInfo()
 	BigLogicRoutine()
 end
