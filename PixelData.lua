@@ -24,6 +24,8 @@ local TargetIsEnemy = false
 local TargetIsBoss = false
 local TargetNotVampBane = false
 
+local AvailableReticleInteraction = nil
+
 local FrontBar, BackBar = false, false
 local InBossBattle = false
 local ReelInFish = false
@@ -49,6 +51,7 @@ local DoBreakFreeInterrupt = 8
 local DoBlock = 9
 local DoReelInFish = 10
 local DoLightAttack = 11
+local DoInteract = 12
 
 
 
@@ -121,6 +124,8 @@ local function BigLogicRoutine()
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
+	elseif (AvailableReticleInteraction == "Search" or AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Search") and not InCombat then
+		SetPixel(DoInteract)
 	else
 		SetPixel(DoNothing)
 	end
@@ -367,7 +372,14 @@ local function OnEventMountedStateChanged(eventCode,mounted)
 	BigLogicRoutine()
 end
 
-
+local function OnEventInteractableTargetChanged()
+	local action, interactableName, mystery1, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
+	d(action)
+	if AvailableReticleInteraction ~= action then
+		AvailableReticleInteraction = action
+		BigLogicRoutine()
+	end
+end
 
 
 
@@ -543,7 +555,8 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACTION_SLOT_UPDATED, OnEventBarSwap)
 		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_SKILL_BUILD_SELECTION_UPDATED, OnEventAbilityChange) -- Turns out this isn't the right event, I'm just going to update abilities when combat begins
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
-
+		ZO_PreHookHandler(RETICLE.interact, "OnEffectivelyShown", OnEventInteractableTargetChanged)
+		ZO_PreHookHandler(RETICLE.interact, "OnHide", OnEventInteractableTargetChanged)
 		
 		zo_callLater(InitialInfoGathering, 1000)
 		

@@ -60,6 +60,11 @@ Loop{
                 Sleep 2000
             Case "0x00000b": ;LightAttack
                 Send 6
+            Case "0x00000c": ;DoInteract
+                if (GetKeyState("6"))
+                    Send {6 up}
+                Send e
+                Sleep 1000
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}
