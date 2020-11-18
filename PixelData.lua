@@ -114,7 +114,7 @@ local function BigLogicRoutine()
 		SetPixel(RapidManeuverSlotted)
 	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 then
 		SetPixel(AccelerateSlotted)
-	elseif InCombat == true and not ImbueWeaponActive and FrontBar then
+	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
