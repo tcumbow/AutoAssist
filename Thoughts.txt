@@ -4,3 +4,5 @@ tie into speedometer to determine when to bother with major expedition
 add dependencies to txt file
 Re-do buff detection to be more efficient? Deltas only?
 Make use of GetAbilityCost
+Key binding to switch modes or end combat early
+re-check combat status when damage taken
