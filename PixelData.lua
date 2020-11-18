@@ -191,7 +191,7 @@ local function UpdateTargetInfo()
 			TargetIsNotPlayer = true
 		end
 
-		if GetUnitReaction('reticleover') == 1 then
+		if GetUnitReaction('reticleover') == UNIT_REACTION_HOSTILE then
 			TargetIsEnemy = true
 		else
 			TargetIsEnemy = false
