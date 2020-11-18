@@ -235,8 +235,6 @@ end
 
 local function UpdateAbilitySlotInfo()
 
-	d("Updating abilities")
-
 	BurstHealSlotted = false
 	HealOverTimeSlotted = false
 	DegenerationSlotted = false
@@ -279,7 +277,7 @@ local function UpdateAbilitySlotInfo()
 			RapidManeuverSlotted = i-2
 		elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
 			AccelerateSlotted = i-2
-		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" then -- do nothing, cuz we don't care about these abilities
+		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
 		end
@@ -314,51 +312,74 @@ end
 
 
 
+local function UpdateBuffs()
+	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
+	-- MustBreakFree = false
+	local numBuffs = GetNumBuffs("player")
+	if numBuffs > 0 then
+		optimalBuffOverlap = 200 -- constant
+		msUntilBuffRecheckNeeded = 999999 -- if this value isn't replaced, then a buff recheck won't be scheduled
+		for i = 1, numBuffs do
+			local name, _, endTime, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
+			local now = GetGameTimeMilliseconds()
+			local timeLeft = (math.floor(endTime * 1000)) - now
+			if name=="Major Sorcery" then
+				MajorSorcery = true
+			elseif name=="Major Prophecy" then
+				MajorProphecy = true
+			elseif name=="Minor Sorcery" then
+				MinorSorcery = true
+			elseif name=="Major Resolve" and timeLeft>optimalBuffOverlap then
+				MajorResolve = true
+				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft; d("blarg") end
+			elseif name=="Minor Mending" then
+				MinorMending = true
+			elseif name=="Deep Thoughts" then
+				MeditationActive = true
+			elseif name=="Elemental Weapon" then
+				ImbueWeaponActive = true
+			elseif name=="Blazing Shield" or name=="Radiant Ward" then
+				DamageShield = true
+			elseif name=="Dampen Magic" then
+				DamageShield = true
+			elseif name=="Major Expedition" and timeLeft>optimalBuffOverlap then
+				MajorExpedition = true
+				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
+			elseif name=="Major Gallop" and timeLeft>optimalBuffOverlap then
+				MajorGallop = true
+				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
+			-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
+			-- 	MustBreakFree = true
+			end
+		end
+		if msUntilBuffRecheckNeeded < 999999 then
+			zo_callLater(UpdateBuffs, msUntilBuffRecheckNeeded-optimalBuffOverlap)
+		end
+	end
+	BigLogicRoutine()
+end
+
+
+
+
 
 local function OnEventMountedStateChanged(eventCode,mounted)
 	Mounted = mounted
 	BigLogicRoutine()
 end
 
+
+
+
+
 local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, finish, stack, icon, buffType, effectType, abilityType, statusType, unitName, unitId, abilityId, sourceType)
-	if unitTag=="player" then
-		MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
-		-- MustBreakFree = false
-		local numBuffs = GetNumBuffs("player")
-		if numBuffs > 0 then
-			for i = 1, numBuffs do
-				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
-				if name=="Major Sorcery" then
-					MajorSorcery = true
-				elseif name=="Major Prophecy" then
-					MajorProphecy = true
-				elseif name=="Minor Sorcery" then
-					MinorSorcery = true
-				elseif name=="Major Resolve" then
-					MajorResolve = true
-				elseif name=="Minor Mending" then
-					MinorMending = true
-				elseif name=="Deep Thoughts" then
-					MeditationActive = true
-				elseif name=="Elemental Weapon" then
-					ImbueWeaponActive = true
-				elseif name=="Blazing Shield" or name=="Radiant Ward" then
-					DamageShield = true
-				elseif name=="Dampen Magic" then
-					DamageShield = true
-				elseif name=="Major Expedition" then
-					MajorExpedition = true
-				elseif name=="Major Gallop" then
-					MajorGallop = true
-				-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
-				-- 	MustBreakFree = true
-				end
-			end
-		end
-	end
 	UpdateLowestGroupHealth()
 	UpdateTargetInfo()
-	BigLogicRoutine()
+	if unitTag=="player" then
+		UpdateBuffs()
+	else
+		BigLogicRoutine()
+	end
 end
 
 local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
