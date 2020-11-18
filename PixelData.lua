@@ -124,7 +124,7 @@ local function BigLogicRoutine()
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction == "Search" or AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Search") and not InCombat then
+	elseif (AvailableReticleInteraction == "Search" or AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
 		SetPixel(DoInteract)
 	else
 		SetPixel(DoNothing)
