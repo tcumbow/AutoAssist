@@ -1,6 +1,7 @@
 local ADDON_NAME = "PixelData"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
+TcumbowPixelDataLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
 
 local Mounted = false
 local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
