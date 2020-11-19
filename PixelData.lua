@@ -17,6 +17,8 @@ local MustDodge = false
 local MustInterrupt = false
 local MustBreakFree = false
 local MustBlock = false
+local Sprinting = false
+
 
 local TargetNotTaunted = false
 local TargetIsNotPlayer = false
@@ -52,6 +54,8 @@ local DoBlock = 9
 local DoReelInFish = 10
 local DoLightAttack = 11
 local DoInteract = 12
+local DoSprint = 13
+
 
 
 
@@ -64,7 +68,9 @@ local function SetPixel(x)
 end
 
 
-
+local function SetSprintingTrue()
+	Sprinting = true
+end
 
 
 
@@ -116,9 +122,14 @@ local function BigLogicRoutine()
 	elseif RapidManeuverSlotted and not MajorExpedition and StaminaPercent > 0.90 then
 		if IsPlayerMoving() then SetPixel(RapidManeuverSlotted)
 		else zo_callLater(BigLogicRoutine, 500) end
-	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 then
-		if IsPlayerMoving() then SetPixel(AccelerateSlotted)
+	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and not InCombat then
+		if IsPlayerMoving() then
+			SetPixel(AccelerateSlotted)
+			Sprinting = false
 		else zo_callLater(BigLogicRoutine, 500) end
+	elseif MajorExpedition and not InCombat and IsPlayerMoving() and not Sprinting and StaminaPercent > 0.10 then
+		SetPixel(DoSprint)
+		zo_callLater(SetSprintingTrue, 500)
 	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then

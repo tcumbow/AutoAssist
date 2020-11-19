@@ -65,6 +65,11 @@ Loop{
                     Send {6 up}
                 Send e
                 Sleep 1000
+            Case "0x00000d": ;DoSprint
+                if (GetKeyState("6"))
+                    Send {6 up}
+                Send g
+                Sleep 1000
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}
