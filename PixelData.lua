@@ -1,7 +1,6 @@
 local ADDON_NAME = "PixelData"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
-TcumbowPixelDataLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
 
 local Mounted = false
 local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
@@ -121,6 +120,13 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
+	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
+		SetPixel(DoHeavyAttack)
+	elseif ReelInFish and not InCombat then
+		SetPixel(DoReelInFish)
+		zo_callLater(PD_StopReelInFish, 2000)
+	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
+		SetPixel(DoInteract)
 	elseif RapidManeuverSlotted and not MajorExpedition and StaminaPercent > 0.90 then
 		if IsPlayerMoving() then SetPixel(RapidManeuverSlotted)
 		else zo_callLater(BigLogicRoutine, 500) end
@@ -132,13 +138,6 @@ local function BigLogicRoutine()
 	elseif MajorExpedition and not InCombat and IsPlayerMoving() and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		zo_callLater(SetSprintingTrue, 500)
-	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted) then
-		SetPixel(DoHeavyAttack)
-	elseif ReelInFish and not InCombat then
-		SetPixel(DoReelInFish)
-		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
-		SetPixel(DoInteract)
 	else
 		SetPixel(DoNothing)
 	end
@@ -571,6 +570,9 @@ local function OnAddonLoaded(event, name)
 		ZO_PreHookHandler(RETICLE.interact, "OnHide", OnEventInteractableTargetChanged)
 		
 		zo_callLater(InitialInfoGathering, 1000)
+
+		PixelDataLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
+
 		
 	end
 end
