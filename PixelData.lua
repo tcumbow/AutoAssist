@@ -26,6 +26,7 @@ local TargetIsEnemy = false
 local TargetIsBoss = false
 local TargetNotVampBane = false
 local TargetNotMajorBreach = false
+local TargetMaxHealth = 0
 
 local AvailableReticleInteraction = nil
 
@@ -224,6 +225,9 @@ local function UpdateTargetInfo()
 		else
 			TargetIsBoss = false
 		end
+
+		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+		TargetMaxHealth = maxHp
 		
 		numAuras = GetNumBuffs('reticleover')
 
