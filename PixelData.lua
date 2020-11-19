@@ -115,7 +115,7 @@ local function BigLogicRoutine()
 		SetPixel(DoInteract)
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DegenerationSlotted)
-	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetIsEnemy and MagickaPercent > 0.60 then
+	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
 		SetPixel(WeaknessToElementsSlotted)
 	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(ImbueWeaponSlotted)
