@@ -25,6 +25,7 @@ local TargetIsNotPlayer = false
 local TargetIsEnemy = false
 local TargetIsBoss = false
 local TargetNotVampBane = false
+local TargetNotMajorBreach = false
 
 local AvailableReticleInteraction = nil
 
@@ -42,8 +43,10 @@ local SunFireSlotted = false
 local FocusSlotted = false
 local MeditationSlotted = false
 local ImbueWeaponSlotted = false
+local DamageShieldSlotted = false
 local RapidManeuverSlotted = false
 local AccelerateSlotted = false
+local WeaknessToElementsSlotted = false
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -111,6 +114,8 @@ local function BigLogicRoutine()
 		SetPixel(DoInteract)
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DegenerationSlotted)
+	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetIsEnemy and MagickaPercent > 0.60 then
+		SetPixel(WeaknessToElementsSlotted)
 	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(ImbueWeaponSlotted)
 	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
@@ -224,14 +229,16 @@ local function UpdateTargetInfo()
 
 		TargetNotVampBane = true
 		TargetNotTaunted = true
+		TargetNotMajorBreach = true
 		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
 				if name=="Taunt" then
 					TargetNotTaunted = false
-				end
-				if name=="Vampire's Bane" then
+				elseif name=="Vampire's Bane" then
 					TargetNotVampBane = false
+				elseif name=="Major Breach" then
+					TargetNotMajorBreach = false
 				end
 			end
 		end
@@ -241,6 +248,7 @@ local function UpdateTargetInfo()
 		TargetIsNotPlayer = false
 		TargetNotVampBane = false
 		TargetIsBoss = false
+		TargetNotMajorBreach = false
 	end
 end
 
@@ -263,6 +271,7 @@ local function UpdateAbilitySlotInfo()
 	DamageShieldSlotted = false
 	RapidManeuverSlotted = false
 	AccelerateSlotted = false
+	WeaknessToElementsSlotted = false
 
 	for i = 3, 7 do
 		local AbilityName = GetAbilityName(GetSlotBoundId(i))
@@ -292,7 +301,9 @@ local function UpdateAbilitySlotInfo()
 			RapidManeuverSlotted = i-2
 		elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
 			AccelerateSlotted = i-2
-		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+		elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
+			WeaknessToElementsSlotted = i-2
+		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
 		end
@@ -325,7 +336,7 @@ local function PeriodicUpdate()
 	zo_callLater(PeriodicUpdate,250)
 end
 
-e
+
 
 local function InitialInfoGathering()
 	InCombat = IsUnitInCombat("player")
