@@ -348,7 +348,7 @@ local function UpdateBuffs()
 				MinorSorcery = true
 			elseif name=="Major Resolve" and timeLeft>optimalBuffOverlap then
 				MajorResolve = true
-				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft; d("blarg") end
+				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
 			elseif name=="Minor Mending" then
 				MinorMending = true
 			elseif name=="Deep Thoughts" then
@@ -387,7 +387,6 @@ end
 
 local function OnEventInteractableTargetChanged()
 	local action, interactableName, mystery1, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
-	d(action)
 	if AvailableReticleInteraction ~= action then
 		AvailableReticleInteraction = action
 		BigLogicRoutine()
