@@ -1,7 +1,7 @@
 add 1 to Red so this doesn't get fake-triggered
 detect when buffs are .25 secs away from fading
-tie into speedometer to determine when to bother with major expedition
 add dependencies to txt file
+add PD detection to all hooks in other add-ons
 Re-do buff detection to be more efficient? Deltas only?
 Make use of GetAbilityCost
 Key binding to switch modes or end combat early
