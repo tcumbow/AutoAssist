@@ -39,8 +39,8 @@ Loop{
             Case "0x000007": ;DoRollDodge
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 7
-                Sleep 500
+                if (PixelColor <> LastPixelColor)
+                    Send 7
             Case "0x000008": ;DoBreakFreeInterrupt
                 if (GetKeyState("6"))
                     Send {6 up}
