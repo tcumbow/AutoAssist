@@ -101,14 +101,16 @@ local function BigLogicRoutine()
 		SetPixel(DoBlock)
 	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
 		SetPixel(DoRollDodge)
-	elseif RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
-		SetPixel(RitualSlotted)
-	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
-		SetPixel(DegenerationSlotted)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 		SetPixel(DoLightAttack)
+	elseif RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+		SetPixel(RitualSlotted)
 	elseif FocusSlotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
 		SetPixel(FocusSlotted)
+	elseif (AvailableReticleInteraction == "Search") then
+		SetPixel(DoInteract)
+	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+		SetPixel(DegenerationSlotted)
 	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(ImbueWeaponSlotted)
 	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
@@ -135,7 +137,7 @@ local function BigLogicRoutine()
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction == "Search" or AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
+	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
 		SetPixel(DoInteract)
 	else
 		SetPixel(DoNothing)
