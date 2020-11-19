@@ -316,7 +316,7 @@ end
 
 
 
-function InitialInfoGathering()
+local function InitialInfoGathering()
 	InCombat = IsUnitInCombat("player")
 	UpdateBarState()
 	UpdateAbilitySlotInfo()
