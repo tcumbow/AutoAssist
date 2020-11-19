@@ -127,14 +127,12 @@ local function BigLogicRoutine()
 		zo_callLater(PD_StopReelInFish, 2000)
 	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
 		SetPixel(DoInteract)
-	elseif RapidManeuverSlotted and not MajorExpedition and StaminaPercent > 0.90 then
-		if IsPlayerMoving() then SetPixel(RapidManeuverSlotted)
-		else zo_callLater(BigLogicRoutine, 500) end
-	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and not InCombat then
-		if IsPlayerMoving() then
-			SetPixel(AccelerateSlotted)
-			Sprinting = false
-		else zo_callLater(BigLogicRoutine, 500) end
+	elseif RapidManeuverSlotted and not MajorExpedition and IsPlayerMoving() and StaminaPercent > 0.90 then
+		SetPixel(RapidManeuverSlotted)
+		Sprinting = false
+	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and IsPlayerMoving() and not InCombat then
+		SetPixel(AccelerateSlotted)
+		Sprinting = false
 	elseif MajorExpedition and not InCombat and IsPlayerMoving() and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		zo_callLater(SetSprintingTrue, 500)
