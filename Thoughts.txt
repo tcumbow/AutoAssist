@@ -6,3 +6,4 @@ Re-do buff detection to be more efficient? Deltas only?
 Make use of GetAbilityCost
 Key binding to switch modes or end combat early
 re-check combat status when damage taken
+switch block to LPC, or keep sleep
