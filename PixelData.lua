@@ -3,6 +3,7 @@ local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
 local Mounted = false
+local Moving = false
 local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
@@ -127,13 +128,13 @@ local function BigLogicRoutine()
 		zo_callLater(PD_StopReelInFish, 2000)
 	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
 		SetPixel(DoInteract)
-	elseif RapidManeuverSlotted and not MajorExpedition and IsPlayerMoving() and StaminaPercent > 0.90 then
+	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(RapidManeuverSlotted)
 		Sprinting = false
-	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and IsPlayerMoving() and not InCombat then
+	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(AccelerateSlotted)
 		Sprinting = false
-	elseif MajorExpedition and not InCombat and IsPlayerMoving() and not Sprinting and StaminaPercent > 0.10 then
+	elseif MajorExpedition and not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		zo_callLater(SetSprintingTrue, 500)
 	else
@@ -316,12 +317,23 @@ end
 
 
 
+local function PeriodicUpdate()
+	if Moving ~= IsPlayerMoving() then
+		Moving = IsPlayerMoving()
+		BigLogicRoutine()
+	end
+	zo_callLater(PeriodicUpdate,250)
+end
+
+e
+
 local function InitialInfoGathering()
 	InCombat = IsUnitInCombat("player")
 	UpdateBarState()
 	UpdateAbilitySlotInfo()
-
+	PeriodicUpdate()
 end
+
 
 
 
@@ -489,6 +501,7 @@ end
 
 function PD_InputReady()
 	InputReady = true
+	UpdateAbilitySlotInfo()
 	BigLogicRoutine()
 end
 
