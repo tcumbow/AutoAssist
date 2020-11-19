@@ -75,5 +75,6 @@ Loop{
                     Send {6 up}
                 
         } 
+        LastPixelColor := PixelColor
     }   
 }
