@@ -379,7 +379,7 @@ local function UpdateBuffs()
 				MeditationActive = true
 			elseif name=="Elemental Weapon" and (timeLeft + 100) > optimalBuffOverlap then
 				ImbueWeaponActive = true
-				if timeLeft + 100 < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft + 100
+				if timeLeft + 100 < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft + 100 end
 			elseif name=="Blazing Shield" or name=="Radiant Ward" then
 				DamageShield = true
 			elseif name=="Dampen Magic" then
