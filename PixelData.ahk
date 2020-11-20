@@ -71,7 +71,7 @@ Loop{
             Case "0x00000e": ;DoMountSprint
                 if (GetKeyState("6"))
                     Send {6 up}
-                if (LastPixelColor != PixelColor Or ((LastActionTime + 5000) <= A_TickCount )) {
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
                     Send g
                     LastActionTime := A_TickCount
                 }
