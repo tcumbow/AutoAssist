@@ -4,7 +4,7 @@ add dependencies to txt file
 add PD detection to all hooks in other add-ons
 Re-do buff detection to be more efficient? Deltas only?
 Make use of GetAbilityCost
-Key binding to switch modes or end combat early
+Key binding to switch modes or end combat early, or force loot, or close up, or auto sprint in combat
 re-check combat status when damage taken
-switch block to LPC, or keep sleep
-remove 200 key delay and only have it delay when LPC=PC
+switch block to LPC, or keep sleep, or stamina loss, or event blocked
+Weave versions of each ability key
