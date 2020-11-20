@@ -63,8 +63,7 @@ Loop{
             Case "0x00000c": ;DoInteract
                 if (GetKeyState("6"))
                     Send {6 up}
-                if (PixelColor <> LastPixelColor)
-                    Send e
+                Send e
             Case "0x00000d": ;DoSprint
                 if (GetKeyState("6"))
                     Send {6 up}
