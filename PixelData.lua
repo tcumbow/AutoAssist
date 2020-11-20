@@ -89,7 +89,6 @@ local function BigLogicRoutine()
 		SetPixel(RapidManeuverSlotted)
 	elseif Mounted and Moving and not Sprinting then
 		SetPixel(DoMountSprint)
-		zo_callLater(SetSprintingTrue, 100)
 	elseif Mounted then
 		SetPixel(DoNothing)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
@@ -448,6 +447,9 @@ local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, pow
 		BigLogicRoutine()
 	elseif unitTag=="player" and powerType==POWERTYPE_MOUNT_STAMINA and powerValue==powerMax and Mounted then
 		Sprinting = false
+		BigLogicRoutine()
+	elseif unitTag=="player" and powerType==POWERTYPE_MOUNT_STAMINA and powerValue<(powerMax-3) and Mounted then
+		Sprinting = true
 		BigLogicRoutine()
 	elseif powerType==POWERTYPE_HEALTH then
 		UpdateLowestGroupHealth()
