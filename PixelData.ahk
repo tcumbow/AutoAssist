@@ -1,5 +1,4 @@
 CoordMode, Pixel, Screen
-SetKeyDelay, 200
 RepeatCounter := 0
 
 Loop{
@@ -7,9 +6,14 @@ Loop{
     Sleep 10
     PixelGetColor, PixelColor, 0, 0, RGB
     if (GetKeyState("F10")) ; I have F10 bound to several key buttons on my controller. It acts as a kill switch so that, for example, while I'm holding down the Start button to resurect someone, AHK doesn't interfere
-        Sleep 10
+        
     else
     {
+        if (LastPixelColor == PixelColor)
+            RepeatCounter := RepeatCounter + 1
+        else
+            RepeatCounter := 0
+        
         Switch PixelColor
         {
             Case "0x000000": ;DoNothing
@@ -40,7 +44,7 @@ Loop{
             Case "0x000007": ;DoRollDodge
                 if (GetKeyState("6"))
                     Send {6 up}
-                if (PixelColor <> LastPixelColor)
+                if (DelayRepeats(500))
                     Send 7
             Case "0x000008": ;DoBreakFreeInterrupt
                 if (GetKeyState("6"))
@@ -68,19 +72,30 @@ Loop{
             Case "0x00000d": ;DoSprint
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send g
+                if (DelayRepeats(300))
+                    Send g
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}
                 
         }
 
-        if (LastPixelColor == PixelColor)
-            RepeatCounter := RepeatCounter + 1
-        else
-            RepeatCounter := 0
+        
+
         LastPixelColor := PixelColor
 
     }   
+}
+
+DelayRepeats(ms)
+{
+    if (RepeatCounter == 0)
+        return True
+    if ((RepeatCounter*10)>=ms) {
+        RepeatCounter := 0
+        return True
+    }
+    else
+        return False
 }
 

@@ -142,7 +142,7 @@ local function BigLogicRoutine()
 		Sprinting = false
 	elseif MajorExpedition and not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
-		zo_callLater(SetSprintingTrue, 500)
+		zo_callLater(SetSprintingTrue, 200)
 	else
 		SetPixel(DoNothing)
 	end
