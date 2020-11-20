@@ -1,5 +1,6 @@
 CoordMode, Pixel, Screen
 SetKeyDelay, 200
+RepeatCounter := 0
 
 Loop{
     WinWaitActive Elder Scrolls Online
@@ -67,13 +68,19 @@ Loop{
             Case "0x00000d": ;DoSprint
                 if (GetKeyState("6"))
                     Send {6 up}
-                if (PixelColor <> LastPixelColor)
-                    Send g
+                Send g
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}
                 
         }
+
+        if (LastPixelColor == PixelColor)
+            RepeatCounter := RepeatCounter + 1
+        else
+            RepeatCounter := 0
         LastPixelColor := PixelColor
+
     }   
 }
+
