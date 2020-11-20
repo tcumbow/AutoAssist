@@ -59,6 +59,7 @@ local DoReelInFish = 10
 local DoLightAttack = 11
 local DoInteract = 12
 local DoSprint = 13
+local DoMountSprint = 14
 
 
 
@@ -69,6 +70,7 @@ local RawPlayerName = GetRawUnitName("player")
 
 local function SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
+	-- d(x)
 end
 
 
@@ -85,6 +87,9 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif RapidManeuverSlotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
 		SetPixel(RapidManeuverSlotted)
+	elseif Mounted and Moving and not Sprinting then
+		SetPixel(DoMountSprint)
+		zo_callLater(SetSprintingTrue, 100)
 	elseif Mounted then
 		SetPixel(DoNothing)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
@@ -113,6 +118,7 @@ local function BigLogicRoutine()
 		SetPixel(FocusSlotted)
 	elseif (AvailableReticleInteraction == "Search") then
 		SetPixel(DoInteract)
+		Sprinting = false
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DegenerationSlotted)
 	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
@@ -127,6 +133,7 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
+		Sprinting = false
 	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
@@ -134,13 +141,14 @@ local function BigLogicRoutine()
 		zo_callLater(PD_StopReelInFish, 2000)
 	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
 		SetPixel(DoInteract)
+		Sprinting = false
 	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(RapidManeuverSlotted)
 		Sprinting = false
 	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(AccelerateSlotted)
 		Sprinting = false
-	elseif MajorExpedition and not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
+	elseif not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		zo_callLater(SetSprintingTrue, 100)
 	else
@@ -335,6 +343,7 @@ end
 local function PeriodicUpdate()
 	if Moving ~= IsPlayerMoving() then
 		Moving = IsPlayerMoving()
+		if not Moving then Sprinting = false end
 		BigLogicRoutine()
 	end
 	zo_callLater(PeriodicUpdate,250)
@@ -344,6 +353,7 @@ end
 
 local function InitialInfoGathering()
 	InCombat = IsUnitInCombat("player")
+	Mounted = IsMounted()
 	UpdateBarState()
 	UpdateAbilitySlotInfo()
 	PeriodicUpdate()
@@ -407,6 +417,7 @@ end
 
 local function OnEventMountedStateChanged(eventCode,mounted)
 	Mounted = mounted
+	Sprinting = false
 	BigLogicRoutine()
 end
 
@@ -433,13 +444,14 @@ end
 local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
 	if unitTag=="player" and powerType==POWERTYPE_STAMINA then
 		StaminaPercent = powerValue / powerMax
+		if powerValue == powerMax and not Mounted then Sprinting = false end
 		BigLogicRoutine()
-		return
-	end
-	if powerType==POWERTYPE_HEALTH then
+	elseif unitTag=="player" and powerType==POWERTYPE_MOUNT_STAMINA and powerValue==powerMax and Mounted then
+		Sprinting = false
+		BigLogicRoutine()
+	elseif powerType==POWERTYPE_HEALTH then
 		UpdateLowestGroupHealth()
 		BigLogicRoutine()
-		return
 	end
 end
 
