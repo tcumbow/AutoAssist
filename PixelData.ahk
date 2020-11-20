@@ -1,11 +1,9 @@
 CoordMode, Pixel, Screen
-RepeatCounter := 0
 global LastPixelColor := "dummy"
 global LastActionTime := 0
 
 Loop{
     WinWaitActive Elder Scrolls Online
-    Sleep 10
     PixelGetColor, PixelColor, 0, 0, RGB
     if (not (GetKeyState("F10"))) ; I have F10 bound to several key buttons on my controller. It acts as a kill switch so that, for example, while I'm holding down the Start button to resurect someone, AHK doesn't interfere
     {
@@ -75,10 +73,6 @@ Loop{
                     Send {6 up}
                 
         }
-
-        
-
         LastPixelColor := PixelColor
-
     }   
 }
