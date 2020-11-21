@@ -15,33 +15,54 @@ Loop{
             Case "0x000001": ;Ability 1
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 1
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 1
+                    LastActionTime := A_TickCount
+                }
             Case "0x000002": ;Ability 2
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 2
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 2
+                    LastActionTime := A_TickCount
+                }
             Case "0x000003": ;Ability 3
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 3
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 3
+                    LastActionTime := A_TickCount
+                }
             Case "0x000004": ;Ability 4
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 4
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 4
+                    LastActionTime := A_TickCount
+                }
             Case "0x000005": ;Ability 5
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 5
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 5
+                    LastActionTime := A_TickCount
+                }
             Case "0x000006": ;DoHeavyAttack
                 Send {6 down}
             Case "0x000007": ;DoRollDodge
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 7
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 7
+                    LastActionTime := A_TickCount
+                }
             Case "0x000008": ;DoBreakFreeInterrupt
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send 8
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 8
+                    LastActionTime := A_TickCount
+                }
             Case "0x000009": ;DoBlock
                 if (GetKeyState("6"))
                     Send {6 up}
@@ -56,7 +77,10 @@ Loop{
                 Send e
                 Sleep 2000
             Case "0x00000b": ;LightAttack
-                Send 6
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send 6
+                    LastActionTime := A_TickCount
+                }
             Case "0x00000c": ;DoInteract
                 if (GetKeyState("6"))
                     Send {6 up}
