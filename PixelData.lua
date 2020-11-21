@@ -28,6 +28,7 @@ local TargetIsBoss = false
 local TargetNotVampBane = false
 local TargetNotMajorBreach = false
 local TargetMaxHealth = 0
+local TargetIsNotSoulTrap = false
 
 local AvailableReticleInteraction = nil
 local AvailableReticleTarget = nil
@@ -50,6 +51,7 @@ local DamageShieldSlotted = false
 local RapidManeuverSlotted = false
 local AccelerateSlotted = false
 local WeaknessToElementsSlotted = false
+local SoulTrapSlotted = false
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -124,6 +126,8 @@ local function BigLogicRoutine()
 		SetPixel(RitualSlotted)
 	elseif FocusSlotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
 		SetPixel(FocusSlotted)
+	elseif SoulTrapSlotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy and TargetIsNotPlayer and not TargetIsBoss then
+		SetPixel(SoulTrapSlotted)
 	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
 		Sprinting = false
@@ -252,6 +256,7 @@ local function UpdateTargetInfo()
 		TargetNotVampBane = true
 		TargetNotTaunted = true
 		TargetNotMajorBreach = true
+		TargetIsNotSoulTrap = true
 		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
@@ -261,6 +266,8 @@ local function UpdateTargetInfo()
 					TargetNotVampBane = false
 				elseif name=="Major Breach" then
 					TargetNotMajorBreach = false
+				elseif name=="Soul Trap" or name=="Soul Splitting Trap" then
+					TargetIsNotSoulTrap = false
 				end
 			end
 		end
@@ -271,6 +278,7 @@ local function UpdateTargetInfo()
 		TargetNotVampBane = false
 		TargetIsBoss = false
 		TargetNotMajorBreach = false
+		TargetIsNotSoulTrap = false
 	end
 end
 
@@ -294,6 +302,7 @@ local function UpdateAbilitySlotInfo()
 	RapidManeuverSlotted = false
 	AccelerateSlotted = false
 	WeaknessToElementsSlotted = false
+	SoulTrapSlotted = false
 
 	for i = 3, 7 do
 		local AbilityName = GetAbilityName(GetSlotBoundId(i))
@@ -325,6 +334,8 @@ local function UpdateAbilitySlotInfo()
 			AccelerateSlotted = i-2
 		elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
 			WeaknessToElementsSlotted = i-2
+		elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
+			SoulTrapSlotted = i-2
 		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 		else 
 			d("Unrecognized ability:"..AbilityName)
