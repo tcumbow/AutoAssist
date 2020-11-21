@@ -108,6 +108,10 @@ local function BigLogicRoutine()
 		SetPixel(BurstHealSlotted)
 	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
 		SetPixel(BurstHealSlotted)
+	elseif BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.60 and MagickaPercent > 0.80 then
+		SetPixel(BurstHealSlotted)
+	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.60 and MagickaPercent > 0.80 then
+		SetPixel(BurstHealSlotted)
 	elseif HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 		SetPixel(HealOverTimeSlotted)
 	elseif RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
