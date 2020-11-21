@@ -443,7 +443,11 @@ local function OnEventMountedStateChanged(eventCode,mounted)
 end
 
 local function OnEventInteractableTargetChanged()
-	local action, interactableName, mystery1, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
+	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
+	if blocked then
+		AvailableReticleTarget = nil
+		AvailableReticleInteraction = nil
+	end
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
