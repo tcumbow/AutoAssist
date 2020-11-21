@@ -18,6 +18,7 @@ local MustInterrupt = false
 local MustBreakFree = false
 local MustBlock = false
 local Sprinting = false
+local LastEnemySightTime = 0
 
 
 local TargetNotTaunted = false
@@ -78,6 +79,13 @@ local function SetSprintingTrue()
 	Sprinting = true
 end
 
+local function EnemiesAround()
+	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then
+		return false
+	else
+		return true
+	end
+end
 
 
 
@@ -133,7 +141,7 @@ local function BigLogicRoutine()
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
 		Sprinting = false
-	elseif InCombat == true and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
+	elseif InCombat and EnemiesAround() and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
@@ -210,6 +218,7 @@ end
 
 
 
+
 local function UpdateTargetInfo()
 	if (DoesUnitExist('reticleover') and not (IsUnitDead('reticleover'))) then -- have a target, scan for auras
 		-- local unitName = zo_strformat("<<t:1>>",GetUnitName('reticleover'))
@@ -222,6 +231,7 @@ local function UpdateTargetInfo()
 
 		if GetUnitReaction('reticleover') == UNIT_REACTION_HOSTILE then
 			TargetIsEnemy = true
+			LastEnemySightTime = GetGameTimeMilliseconds()
 		else
 			TargetIsEnemy = false
 		end
