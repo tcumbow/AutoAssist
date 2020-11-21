@@ -241,7 +241,7 @@ local function UpdateTargetInfo()
 			TargetIsEnemy = false
 		end
 
-		if GetUnitDifficulty("reticleover") == MONSTER_DIFFICULTY_DEADLY then
+		if GetUnitDifficulty("reticleover") >= 3 then
 			TargetIsBoss = true
 			InBossBattle = true
 		else
