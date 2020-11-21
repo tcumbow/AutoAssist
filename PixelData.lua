@@ -30,6 +30,7 @@ local TargetNotMajorBreach = false
 local TargetMaxHealth = 0
 
 local AvailableReticleInteraction = nil
+local AvailableReticleTarget = nil
 
 local FrontBar, BackBar = false, false
 local InBossBattle = false
@@ -123,7 +124,7 @@ local function BigLogicRoutine()
 		SetPixel(RitualSlotted)
 	elseif FocusSlotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
 		SetPixel(FocusSlotted)
-	elseif (AvailableReticleInteraction == "Search") then
+	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
 		Sprinting = false
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
@@ -146,7 +147,7 @@ local function BigLogicRoutine()
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction == "Cut" or AvailableReticleInteraction == "Mine" or AvailableReticleInteraction == "Collect" or AvailableReticleInteraction == "Loot") and not InCombat then
+	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and AvailableReticleTarget=="Drink") or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
 		Sprinting = false
 	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
@@ -432,10 +433,13 @@ end
 
 local function OnEventInteractableTargetChanged()
 	local action, interactableName, mystery1, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
-	if AvailableReticleInteraction ~= action then
+	d(interactableName)
+	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
+		AvailableReticleTarget = interactableName
 		BigLogicRoutine()
 	end
+	
 end
 
 
