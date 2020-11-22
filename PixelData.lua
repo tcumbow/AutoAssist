@@ -21,6 +21,8 @@ local MustBreakFree = false
 local MustBlock = false
 local Sprinting = false
 local LastEnemySightTime = 0
+local Hidden = false
+local Crouching = false
 
 local CurrentPixel = 0
 local PreviousPixel = 0
@@ -171,7 +173,7 @@ local function BigLogicRoutine()
 		SetPixel(RapidManeuverSlotted)
 	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(AccelerateSlotted)
-	elseif not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
+	elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		-- zo_callLater(SetSprintingTrue, 100)
 	else
@@ -503,6 +505,25 @@ local function OnEventGroupSupportRangeUpdate()
 	BigLogicRoutine()
 end
 
+local function OnEventStealthChange(_,_,stealthState)
+	if stealthState > 0 then
+		Crouching = true
+		d("Crouching")
+		if stealthState == 3 then
+			Hidden = true
+			d("Hidden")
+		else
+			Hidden = false
+			d("Not Hidden")
+		end
+	else
+		Crouching = false
+		d("Not Crouching")
+		Hidden = false
+		d("Not Hidden")
+	end
+end
+
 local function OnEventCombatTipDisplay(_, tipId)
 	if tipId == 2 then
 		return
@@ -646,6 +667,7 @@ local function OnAddonLoaded(event, name)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED, OnEventReticleChanged)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_WEAPON_PAIR_LOCK_CHANGED, OnEventBarSwap)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACTION_SLOT_UPDATED, OnEventBarSwap)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_STEALTH_STATE_CHANGED, OnEventStealthChange)
 		-- EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_SKILL_BUILD_SELECTION_UPDATED, OnEventAbilityChange) -- Turns out this isn't the right event, I'm just going to update abilities when combat begins
 		-- EVENT_MANAGER:AddFilterForEvent(ADDON_NAME, EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 		ZO_PreHookHandler(RETICLE.interact, "OnEffectivelyShown", OnEventInteractableTargetChanged)

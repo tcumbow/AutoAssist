@@ -47,6 +47,7 @@
         "RETICLE",
         "ZO_PreHookHandler",
         "EVENT_WEAPON_PAIR_LOCK_CHANGED",
-        "EVENT_ADD_ON_LOADED"
+        "EVENT_ADD_ON_LOADED",
+        "EVENT_STEALTH_STATE_CHANGED"
     ]
 }
