@@ -82,9 +82,9 @@ local function SetPixel(x)
 end
 
 
-local function SetSprintingTrue()
-	Sprinting = true
-end
+-- local function SetSprintingTrue()
+-- 	Sprinting = true
+-- end
 
 local function EnemiesAround()
 	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then
@@ -174,7 +174,7 @@ local function BigLogicRoutine()
 		Sprinting = false
 	elseif not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
-		zo_callLater(SetSprintingTrue, 100)
+		-- zo_callLater(SetSprintingTrue, 100)
 	else
 		SetPixel(DoNothing)
 	end
@@ -485,8 +485,8 @@ local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, pow
 		StaminaPrevious = Stamina
 		Stamina = powerValue
 		StaminaPercent = powerValue / powerMax
-		if (powerValue == powerMax or Stamina > StaminaPrevious) and not Mounted then Sprinting = false end
-
+		if (powerValue == powerMax or Stamina > StaminaPrevious) and not Mounted then Sprinting = false
+		elseif CurrentPixel == DoSprint and Stamina < StaminaPrevious and not Mounted then Sprinting = true end
 		BigLogicRoutine()
 	elseif unitTag=="player" and powerType==POWERTYPE_MOUNT_STAMINA and powerValue==powerMax and Mounted then
 		Sprinting = false
