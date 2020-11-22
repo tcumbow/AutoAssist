@@ -169,6 +169,8 @@ local function BigLogicRoutine()
 		zo_callLater(PD_StopReelInFish, 2000)
 	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
+	elseif (AvailableReticleInteraction=="Steal From") and Hidden and not InCombat then
+		SetPixel(DoInteract)
 	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(RapidManeuverSlotted)
 	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
