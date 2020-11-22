@@ -259,7 +259,7 @@ local function UpdateTargetInfo()
 		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
 		TargetMaxHealth = maxHp
 		
-		numAuras = GetNumBuffs('reticleover')
+		local numAuras = GetNumBuffs('reticleover')
 
 		TargetNotVampBane = true
 		TargetNotTaunted = true
@@ -397,8 +397,8 @@ local function UpdateBuffs()
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
 	if numBuffs > 0 then
-		optimalBuffOverlap = 200 -- constant
-		msUntilBuffRecheckNeeded = 999999 -- if this value isn't replaced, then a buff recheck won't be scheduled
+		local optimalBuffOverlap = 200 -- constant
+		local msUntilBuffRecheckNeeded = 999999 -- if this value isn't replaced, then a buff recheck won't be scheduled
 		for i = 1, numBuffs do
 			local name, _, endTime, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
 			local now = GetGameTimeMilliseconds()
