@@ -142,7 +142,6 @@ local function BigLogicRoutine()
 		SetPixel(SoulTrapSlotted)
 	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
-		Sprinting = false
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DegenerationSlotted)
 	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
@@ -157,7 +156,6 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-		Sprinting = false
 	elseif SunFireSlotted and TargetNotVampBane and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
 	elseif SunFireSlotted and MagickaPercent > 0.90 and InCombat and TargetIsEnemy then
@@ -169,19 +167,17 @@ local function BigLogicRoutine()
 		zo_callLater(PD_StopReelInFish, 2000)
 	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
-		Sprinting = false
 	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(RapidManeuverSlotted)
-		Sprinting = false
 	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(AccelerateSlotted)
-		Sprinting = false
 	elseif not InCombat and Moving and not Sprinting and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		-- zo_callLater(SetSprintingTrue, 100)
 	else
 		SetPixel(DoNothing)
 	end
+	if CurrentPixel ~= DoSprint and CurrentPixel ~= DoMountSprint and CurrentPixel ~= DoNothing then Sprinting = false end
 end
 
 
