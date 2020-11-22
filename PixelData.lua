@@ -98,6 +98,8 @@ end
 
 
 local function BigLogicRoutine()
+	Moving = IsPlayerMoving()
+	if not Moving then Sprinting = false end
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
 	elseif RapidManeuverSlotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
@@ -375,8 +377,6 @@ end
 
 local function PeriodicUpdate()
 	if Moving ~= IsPlayerMoving() then
-		Moving = IsPlayerMoving()
-		if not Moving then Sprinting = false end
 		BigLogicRoutine()
 	end
 	zo_callLater(PeriodicUpdate,250)
