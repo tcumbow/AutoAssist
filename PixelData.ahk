@@ -99,6 +99,13 @@ Loop{
                     Send g
                     LastActionTime := A_TickCount
                 }
+            Case "0x00000f": ;DoCrouch
+                if (GetKeyState("6"))
+                    Send {6 up}
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
+                    Send {Ctrl}
+                    LastActionTime := A_TickCount
+                }
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}

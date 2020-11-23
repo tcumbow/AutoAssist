@@ -23,6 +23,8 @@ local Sprinting = false
 local LastEnemySightTime = 0
 local Hidden = false
 local Crouching = false
+local CrouchWasAuto = false
+local LastStealSightTime = 0
 
 local CurrentPixel = 0
 local PreviousPixel = 0
@@ -70,6 +72,7 @@ local DoLightAttack = 11
 local DoInteract = 12
 local DoSprint = 13
 local DoMountSprint = 14
+local DoCrouch = 15
 
 
 
@@ -171,6 +174,11 @@ local function BigLogicRoutine()
 		SetPixel(DoInteract)
 	elseif (AvailableReticleInteraction=="Steal From") and Hidden and not InCombat then
 		SetPixel(DoInteract)
+	elseif (AvailableReticleInteraction=="Steal From") and not Crouching and not InCombat then
+		SetPixel(DoCrouch)
+		CrouchWasAuto = true
+	elseif (AvailableReticleInteraction~="Steal From") and Crouching and CrouchWasAuto then
+		SetPixel(DoCrouch)
 	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(RapidManeuverSlotted)
 	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
@@ -520,6 +528,7 @@ local function OnEventStealthChange(_,_,stealthState)
 		end
 	else
 		Crouching = false
+		CrouchWasAuto = false
 		d("Not Crouching")
 		Hidden = false
 		d("Not Hidden")
