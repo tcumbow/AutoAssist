@@ -2,6 +2,7 @@ local ADDON_NAME = "PixelData"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
+local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
 local Moving = false
 local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
@@ -75,12 +76,6 @@ local DoMountSprint = 14
 local DoCrouch = 15
 
 
-
-
-
-local RawPlayerName = GetRawUnitName("player")
-
-
 local function SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
 	PreviousPixel = CurrentPixel
@@ -88,25 +83,16 @@ local function SetPixel(x)
 	-- d(x)
 end
 
-
--- local function SetSprintingTrue()
--- 	Sprinting = true
--- end
-
-local function EnemiesAround()
-	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then
-		return false
-	else
-		return true
-	end
+local function UpdateLastSights()
+	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
+	if AvailableReticleInteraction == "Steal From" then LastStealSightTime = GetGameTimeMilliseconds() end
 end
-
-
-
 
 local function BigLogicRoutine()
 	Moving = IsPlayerMoving()
 	if not Moving then Sprinting = false end
+	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
+	
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
 	elseif RapidManeuverSlotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
@@ -165,7 +151,7 @@ local function BigLogicRoutine()
 		SetPixel(SunFireSlotted)
 	elseif SunFireSlotted and MagickaPercent > 0.90 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
-	elseif InCombat and EnemiesAround() and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
+	elseif InCombat and EnemiesAround and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
@@ -189,6 +175,7 @@ local function BigLogicRoutine()
 	else
 		SetPixel(DoNothing)
 	end
+
 	if CurrentPixel ~= DoSprint and CurrentPixel ~= DoMountSprint and CurrentPixel ~= DoNothing then Sprinting = false end
 end
 
@@ -260,7 +247,6 @@ local function UpdateTargetInfo()
 
 		if GetUnitReaction('reticleover') == UNIT_REACTION_HOSTILE then
 			TargetIsEnemy = true
-			LastEnemySightTime = GetGameTimeMilliseconds()
 		else
 			TargetIsEnemy = false
 		end
@@ -386,6 +372,7 @@ end
 
 
 local function PeriodicUpdate()
+	UpdateLastSights()
 	if Moving ~= IsPlayerMoving() then
 		BigLogicRoutine()
 	end
@@ -474,7 +461,6 @@ local function OnEventInteractableTargetChanged()
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
-		if AvailableReticleInteraction == "Steal From" then LastStealSightTime = GetGameTimeMilliseconds() end
 		BigLogicRoutine()
 	end
 	
