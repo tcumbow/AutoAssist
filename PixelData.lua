@@ -286,7 +286,7 @@ local function UpdateTargetInfo()
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
 				if name=="Taunt" then
 					TargetNotTaunted = false
-				elseif name=="Vampire's Bane" then
+				elseif name=="Vampire's Bane" or name=="Reflective Light" or name=="Sun Fire" then
 					TargetNotSunFired = false
 				elseif name=="Major Breach" then
 					TargetNotMajorBreach = false
