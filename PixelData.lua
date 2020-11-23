@@ -85,7 +85,7 @@ end
 
 local function UpdateLastSights()
 	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
-	if AvailableReticleInteraction == "Steal" then LastStealSightTime = GetGameTimeMilliseconds() end
+	if AvailableReticleInteraction == "Steal" or AvailableReticleInteraction == "BlockedSteal" then LastStealSightTime = GetGameTimeMilliseconds() end
 end
 
 local function BigLogicRoutine()
@@ -453,11 +453,15 @@ end
 
 local function OnEventInteractableTargetChanged()
 	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
+	if action == "Steal From" then action = "Steal" end
 	if blocked or additionalInfo == 2 then
-		action = nil
+		if action == "Steal" then
+			action = "BlockedSteal"
+		else
+			action = nil
+		end
 		interactableName = nil
 	end
-	if action == "Steal From" then action = "Steal" end
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
