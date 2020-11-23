@@ -510,20 +510,15 @@ end
 local function OnEventStealthChange(_,_,stealthState)
 	if stealthState > 0 then
 		Crouching = true
-		d("Crouching")
 		if stealthState == 3 then
 			Hidden = true
-			d("Hidden")
 		else
 			Hidden = false
-			d("Not Hidden")
 		end
 	else
 		Crouching = false
 		CrouchWasAuto = false
-		d("Not Crouching")
 		Hidden = false
-		d("Not Hidden")
 	end
 end
 
