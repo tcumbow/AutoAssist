@@ -33,7 +33,7 @@ local TargetNotTaunted = false
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
 local TargetIsBoss = false
-local TargetNotVampBane = false
+local TargetNotSunFired = false
 local TargetNotMajorBreach = false
 local TargetMaxHealth = 0
 local TargetIsNotSoulTrap = false
@@ -161,7 +161,7 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-	elseif SunFireSlotted and TargetNotVampBane and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
+	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
 	elseif SunFireSlotted and MagickaPercent > 0.90 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
@@ -277,7 +277,7 @@ local function UpdateTargetInfo()
 		
 		local numAuras = GetNumBuffs('reticleover')
 
-		TargetNotVampBane = true
+		TargetNotSunFired = true
 		TargetNotTaunted = true
 		TargetNotMajorBreach = true
 		TargetIsNotSoulTrap = true
@@ -287,7 +287,7 @@ local function UpdateTargetInfo()
 				if name=="Taunt" then
 					TargetNotTaunted = false
 				elseif name=="Vampire's Bane" then
-					TargetNotVampBane = false
+					TargetNotSunFired = false
 				elseif name=="Major Breach" then
 					TargetNotMajorBreach = false
 				elseif name=="Soul Trap" or name=="Soul Splitting Trap" then
@@ -299,7 +299,7 @@ local function UpdateTargetInfo()
 		TargetNotTaunted = false
 		TargetIsEnemy = false
 		TargetIsNotPlayer = false
-		TargetNotVampBane = false
+		TargetNotSunFired = false
 		TargetIsBoss = false
 		TargetNotMajorBreach = false
 		TargetIsNotSoulTrap = false
@@ -346,7 +346,7 @@ local function UpdateAbilitySlotInfo()
 			RitualSlotted = i-2
 		elseif AbilityName == "Degeneration" then
 			DegenerationSlotted = i-2
-		elseif AbilityName == "Vampire's Bane" then
+		elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
 			SunFireSlotted = i-2
 		elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
 			DamageShieldSlotted = i-2
