@@ -1,6 +1,6 @@
 add 1 to Red so this doesn't get fake-triggered
 detect when buffs are .25 secs away from fading
-add dependencies to txt file
+add dependencies to txt file or add detection in other direction
 add PD detection to all hooks in other add-ons
 Re-do buff detection to be more efficient? Deltas only?
 Make use of GetAbilityCost
@@ -8,3 +8,5 @@ Key binding to switch modes or end combat early, or force loot, or close up, or 
 re-check combat status when damage taken
 switch block to LPC, or keep sleep, or stamina loss, or event blocked
 Weave versions of each ability key
+move degeneration below DoT placement
+more single-target DoTs
