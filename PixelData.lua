@@ -2,6 +2,7 @@ local ADDON_NAME = "PixelData"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 
+local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
 local Moving = false
 local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
@@ -33,7 +34,7 @@ local TargetNotTaunted = false
 local TargetIsNotPlayer = false
 local TargetIsEnemy = false
 local TargetIsBoss = false
-local TargetNotVampBane = false
+local TargetNotSunFired = false
 local TargetNotMajorBreach = false
 local TargetMaxHealth = 0
 local TargetIsNotSoulTrap = false
@@ -75,12 +76,6 @@ local DoMountSprint = 14
 local DoCrouch = 15
 
 
-
-
-
-local RawPlayerName = GetRawUnitName("player")
-
-
 local function SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
 	PreviousPixel = CurrentPixel
@@ -88,25 +83,16 @@ local function SetPixel(x)
 	-- d(x)
 end
 
-
--- local function SetSprintingTrue()
--- 	Sprinting = true
--- end
-
-local function EnemiesAround()
-	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then
-		return false
-	else
-		return true
-	end
+local function UpdateLastSights()
+	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
+	if AvailableReticleInteraction == "Steal" or AvailableReticleInteraction == "BlockedSteal" then LastStealSightTime = GetGameTimeMilliseconds() end
 end
-
-
-
 
 local function BigLogicRoutine()
 	Moving = IsPlayerMoving()
 	if not Moving then Sprinting = false end
+	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
+	
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
 	elseif RapidManeuverSlotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
@@ -161,20 +147,20 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-	elseif SunFireSlotted and TargetNotVampBane and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
+	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
 	elseif SunFireSlotted and MagickaPercent > 0.90 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
-	elseif InCombat and EnemiesAround() and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
+	elseif InCombat and EnemiesAround and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
+	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Beets" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
-	elseif (AvailableReticleInteraction=="Steal From") and Hidden and not InCombat then
+	elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
 		SetPixel(DoInteract)
-	elseif (AvailableReticleInteraction=="Steal From") and not Crouching and not InCombat then
+	elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat then
 		SetPixel(DoCrouch)
 		CrouchWasAuto = true
 	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
@@ -189,6 +175,7 @@ local function BigLogicRoutine()
 	else
 		SetPixel(DoNothing)
 	end
+
 	if CurrentPixel ~= DoSprint and CurrentPixel ~= DoMountSprint and CurrentPixel ~= DoNothing then Sprinting = false end
 end
 
@@ -260,7 +247,6 @@ local function UpdateTargetInfo()
 
 		if GetUnitReaction('reticleover') == UNIT_REACTION_HOSTILE then
 			TargetIsEnemy = true
-			LastEnemySightTime = GetGameTimeMilliseconds()
 		else
 			TargetIsEnemy = false
 		end
@@ -277,7 +263,7 @@ local function UpdateTargetInfo()
 		
 		local numAuras = GetNumBuffs('reticleover')
 
-		TargetNotVampBane = true
+		TargetNotSunFired = true
 		TargetNotTaunted = true
 		TargetNotMajorBreach = true
 		TargetIsNotSoulTrap = true
@@ -286,8 +272,8 @@ local function UpdateTargetInfo()
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
 				if name=="Taunt" then
 					TargetNotTaunted = false
-				elseif name=="Vampire's Bane" then
-					TargetNotVampBane = false
+				elseif name=="Vampire's Bane" or name=="Reflective Light" or name=="Sun Fire" then
+					TargetNotSunFired = false
 				elseif name=="Major Breach" then
 					TargetNotMajorBreach = false
 				elseif name=="Soul Trap" or name=="Soul Splitting Trap" then
@@ -299,7 +285,7 @@ local function UpdateTargetInfo()
 		TargetNotTaunted = false
 		TargetIsEnemy = false
 		TargetIsNotPlayer = false
-		TargetNotVampBane = false
+		TargetNotSunFired = false
 		TargetIsBoss = false
 		TargetNotMajorBreach = false
 		TargetIsNotSoulTrap = false
@@ -346,7 +332,7 @@ local function UpdateAbilitySlotInfo()
 			RitualSlotted = i-2
 		elseif AbilityName == "Degeneration" then
 			DegenerationSlotted = i-2
-		elseif AbilityName == "Vampire's Bane" then
+		elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
 			SunFireSlotted = i-2
 		elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
 			DamageShieldSlotted = i-2
@@ -386,6 +372,7 @@ end
 
 
 local function PeriodicUpdate()
+	UpdateLastSights()
 	if Moving ~= IsPlayerMoving() then
 		BigLogicRoutine()
 	end
@@ -466,15 +453,18 @@ end
 
 local function OnEventInteractableTargetChanged()
 	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
-	d(additionalInfo)
+	if action == "Steal From" then action = "Steal" end
 	if blocked or additionalInfo == 2 then
-		action = nil
+		if action == "Steal" then
+			action = "BlockedSteal"
+		else
+			action = nil
+		end
 		interactableName = nil
 	end
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
-		if AvailableReticleInteraction == "Steal From" then LastStealSightTime = GetGameTimeMilliseconds() end
 		BigLogicRoutine()
 	end
 	
@@ -520,21 +510,17 @@ end
 local function OnEventStealthChange(_,_,stealthState)
 	if stealthState > 0 then
 		Crouching = true
-		d("Crouching")
 		if stealthState == 3 then
 			Hidden = true
-			d("Hidden")
 		else
 			Hidden = false
-			d("Not Hidden")
 		end
 	else
 		Crouching = false
 		CrouchWasAuto = false
-		d("Not Crouching")
 		Hidden = false
-		d("Not Hidden")
 	end
+	BigLogicRoutine()
 end
 
 local function OnEventCombatTipDisplay(_, tipId)
