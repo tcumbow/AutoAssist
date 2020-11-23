@@ -177,7 +177,7 @@ local function BigLogicRoutine()
 	elseif (AvailableReticleInteraction=="Steal From") and not Crouching and not InCombat then
 		SetPixel(DoCrouch)
 		CrouchWasAuto = true
-	elseif (AvailableReticleInteraction~="Steal From") and Crouching and CrouchWasAuto then
+	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
 		SetPixel(DoCrouch)
 	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(RapidManeuverSlotted)
@@ -466,13 +466,15 @@ end
 
 local function OnEventInteractableTargetChanged()
 	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
-	if blocked then
-		AvailableReticleTarget = nil
-		AvailableReticleInteraction = nil
+	d(additionalInfo)
+	if blocked or additionalInfo == 2 then
+		action = nil
+		interactableName = nil
 	end
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
+		if AvailableReticleInteraction == "Steal From" then LastStealSightTime = GetGameTimeMilliseconds() end
 		BigLogicRoutine()
 	end
 	
