@@ -520,6 +520,7 @@ local function OnEventStealthChange(_,_,stealthState)
 		CrouchWasAuto = false
 		Hidden = false
 	end
+	BigLogicRoutine()
 end
 
 local function OnEventCombatTipDisplay(_, tipId)
