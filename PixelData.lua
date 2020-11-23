@@ -85,7 +85,7 @@ end
 
 local function UpdateLastSights()
 	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
-	if AvailableReticleInteraction == "Steal From" then LastStealSightTime = GetGameTimeMilliseconds() end
+	if AvailableReticleInteraction == "Steal" then LastStealSightTime = GetGameTimeMilliseconds() end
 end
 
 local function BigLogicRoutine()
@@ -158,9 +158,9 @@ local function BigLogicRoutine()
 		zo_callLater(PD_StopReelInFish, 2000)
 	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
-	elseif (AvailableReticleInteraction=="Steal From") and Hidden and not InCombat then
+	elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
 		SetPixel(DoInteract)
-	elseif (AvailableReticleInteraction=="Steal From") and not Crouching and not InCombat then
+	elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat then
 		SetPixel(DoCrouch)
 		CrouchWasAuto = true
 	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
@@ -453,11 +453,11 @@ end
 
 local function OnEventInteractableTargetChanged()
 	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
-	d(additionalInfo)
 	if blocked or additionalInfo == 2 then
 		action = nil
 		interactableName = nil
 	end
+	if action == "Steal From" then action = "Steal" end
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
