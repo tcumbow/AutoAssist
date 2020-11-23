@@ -147,9 +147,9 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
+	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
-	elseif SunFireSlotted and MagickaPercent > 0.90 and InCombat and TargetIsEnemy then
+	elseif SunFireSlotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
 		SetPixel(DoHeavyAttack)
