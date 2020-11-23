@@ -8,5 +8,4 @@ Key binding to switch modes or end combat early, or force loot, or close up, or 
 re-check combat status when damage taken
 switch block to LPC, or keep sleep, or stamina loss, or event blocked
 Weave versions of each ability key
-move degeneration below DoT placement
 more single-target DoTs

@@ -133,22 +133,22 @@ local function BigLogicRoutine()
 		SetPixel(SoulTrapSlotted)
 	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
+	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		SetPixel(SunFireSlotted)
 	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DegenerationSlotted)
 	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
 		SetPixel(WeaknessToElementsSlotted)
+	elseif SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
+		SetPixel(SunFireSlotted)
 	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(ImbueWeaponSlotted)
 	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
 		SetPixel(DamageShieldSlotted)
-	elseif SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
-		SetPixel(SunFireSlotted)
 	elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 		SetPixel(DoNothing)
 	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(MeditationSlotted)
-	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
-		SetPixel(SunFireSlotted)
 	elseif SunFireSlotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(SunFireSlotted)
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
