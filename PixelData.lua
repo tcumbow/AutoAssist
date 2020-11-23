@@ -452,6 +452,7 @@ local function OnEventMountedStateChanged(eventCode,mounted)
 end
 
 local function OnEventInteractableTargetChanged()
+	UpdateLastSights()
 	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
 	if action == "Steal From" then action = "Steal" end
 	if blocked or additionalInfo == 2 then
@@ -465,6 +466,7 @@ local function OnEventInteractableTargetChanged()
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
+		UpdateLastSights()
 		BigLogicRoutine()
 	end
 	
@@ -570,6 +572,7 @@ end
 
 
 local function OnEventReticleChanged()
+	UpdateLastSights()
 	UpdateTargetInfo()
 	BigLogicRoutine()
 end
