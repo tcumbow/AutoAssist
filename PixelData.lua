@@ -374,7 +374,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
 				SoulTrap.Slotted = true
 				SoulTrap[barNumIterator] = i-2
-			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" then
+			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
 				DestructiveTouch.Slotted = true
 				DestructiveTouch[barNumIterator] = i-2
 			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
