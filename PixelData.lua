@@ -5,7 +5,7 @@ local ADDON_AUTHOR = "Tom Cumbow"
 local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
 local Moving = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local MagickaPercent = 1.00
@@ -46,21 +46,21 @@ local FrontBar, BackBar = false, false
 local InBossBattle = false
 local ReelInFish = false
 
-local BurstHealSlotted = false
-local HealOverTimeSlotted = false
-local DegenerationSlotted = false
-local RitualSlotted = false
-local RemoteInterruptSlotted = false
-local TauntSlotted = false
-local SunFireSlotted = false
-local FocusSlotted = false
-local MeditationSlotted = false
-local ImbueWeaponSlotted = false
-local DamageShieldSlotted = false
-local RapidManeuverSlotted = false
-local AccelerateSlotted = false
-local WeaknessToElementsSlotted = false
-local SoulTrapSlotted = false
+local BurstHeal = { }
+local HealOverTime = { }
+local Degeneration = { }
+local Ritual = { }
+local RemoteInterrupt = { }
+local Taunt = { }
+local SunFire = { }
+local Focus = { }
+local Meditation = { }
+local ImbueWeapon = { }
+local DamageShield = { }
+local RapidManeuver = { }
+local Accelerate = { }
+local WeaknessToElements = { }
+local SoulTrap = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -143,7 +143,7 @@ local function BigLogicRoutine()
 		SetPixel(SunFireSlotted)
 	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(ImbueWeaponSlotted)
-	elseif DamageShieldSlotted and InCombat == true and DamageShield == false and MagickaPercent > 0.50 then
+	elseif DamageShieldSlotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
 		SetPixel(DamageShieldSlotted)
 	elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 		SetPixel(DoNothing)
@@ -298,21 +298,21 @@ end
 
 local function UpdateAbilitySlotInfo()
 
-	BurstHealSlotted = false
-	HealOverTimeSlotted = false
-	DegenerationSlotted = false
-	RitualSlotted = false
-	RemoteInterruptSlotted = false
-	TauntSlotted = false
-	SunFireSlotted = false
-	FocusSlotted = false
-	MeditationSlotted = false
-	ImbueWeaponSlotted = false
-	DamageShieldSlotted = false
-	RapidManeuverSlotted = false
-	AccelerateSlotted = false
-	WeaknessToElementsSlotted = false
-	SoulTrapSlotted = false
+	BurstHeal = { }
+	HealOverTime = { }
+	Degeneration = { }
+	Ritual = { }
+	RemoteInterrupt = { }
+	Taunt = { }
+	SunFire = { }
+	Focus = { }
+	Meditation = { }
+	ImbueWeapon = { }
+	DamageShield = { }
+	RapidManeuver = { }
+	Accelerate = { }
+	WeaknessToElements = { }
+	SoulTrap = { }
 
 	for i = 3, 7 do
 		local AbilityName = GetAbilityName(GetSlotBoundId(i))
@@ -394,7 +394,7 @@ end
 
 
 local function UpdateBuffs()
-	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShield, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
+	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
 	if numBuffs > 0 then
@@ -421,9 +421,9 @@ local function UpdateBuffs()
 				ImbueWeaponActive = true
 				if timeLeft + 100 < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft + 100 end
 			elseif name=="Blazing Shield" or name=="Radiant Ward" then
-				DamageShield = true
+				DamageShieldActive = true
 			elseif name=="Dampen Magic" then
-				DamageShield = true
+				DamageShieldActive = true
 			elseif name=="Major Expedition" and timeLeft>optimalBuffOverlap then
 				MajorExpedition = true
 				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
