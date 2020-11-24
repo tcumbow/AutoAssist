@@ -78,8 +78,8 @@ local DoInteract = 12
 local DoSprint = 13
 local DoMountSprint = 14
 local DoCrouch = 15
--- DoFrontBar = 16
--- DoBackBar = 17
+local DoFrontBar = 16
+local DoBackBar = 17
 
 
 local function SetPixel(x)
@@ -167,7 +167,11 @@ local function BigLogicRoutine()
 	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 	-- 	SetPixel(DoAbility(SunFire))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
-		SetPixel(DoHeavyAttack)
+		if FrontBar then
+			SetPixel(DoBackBar) -- assumes lightning staff on back bar, prioritizing it for higher DPS
+		else
+			SetPixel(DoHeavyAttack)
+		end
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
