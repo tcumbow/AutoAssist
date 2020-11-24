@@ -63,6 +63,7 @@ local RapidManeuver = { }
 local Accelerate = { }
 local WeaknessToElements = { }
 local SoulTrap = { }
+local DestructiveTouch = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -323,6 +324,7 @@ local function UpdateAbilitySlotInfo()
 	Accelerate = { }
 	WeaknessToElements = { }
 	SoulTrap = { }
+	DestructiveTouch = { }
 
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
@@ -372,6 +374,9 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
 				SoulTrap.Slotted = true
 				SoulTrap[barNumIterator] = i-2
+			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" then
+				DestructiveTouch.Slotted = true
+				DestructiveTouch[barNumIterator] = i-2
 			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 			else 
 				d("Unrecognized ability:"..AbilityName)
