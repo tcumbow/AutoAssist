@@ -291,7 +291,7 @@ local function UpdateTargetInfo()
 					TargetNotSunFired = false
 				elseif name=="Major Breach" then
 					TargetNotMajorBreach = false
-				elseif name=="Soul Trap" or name=="Soul Splitting Trap" then
+				elseif name=="Soul Trap" or name=="Soul Splitting Trap" or name=="Consuming Trap" then
 					TargetIsNotSoulTrap = false
 				elseif name == "Destructive Touch" or name == "Shock Touch" or name == "Destructive Reach" or name == "Shock Reach" then
 					TargetIsNotDestructiveTouched = false
@@ -378,7 +378,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
 				WeaknessToElements.Slotted = true
 				WeaknessToElements[barNumIterator] = i-2
-			elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
+			elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" or AbilityName == "Consuming Trap" then
 				SoulTrap.Slotted = true
 				SoulTrap[barNumIterator] = i-2
 			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
