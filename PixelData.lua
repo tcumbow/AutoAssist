@@ -281,7 +281,7 @@ local function UpdateTargetInfo()
 		TargetNotTaunted = true
 		TargetNotMajorBreach = true
 		TargetIsNotSoulTrap = true
-		TargetIsNotDestructiveTouched = false
+		TargetIsNotDestructiveTouched = true
 		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
