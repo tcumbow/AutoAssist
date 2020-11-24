@@ -110,7 +110,7 @@ Loop{
                 if (GetKeyState("6"))
                     Send {6 up}
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
-                    Send `
+                    Send ``
                     LastActionTime := A_TickCount
                 }
             Default: ;Same as DoNothing
