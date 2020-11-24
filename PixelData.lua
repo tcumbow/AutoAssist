@@ -40,6 +40,7 @@ local TargetNotSunFired = false
 local TargetNotMajorBreach = false
 local TargetMaxHealth = 0
 local TargetIsNotSoulTrap = false
+local TargetIsNotDestructiveTouched = false
 
 local AvailableReticleInteraction = nil
 local AvailableReticleTarget = nil
@@ -146,6 +147,8 @@ local function BigLogicRoutine()
 		SetPixel(DoInteract)
 	elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(SunFire))
+	elseif DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(DestructiveTouch))
 	elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(Degeneration))
 	elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
@@ -278,6 +281,7 @@ local function UpdateTargetInfo()
 		TargetNotTaunted = true
 		TargetNotMajorBreach = true
 		TargetIsNotSoulTrap = true
+		TargetIsNotDestructiveTouched = false
 		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
@@ -289,6 +293,8 @@ local function UpdateTargetInfo()
 					TargetNotMajorBreach = false
 				elseif name=="Soul Trap" or name=="Soul Splitting Trap" then
 					TargetIsNotSoulTrap = false
+				elseif name == "Destructive Touch" or name == "Shock Touch" or name == "Destructive Reach" or name == "Shock Reach" then
+					TargetIsNotDestructiveTouched = false
 				end
 			end
 		end
@@ -300,6 +306,7 @@ local function UpdateTargetInfo()
 		TargetIsBoss = false
 		TargetNotMajorBreach = false
 		TargetIsNotSoulTrap = false
+		TargetIsNotDestructiveTouched = false
 	end
 end
 
@@ -374,7 +381,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
 				SoulTrap.Slotted = true
 				SoulTrap[barNumIterator] = i-2
-			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
+			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
 				DestructiveTouch.Slotted = true
 				DestructiveTouch[barNumIterator] = i-2
 			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
