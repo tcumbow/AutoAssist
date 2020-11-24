@@ -156,7 +156,7 @@ local function BigLogicRoutine()
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Beets" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
+	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Grapes" or AvailableReticleTarget=="Tankard" or AvailableReticleTarget=="Cheese" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Beets" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
 	elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
 		SetPixel(DoInteract)
