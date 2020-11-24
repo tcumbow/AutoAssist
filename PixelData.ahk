@@ -106,6 +106,13 @@ Loop{
                     Send {Ctrl}
                     LastActionTime := A_TickCount
                 }
+            Case "0x000010": ;DoBarSwap
+                if (GetKeyState("6"))
+                    Send {6 up}
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send `
+                    LastActionTime := A_TickCount
+                }
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}

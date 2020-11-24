@@ -26,6 +26,8 @@ local Hidden = false
 local Crouching = false
 local CrouchWasAuto = false
 local LastStealSightTime = 0
+local CurrentBar = 0
+local OtherBar = 0
 
 local CurrentPixel = 0
 local PreviousPixel = 0
@@ -74,6 +76,7 @@ local DoInteract = 12
 local DoSprint = 13
 local DoMountSprint = 14
 local DoCrouch = 15
+local DoBarSwap = 16
 
 
 local function SetPixel(x)
@@ -81,6 +84,13 @@ local function SetPixel(x)
 	PreviousPixel = CurrentPixel
 	CurrentPixel = x
 	-- d(x)
+end
+
+local function DoAbility(ability)
+	if ability[CurrentBar] then return ability[CurrentBar]
+	elseif ability[OtherBar] then return DoBarSwap
+	else d("Impossible situation in DoAbility function")
+	end
 end
 
 local function UpdateLastSights()
@@ -95,63 +105,63 @@ local function BigLogicRoutine()
 	
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
-	elseif RapidManeuverSlotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
-		SetPixel(RapidManeuverSlotted)
+	elseif RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
+		SetPixel(DoAbility(RapidManeuver))
 	elseif Mounted and Moving and not Sprinting then
 		SetPixel(DoMountSprint)
 	elseif Mounted then
 		SetPixel(DoNothing)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
-	elseif BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.40 then
-		SetPixel(BurstHealSlotted)
-	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
-		SetPixel(BurstHealSlotted)
-	elseif BurstHealSlotted and LowestGroupHealthPercentWithRegen < 0.60 and MagickaPercent > 0.80 then
-		SetPixel(BurstHealSlotted)
-	elseif BurstHealSlotted and LowestGroupHealthPercentWithoutRegen < 0.60 and MagickaPercent > 0.80 then
-		SetPixel(BurstHealSlotted)
-	elseif HealOverTimeSlotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
-		SetPixel(HealOverTimeSlotted)
-	elseif RemoteInterruptSlotted and MustInterrupt and MagickaPercent > 0.49 then
-		SetPixel(RemoteInterruptSlotted)
+	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.40 then
+		SetPixel(DoAbility(BurstHeal))
+	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
+		SetPixel(DoAbility(BurstHeal))
+	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.60 and MagickaPercent > 0.80 then
+		SetPixel(DoAbility(BurstHeal))
+	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithoutRegen < 0.60 and MagickaPercent > 0.80 then
+		SetPixel(DoAbility(BurstHeal))
+	elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
+		SetPixel(DoAbility(HealOverTime))
+	elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
+		SetPixel(DoAbility(RemoteInterrupt))
 	elseif MustInterrupt and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
-	elseif TauntSlotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
-		SetPixel(TauntSlotted)
+	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+		SetPixel(DoAbility(Taunt))
 	elseif MustBlock and StaminaPercent > 0.99 then
 		SetPixel(DoBlock)
 	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
 		SetPixel(DoRollDodge)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 		SetPixel(DoLightAttack)
-	elseif RitualSlotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
-		SetPixel(RitualSlotted)
-	elseif FocusSlotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
-		SetPixel(FocusSlotted)
-	elseif SoulTrapSlotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy and TargetIsNotPlayer and not TargetIsBoss then
-		SetPixel(SoulTrapSlotted)
+	elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+		SetPixel(DoAbility(Ritual))
+	elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
+		SetPixel(DoAbility(Focus))
+	elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy and TargetIsNotPlayer and not TargetIsBoss then
+		SetPixel(DoAbility(SoulTrap))
 	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
-	elseif SunFireSlotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
-		SetPixel(SunFireSlotted)
-	elseif DegenerationSlotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
-		SetPixel(DegenerationSlotted)
-	elseif WeaknessToElementsSlotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
-		SetPixel(WeaknessToElementsSlotted)
-	elseif SunFireSlotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
-		SetPixel(SunFireSlotted)
-	elseif ImbueWeaponSlotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
-		SetPixel(ImbueWeaponSlotted)
-	elseif DamageShieldSlotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
-		SetPixel(DamageShieldSlotted)
+	elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(SunFire))
+	elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(Degeneration))
+	elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
+		SetPixel(DoAbility(WeaknessToElements))
+	elseif SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
+		SetPixel(DoAbility(SunFire))
+	elseif ImbueWeapon.Slotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+		SetPixel(DoAbility(ImbueWeapon))
+	elseif DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
+		SetPixel(DoAbility(DamageShield))
 	elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 		SetPixel(DoNothing)
-	elseif MeditationSlotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
-		SetPixel(MeditationSlotted)
-	elseif SunFireSlotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
-		SetPixel(SunFireSlotted)
-	elseif InCombat and EnemiesAround and not ImbueWeaponActive and not (AccelerateSlotted and RapidManeuverSlotted and BackBar) then
+	elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
+		SetPixel(DoAbility(Meditation))
+	elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(SunFire))
+	elseif InCombat and EnemiesAround and not ImbueWeaponActive and not (Accelerate.Slotted and RapidManeuver.Slotted and BackBar) then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
@@ -165,10 +175,10 @@ local function BigLogicRoutine()
 		CrouchWasAuto = true
 	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
 		SetPixel(DoCrouch)
-	elseif RapidManeuverSlotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
-		SetPixel(RapidManeuverSlotted)
-	elseif AccelerateSlotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
-		SetPixel(AccelerateSlotted)
+	elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
+		SetPixel(DoAbility(RapidManeuver))
+	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
+		SetPixel(DoAbility(Accelerate))
 	elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
 		SetPixel(DoSprint)
 		-- zo_callLater(SetSprintingTrue, 100)
@@ -314,44 +324,60 @@ local function UpdateAbilitySlotInfo()
 	WeaknessToElements = { }
 	SoulTrap = { }
 
-	for i = 3, 7 do
-		local AbilityName = GetAbilityName(GetSlotBoundId(i))
-		if AbilityName == "Ritual of Rebirth" then
-			BurstHealSlotted = i-2
-		elseif AbilityName == "Rapid Regeneration" then
-			HealOverTimeSlotted = i-2
-		elseif AbilityName == "Inner Rage" then
-			TauntSlotted = i-2
-		elseif AbilityName == "Deep Thoughts" then
-			MeditationSlotted = i-2
-		elseif AbilityName == "Elemental Weapon" then
-			ImbueWeaponSlotted = i-2
-		elseif AbilityName == "Channeled Focus" then
-			FocusSlotted = i-2
-		elseif AbilityName == "Extended Ritual" then
-			RitualSlotted = i-2
-		elseif AbilityName == "Degeneration" then
-			DegenerationSlotted = i-2
-		elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
-			SunFireSlotted = i-2
-		elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
-			DamageShieldSlotted = i-2
-		elseif AbilityName == "Explosive Charge" then
-			RemoteInterruptSlotted = i-2
-		elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
-			RapidManeuverSlotted = i-2
-		elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
-			AccelerateSlotted = i-2
-		elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
-			WeaknessToElementsSlotted = i-2
-		elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
-			SoulTrapSlotted = i-2
-		elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
-		else 
-			d("Unrecognized ability:"..AbilityName)
+	for barNumIterator = 0, 1 do
+		for i = 3, 7 do
+			local AbilityName = GetAbilityName(GetSlotBoundId(i,barNumIterator))
+			if AbilityName == "Ritual of Rebirth" then
+				BurstHeal.Slotted = true
+				BurstHeal[barNumIterator] = i-2
+			elseif AbilityName == "Rapid Regeneration" then
+				HealOverTime.Slotted = true
+				HealOverTime[barNumIterator] = i-2
+			elseif AbilityName == "Inner Rage" then
+				Taunt.Slotted = true
+				Taunt[barNumIterator] = i-2
+			elseif AbilityName == "Deep Thoughts" then
+				Meditation.Slotted = true
+				Meditation[barNumIterator] = i-2
+			elseif AbilityName == "Elemental Weapon" then
+				ImbueWeapon.Slotted = true
+				ImbueWeapon[barNumIterator] = i-2
+			elseif AbilityName == "Channeled Focus" then
+				Focus.Slotted = true
+				Focus[barNumIterator] = i-2
+			elseif AbilityName == "Extended Ritual" then
+				Ritual.Slotted = true
+				Ritual[barNumIterator] = i-2
+			elseif AbilityName == "Degeneration" then
+				Degeneration.Slotted = true
+				Degeneration[barNumIterator] = i-2
+			elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
+				SunFire.Slotted = true
+				SunFire[barNumIterator] = i-2
+			elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
+				DamageShield.Slotted = true
+				DamageShield[barNumIterator] = i-2
+			elseif AbilityName == "Explosive Charge" then
+				RemoteInterrupt.Slotted = true
+				RemoteInterrupt[barNumIterator] = i-2
+			elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
+				RapidManeuver.Slotted = true
+				RapidManeuver[barNumIterator] = i-2
+			elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
+				Accelerate.Slotted = true
+				Accelerate[barNumIterator] = i-2
+			elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
+				WeaknessToElements.Slotted = true
+				WeaknessToElements[barNumIterator] = i-2
+			elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" then
+				SoulTrap.Slotted = true
+				SoulTrap[barNumIterator] = i-2
+			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+			else 
+				d("Unrecognized ability:"..AbilityName)
+			end
 		end
 	end
-
 end
 
 
@@ -359,13 +385,17 @@ end
 
 
 local function UpdateBarState()
-	local BarNum = GetActiveWeaponPairInfo()
-	if BarNum == 1 then
+	local barNum = GetActiveWeaponPairInfo()
+	if barNum == 1 then
 		FrontBar = true
 		BackBar = false
-	elseif BarNum == 2 then
+		CurrentBar = 0 --translating to match the zero-based bar numbering used by the ability routine above
+		OtherBar = 1
+	elseif barNum == 2 then
 		BackBar = true
 		FrontBar = false
+		CurrentBar = 1
+		OtherBar = 0
 	end
 end
 
