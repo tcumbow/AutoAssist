@@ -78,7 +78,8 @@ local DoInteract = 12
 local DoSprint = 13
 local DoMountSprint = 14
 local DoCrouch = 15
-local DoBarSwap = 16
+-- DoFrontBar = 16
+-- DoBackBar = 17
 
 
 local function SetPixel(x)
@@ -90,7 +91,7 @@ end
 
 local function DoAbility(ability)
 	if ability[CurrentBar] then return ability[CurrentBar]
-	elseif ability[OtherBar] then return DoBarSwap
+	elseif ability[OtherBar] then return (16+OtherBar)
 	else d("Impossible situation in DoAbility function")
 	end
 end
