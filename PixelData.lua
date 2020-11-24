@@ -142,10 +142,10 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(Ritual))
 	elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
 		SetPixel(DoAbility(Focus))
-	elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy and TargetIsNotPlayer and not TargetIsBoss then
-		SetPixel(DoAbility(SoulTrap))
 	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
+	elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(SoulTrap))
 	elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(SunFire))
 	elseif DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
