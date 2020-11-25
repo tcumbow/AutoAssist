@@ -70,9 +70,11 @@ Loop{
             Case "0x000009": ;DoBlock
                 if (GetKeyState("6"))
                     Send {6 up}
-                Send {9 down}
-                Sleep 1500
-                Send {9 up}
+                if (not GetKeyState("9")) {
+                    Send {9 down}
+                    Sleep 1500
+                    Send {9 up}
+                }
             Case "0x00000a": ;ReelInFish
                 if (GetKeyState("6"))
                     Send {6 up}
@@ -138,7 +140,8 @@ Loop{
                 if (GetKeyState("6"))
                     Send {6 up}
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 500) <= A_TickCount )) {
-                    Send {9 down}
+                    if (not GetKeyState("9"))
+                            Send {9 down}
                     LastActionTime := A_TickCount
                 }
             Default: ;Same as DoNothing
