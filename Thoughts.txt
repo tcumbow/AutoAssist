@@ -9,9 +9,10 @@ re-check combat status when damage taken
 switch block to LPC, or keep sleep, or stamina loss, or event blocked
 Weave versions of each ability key
 more single-target DoTs
-Just block if all else done and health is not full
+Just block if all else done and health is not full and/or in boss battle 
 Switch between ice block and regular blocks
 Adjust champ points for max blocking and redirect dodges
 Proc monster sets like Kena
 Radiating Regen with proactive mode? (And back to Earthgore)
 Replace MagPercent logic with #of spare burst heals to keep available
+
