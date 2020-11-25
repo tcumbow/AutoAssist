@@ -80,7 +80,7 @@ local DoMountSprint = 14
 local DoCrouch = 15
 local DoFrontBar = 16
 local DoBackBar = 17
-
+local DoLongBlock = 18
 
 local function SetPixel(x)
 	PDL:SetColor(0,0,(x/255))
@@ -166,6 +166,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(Meditation))
 	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 	-- 	SetPixel(DoAbility(SunFire))
+	elseif InCombat then
+		SetPixel(DoLongBlock)
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
 		if FrontBar then
 			SetPixel(DoBackBar) -- assumes lightning staff on back bar, prioritizing it for higher DPS
