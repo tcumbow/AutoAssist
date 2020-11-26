@@ -167,11 +167,7 @@ local function BigLogicRoutine()
 	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 	-- 	SetPixel(DoAbility(SunFire))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
-		if FrontBar then
-			SetPixel(DoBackBar) -- assumes lightning staff on back bar, prioritizing it for higher DPS
-		else
-			SetPixel(DoHeavyAttack)
-		end
+		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
