@@ -155,8 +155,9 @@ local function BigLogicRoutine()
 		SetPixel(DoBreakFreeInterrupt)
 	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		SetPixel(DoAbility(Taunt))
-	elseif MustBlock and StaminaPercent > 0.99 and ModPixel ~= ModBlock then
-		SetPixel(DoBlock)
+	elseif MustBlock and StaminaPercent > 0.99 then
+		ModPixel = ModBlock
+		SetPixel(DoNothing)
 	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
 		SetPixel(DoRollDodge)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
