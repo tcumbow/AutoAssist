@@ -365,7 +365,7 @@ local function UpdateAbilitySlotInfo()
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
 			local AbilityName = GetAbilityName(GetSlotBoundId(i,barNumIterator))
-			if AbilityName == "Ritual of Rebirth" then
+			if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
 				BurstHeal.Slotted = true
 				BurstHeal[barNumIterator] = i-2
 			elseif AbilityName == "Rapid Regeneration" then
