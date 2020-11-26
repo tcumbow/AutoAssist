@@ -10,8 +10,11 @@ local InputReady = true
 local InCombat = false
 local MagickaPercent = 1.00
 local StaminaPercent = 1.00
+local HealthPercent = 1.00
 local Stamina = 0
 local StaminaPrevious = 0
+local Health = 0
+local HealthPrevious = 0
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
 local Feared = false
@@ -542,6 +545,11 @@ local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, pow
 		Sprinting = true
 		BigLogicRoutine()
 	elseif powerType==POWERTYPE_HEALTH then
+		if unitTag=="player" then
+			HealthPrevious = Health
+			Health = powerValue
+			HealthPercent = powerValue / powerMax
+		end
 		UpdateLowestGroupHealth()
 		BigLogicRoutine()
 	end
