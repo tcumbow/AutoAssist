@@ -10,11 +10,33 @@ Loop{
     PixelAction := SubStr(PixelColor,7,2)
     if (not (GetKeyState("F10"))) ; I have F10 bound to several key buttons on my controller. It acts as a kill switch so that, for example, while I'm holding down the Start button to resurect someone, AHK doesn't interfere
     {
+        ; if (PixelModifier == "00") {} ;ModPlain
+        if (PixelModifier == "01") ;ModHeavyAttack
+        {
+            if (not GetKeyState("6"))
+                Send {6 down}
+        }
+        else
+        {
+            if (GetKeyState("6"))
+                Send {6 up}
+        }
+        
+        if (PixelModifier == "02") ;ModBlock
+        {
+            if (not GetKeyState("9"))
+                Send {9 down}
+        }
+        else
+        {
+            if (GetKeyState("9"))
+                Send {9 up}
+        }
+    
         Switch PixelAction
         {
             Case "00": ;DoNothing
-                if (GetKeyState("6")) ; 6 is bound to attack, so many of these cases are set to release the 6 key since it might be held down for a heavy attack
-                    Send {6 up}
+
             Case "01": ;Ability 1
                 if (GetKeyState("6"))
                     Send {6 up}
@@ -50,8 +72,8 @@ Loop{
                     Send 5
                     LastActionTime := A_TickCount
                 }
-            Case "06": ;DoHeavyAttack
-                Send {6 down}
+            ; Case "06": ;DoHeavyAttack
+            ;     Send {6 down}
             Case "07": ;DoRollDodge
                 if (GetKeyState("6"))
                     Send {6 up}
@@ -66,12 +88,12 @@ Loop{
                     Send 8
                     LastActionTime := A_TickCount
                 }
-            Case "09": ;DoBlock
-                if (GetKeyState("6"))
-                    Send {6 up}
-                Send {9 down}
-                Sleep 1500
-                Send {9 up}
+            ; Case "09": ;DoBlock
+            ;     if (GetKeyState("6"))
+            ;         Send {6 up}
+            ;     Send {9 down}
+            ;     Sleep 1500
+            ;     Send {9 up}
             Case "0a": ;ReelInFish
                 if (GetKeyState("6"))
                     Send {6 up}

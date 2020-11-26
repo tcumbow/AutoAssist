@@ -84,9 +84,14 @@ local DoCrouch = 15
 local DoFrontBar = 16
 local DoBackBar = 17
 
+local ModPlain = 0
+local ModHeavyAttack = 1
+local ModBlock = 2
+
+local ModPixel = ModPlain
 
 local function SetPixel(x)
-	PDL:SetColor(0,0,(x/255))
+	PDL:SetColor(0,(ModPixel/255),(x/255))
 	PreviousPixel = CurrentPixel
 	CurrentPixel = x
 	-- d(x)
@@ -108,6 +113,10 @@ local function BigLogicRoutine()
 	Moving = IsPlayerMoving()
 	if not Moving then Sprinting = false end
 	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
+
+	if InputReady == false or IsUnitDead("player") or not InCombat then
+		ModPixel = ModPlain
+	elseif 
 	
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
