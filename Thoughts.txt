@@ -15,3 +15,4 @@ Adjust champ points for max blocking and redirect dodges
 Proc monster sets like Kena
 Radiating Regen with proactive mode? (And back to Earthgore)
 Replace MagPercent logic with #of spare burst heals to keep available
+Hotstring for reloadui which reloads AHK; or at least a hotkey
