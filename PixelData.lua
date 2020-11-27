@@ -235,7 +235,7 @@ local function UnitHasRegen(unitTag)
 	if numBuffs > 0 then
 		for i = 1, numBuffs do
 			local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo(unitTag, i)
-			if name=="Rapid Regeneration" then
+			if name=="Rapid Regeneration" or name=="Radiating Regeneration" then
 				return true
 			end
 		end
@@ -370,7 +370,7 @@ local function UpdateAbilitySlotInfo()
 			if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
 				BurstHeal.Slotted = true
 				BurstHeal[barNumIterator] = i-2
-			elseif AbilityName == "Rapid Regeneration" then
+			elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration then
 				HealOverTime.Slotted = true
 				HealOverTime[barNumIterator] = i-2
 			elseif AbilityName == "Inner Rage" then
