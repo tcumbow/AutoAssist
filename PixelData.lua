@@ -120,7 +120,7 @@ local function BigLogicRoutine()
 	if not Moving then Sprinting = false end
 	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
 
-	if InputReady == false or IsUnitDead("player") or not InCombat then
+	if InputReady == false or IsUnitDead("player") or not InCombat or Mounted then
 		ModPixel = ModPlain
 	elseif HealthPercent < 0.90 and StaminaPercent > 0.20 then
 		ModPixel = ModBlock
