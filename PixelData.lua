@@ -69,6 +69,7 @@ local WeaknessToElements = { }
 local SoulTrap = { }
 local DestructiveTouch = { }
 local ForceShock = { }
+local Pokes = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -123,6 +124,8 @@ local function BigLogicRoutine()
 	if InputReady == false or IsUnitDead("player") or not InCombat or Mounted then
 		ModPixel = ModPlain
 	elseif HealthPercent < 0.90 and StaminaPercent > 0.20 then
+		ModPixel = ModBlock
+	elseif MagickaPercent > 0.50 and StaminaPercent > 0.20 and not Moving then
 		ModPixel = ModBlock
 	else
 		ModPixel = ModHeavyAttack
@@ -193,6 +196,8 @@ local function BigLogicRoutine()
 	-- 	SetPixel(DoAbility(SunFire))
 	elseif ForceShock.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(ForceShock))
+	elseif Pokes.Slotted and MagickaPercent > 0.40 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(Pokes))
 	-- elseif InCombat and EnemiesAround and not ImbueWeaponActive then
 	-- 	SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
@@ -233,7 +238,7 @@ local function UnitHasRegen(unitTag)
 	if numBuffs > 0 then
 		for i = 1, numBuffs do
 			local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo(unitTag, i)
-			if name=="Rapid Regeneration" then
+			if name=="Rapid Regeneration" or name=="Radiating Regeneration" then
 				return true
 			end
 		end
@@ -361,6 +366,7 @@ local function UpdateAbilitySlotInfo()
 	SoulTrap = { }
 	DestructiveTouch = { }
 	ForceShock = { }
+	Pokes = { }
 
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
@@ -368,7 +374,7 @@ local function UpdateAbilitySlotInfo()
 			if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
 				BurstHeal.Slotted = true
 				BurstHeal[barNumIterator] = i-2
-			elseif AbilityName == "Rapid Regeneration" then
+			elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration then
 				HealOverTime.Slotted = true
 				HealOverTime[barNumIterator] = i-2
 			elseif AbilityName == "Inner Rage" then
@@ -380,7 +386,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Elemental Weapon" then
 				ImbueWeapon.Slotted = true
 				ImbueWeapon[barNumIterator] = i-2
-			elseif AbilityName == "Channeled Focus" then
+			elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" then
 				Focus.Slotted = true
 				Focus[barNumIterator] = i-2
 			elseif AbilityName == "Extended Ritual" then
@@ -416,7 +422,10 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Force Shock" or AbilityName == "Force Shock" or AbilityName == "Force Shock" or AbilityName == "Force Shock" then
 				ForceShock.Slotted = true
 				ForceShock[barNumIterator] = i-2
-			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Puncturing Sweep" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+			elseif AbilityName == "Puncturing Sweep" then
+				Pokes.Slotted = true
+				Pokes[barNumIterator] = i-2
+			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 			else 
 				d("Unrecognized ability:"..AbilityName)
 			end
