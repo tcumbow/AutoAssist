@@ -173,6 +173,8 @@ local function BigLogicRoutine()
 	-- 	SetPixel(DoAbility(SunFire))
 	elseif ForceShock.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(ForceShock))
+	elseif Pokes.Slotted and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+		SetPixel(DoAbility(Pokes))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
