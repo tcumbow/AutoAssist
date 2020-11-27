@@ -124,6 +124,8 @@ local function BigLogicRoutine()
 		ModPixel = ModPlain
 	elseif HealthPercent < 0.90 and StaminaPercent > 0.20 then
 		ModPixel = ModBlock
+	elseif MagickaPercent > 0.50 and StaminaPercent > 0.20 and not Moving then
+		ModPixel = ModBlock
 	else
 		ModPixel = ModHeavyAttack
 	end
