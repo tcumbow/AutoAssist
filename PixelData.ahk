@@ -8,7 +8,7 @@ Loop{
     PixelRed := SubStr(PixelColor,3,2)
     PixelModifier := SubStr(PixelColor,5,2)
     PixelAction := SubStr(PixelColor,7,2)
-    if (not (GetKeyState("F10"))) ; I have F10 bound to several key buttons on my controller. It acts as a kill switch so that, for example, while I'm holding down the Start button to resurect someone, AHK doesn't interfere
+    if (not (GetKeyState("F10")) and PixelRed == "00") ; I have F10 bound to several key buttons on my controller. It acts as a kill switch so that, for example, while I'm holding down the Start button to resurect someone, AHK doesn't interfere
     {
         ; if (PixelModifier == "00") {} ;ModPlain
         if (PixelModifier == "01") ;ModHeavyAttack
