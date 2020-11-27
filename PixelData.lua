@@ -382,7 +382,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Elemental Weapon" then
 				ImbueWeapon.Slotted = true
 				ImbueWeapon[barNumIterator] = i-2
-			elseif AbilityName == "Channeled Focus" then
+			elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" then
 				Focus.Slotted = true
 				Focus[barNumIterator] = i-2
 			elseif AbilityName == "Extended Ritual" then
