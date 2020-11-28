@@ -193,8 +193,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(RapidManeuver))
 	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(DoAbility(Accelerate))
-	elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
-		SetPixel(DoSprint)
+	--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
+	--	SetPixel(DoSprint)
 		-- zo_callLater(SetSprintingTrue, 100)
 	else
 		SetPixel(DoNothing)
