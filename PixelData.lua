@@ -73,10 +73,10 @@ local Pokes = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
-local DoHeavyAttack = 6
+-- local DoHeavyAttack = 6
 local DoRollDodge = 7
 local DoBreakFreeInterrupt = 8
-local DoBlock = 9
+-- local DoBlock = 9
 local DoReelInFish = 10
 local DoLightAttack = 11
 local DoInteract = 12
@@ -86,9 +86,14 @@ local DoCrouch = 15
 local DoFrontBar = 16
 local DoBackBar = 17
 
+local ModPlain = 0
+local ModHeavyAttack = 1
+local ModBlock = 2
+
+local ModPixel = ModPlain
 
 local function SetPixel(x)
-	PDL:SetColor(0,0,(x/255))
+	PDL:SetColor(0,(ModPixel/255),(x/255))
 	PreviousPixel = CurrentPixel
 	CurrentPixel = x
 	-- d(x)
@@ -101,6 +106,11 @@ local function DoAbility(ability)
 	end
 end
 
+local function Immediately(x)
+	if ModPixel == ModHeavyAttack then ModPixel = ModBlock end
+	return x
+end
+
 local function UpdateLastSights()
 	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
 	if AvailableReticleInteraction == "Steal" or AvailableReticleInteraction == "BlockedSteal" then LastStealSightTime = GetGameTimeMilliseconds() end
@@ -110,6 +120,16 @@ local function BigLogicRoutine()
 	Moving = IsPlayerMoving()
 	if not Moving then Sprinting = false end
 	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
+
+	if InputReady == false or IsUnitDead("player") or not InCombat or Mounted then
+		ModPixel = ModPlain
+	elseif HealthPercent < 0.90 and StaminaPercent > 0.20 then
+		ModPixel = ModBlock
+	elseif MagickaPercent > 0.50 and StaminaPercent > 0.20 and not Moving then
+		ModPixel = ModBlock
+	else
+		ModPixel = ModHeavyAttack
+	end
 	
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
@@ -122,27 +142,30 @@ local function BigLogicRoutine()
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
 	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.40 then
-		SetPixel(DoAbility(BurstHeal))
+		SetPixel(DoAbility(Immediately(BurstHeal)))
 	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
-		SetPixel(DoAbility(BurstHeal))
+		SetPixel(DoAbility(Immediately(BurstHeal)))
 	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.60 and MagickaPercent > 0.80 then
-		SetPixel(DoAbility(BurstHeal))
+		SetPixel(DoAbility(Immediately(BurstHeal)))
 	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithoutRegen < 0.60 and MagickaPercent > 0.80 then
-		SetPixel(DoAbility(BurstHeal))
+		SetPixel(DoAbility(Immediately(BurstHeal)))
+	elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.80 and InCombat then
+		SetPixel(DoAbility(Immediately(HealOverTime)))
 	elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 		SetPixel(DoAbility(HealOverTime))
 	elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
-		SetPixel(DoAbility(RemoteInterrupt))
+		SetPixel(DoAbility(Immediately(RemoteInterrupt)))
 	elseif MustInterrupt and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
 	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
 		SetPixel(DoAbility(Taunt))
 	elseif MustBlock and StaminaPercent > 0.99 then
-		SetPixel(DoBlock)
+		ModPixel = ModBlock
+		SetPixel(DoNothing)
 	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
 		SetPixel(DoRollDodge)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
-		SetPixel(DoLightAttack)
+		SetPixel(Immediately(DoLightAttack))
 	elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 		SetPixel(DoAbility(Ritual))
 	elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
@@ -173,14 +196,14 @@ local function BigLogicRoutine()
 	-- 	SetPixel(DoAbility(SunFire))
 	elseif ForceShock.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(ForceShock))
-	elseif Pokes.Slotted and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+	elseif Pokes.Slotted and MagickaPercent > 0.40 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(Pokes))
-	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
-		SetPixel(DoHeavyAttack)
+	-- elseif InCombat and EnemiesAround and not ImbueWeaponActive then
+	-- 	SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Pork" or AvailableReticleTarget=="Poultry" or AvailableReticleTarget=="Grapes" or AvailableReticleTarget=="Tankard" or AvailableReticleTarget=="Cheese" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Beets" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
+	elseif (AvailableReticleInteraction=="Disarm" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and (AvailableReticleTarget=="Drink" or AvailableReticleTarget=="Coins" or AvailableReticleTarget=="Pork" or AvailableReticleTarget=="Poultry" or AvailableReticleTarget=="Grapes" or AvailableReticleTarget=="Tankard" or AvailableReticleTarget=="Cheese" or AvailableReticleTarget=="Meal" or AvailableReticleTarget=="Beets" or AvailableReticleTarget=="Pie" or AvailableReticleTarget=="Potato" or AvailableReticleTarget=="Potion" or AvailableReticleTarget=="Alchemy Bottle" or AvailableReticleTarget=="Bread" or AvailableReticleTarget=="Apple" or AvailableReticleTarget=="Radish" or AvailableReticleTarget=="Venison")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Giant Clam"))) and not InCombat then
 		SetPixel(DoInteract)
 	elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
 		SetPixel(DoInteract)
@@ -193,8 +216,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(RapidManeuver))
 	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(DoAbility(Accelerate))
-	--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
-	--	SetPixel(DoSprint)
+	elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
+		SetPixel(DoSprint)
 		-- zo_callLater(SetSprintingTrue, 100)
 	else
 		SetPixel(DoNothing)
@@ -348,10 +371,10 @@ local function UpdateAbilitySlotInfo()
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
 			local AbilityName = GetAbilityName(GetSlotBoundId(i,barNumIterator))
-			if AbilityName == "Ritual of Rebirth" then
+			if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
 				BurstHeal.Slotted = true
 				BurstHeal[barNumIterator] = i-2
-			elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration" then
+			elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration then
 				HealOverTime.Slotted = true
 				HealOverTime[barNumIterator] = i-2
 			elseif AbilityName == "Inner Rage" then
@@ -363,7 +386,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Elemental Weapon" then
 				ImbueWeapon.Slotted = true
 				ImbueWeapon[barNumIterator] = i-2
-			elseif AbilityName == "Channeled Focus" then
+			elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" then
 				Focus.Slotted = true
 				Focus[barNumIterator] = i-2
 			elseif AbilityName == "Extended Ritual" then
