@@ -189,7 +189,7 @@ local function BigLogicRoutine()
 		CrouchWasAuto = true
 	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
 		SetPixel(DoCrouch)
-	elseif RapidManeuver.Slotted and not MajorExpedition and (Moving or InCombat) and StaminaPercent > 0.90 then
+	elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(DoAbility(RapidManeuver))
 	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
 		SetPixel(DoAbility(Accelerate))
