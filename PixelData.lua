@@ -48,6 +48,8 @@ local TargetIsNotDestructiveTouched = false
 local AvailableReticleInteraction = nil
 local AvailableReticleTarget = nil
 
+local PickpocketPrime = false
+
 local FrontBar, BackBar = false, false
 local InBossBattle = false
 local ReelInFish = false
@@ -194,6 +196,8 @@ local function BigLogicRoutine()
 		CrouchWasAuto = true
 	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
 		SetPixel(DoCrouch)
+	elseif PickpocketPrime then
+		SetPixel(DoInteract)
 	elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(DoAbility(RapidManeuver))
 	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
@@ -422,6 +426,13 @@ end
 
 
 
+local function UpdatePickpocketState()
+	local isInBonus, isHostile, percentChance, _, isEmpty, prospectiveResult, _, _ = GetGameCameraPickpocketingBonusInfo()
+	local cantInteract 	= isHostile or empty or not prospectiveResult == PROSPECTIVE_PICKPOCKET_RESULT_CAN_ATTEMPT 
+	PickpocketPrime		= not cantInteract and percentChance == 100
+end
+
+
 
 local function UpdateBarState()
 	local barNum = GetActiveWeaponPairInfo()
@@ -525,6 +536,11 @@ end
 local function OnEventInteractableTargetChanged()
 	UpdateLastSights()
 	local action, interactableName, blocked, mystery2, additionalInfo = GetGameCameraInteractableActionInfo()
+	-- d(action)
+	-- d(interactableName)
+	-- d(blocked)
+	-- d(mystery2)
+	-- d(additionalInfo)
 	if action == "Steal From" then action = "Steal" end
 	if blocked or additionalInfo == 2 then
 		if action == "Steal" then
@@ -534,6 +550,7 @@ local function OnEventInteractableTargetChanged()
 		end
 		interactableName = nil
 	end
+	if action == "Pickpocket" then UpdatePickpocketState() else PickpocketPrime = false end
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
