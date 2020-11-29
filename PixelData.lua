@@ -5,7 +5,7 @@ local ADDON_AUTHOR = "Tom Cumbow"
 local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
 local Moving = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower = false, false, false, false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local MagickaPercent = 1.00
@@ -191,7 +191,7 @@ local function BigLogicRoutine()
 		SetPixel(DoCrouch)
 	elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		SetPixel(DoAbility(RapidManeuver))
-	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.90 and Moving and not InCombat then
+	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
 		SetPixel(DoAbility(Accelerate))
 	--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
 	--	SetPixel(DoSprint)
@@ -454,7 +454,7 @@ end
 
 
 local function UpdateBuffs()
-	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition = false, false, false, false, false, false, false, false, false, false
+	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower = false, false, false, false, false, false, false, false, false, false, false
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
 	if numBuffs > 0 then
@@ -484,6 +484,8 @@ local function UpdateBuffs()
 				DamageShieldActive = true
 			elseif name=="Dampen Magic" then
 				DamageShieldActive = true
+			elseif name=="Empower" then
+				Empower = true
 			elseif name=="Major Expedition" and timeLeft>optimalBuffOverlap then
 				MajorExpedition = true
 				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
