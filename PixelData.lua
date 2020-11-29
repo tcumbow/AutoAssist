@@ -178,7 +178,7 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(ForceShock))
 	elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(Pokes))
-	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower then
+	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
 		SetPixel(DoAbility(SolarBarrage))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.80 then
 		SetPixel(DoHeavyAttack)
