@@ -180,6 +180,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(Pokes))
 	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
 		SetPixel(DoAbility(SolarBarrage))
+	elseif Degeneration.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and TargetIsEnemy then
+		SetPixel(DoAbility(Degeneration))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.80 then
 		SetPixel(DoHeavyAttack)
 	elseif InCombat and TargetIsEnemy then
