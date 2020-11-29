@@ -128,3 +128,9 @@ Loop{
         LastPixelColor := PixelColor
     }   
 }
+
+
+f9::
+Send /reloadui{enter}
+Reload
+return
