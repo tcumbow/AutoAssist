@@ -176,10 +176,12 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(ForceShock))
 	elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(Pokes))
-	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat then
+	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower then
 		SetPixel(DoAbility(SolarBarrage))
-	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
+	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.80 then
 		SetPixel(DoHeavyAttack)
+	elseif InCombat and TargetIsEnemy then
+		SetPixel(DoLightAttack)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
