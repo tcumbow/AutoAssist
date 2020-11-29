@@ -70,6 +70,7 @@ local SoulTrap = { }
 local DestructiveTouch = { }
 local ForceShock = { }
 local Pokes = { }
+local SolarBarrage = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -175,6 +176,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(ForceShock))
 	elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(Pokes))
+	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat then
+		SetPixel(DoAbility(SolarBarrage))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive then
 		SetPixel(DoHeavyAttack)
 	elseif ReelInFish and not InCombat then
@@ -344,6 +347,7 @@ local function UpdateAbilitySlotInfo()
 	DestructiveTouch = { }
 	ForceShock = { }
 	Pokes = { }
+	SolarBarrage = { }
 
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
@@ -402,6 +406,9 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Puncturing Sweep" then
 				Pokes.Slotted = true
 				Pokes[barNumIterator] = i-2
+			elseif AbilityName == "Solar Barrage" then
+				SolarBarrage.Slotted = true
+				SolarBarrage[barNumIterator] = i-2
 			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 			else 
 				d("Unrecognized ability:"..AbilityName)
