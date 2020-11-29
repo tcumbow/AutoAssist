@@ -198,8 +198,8 @@ local function BigLogicRoutine()
 		SetPixel(DoCrouch)
 	elseif PickpocketPrime then
 		SetPixel(DoInteract)
-	elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
-		SetPixel(DoAbility(RapidManeuver))
+	-- elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
+	-- 	SetPixel(DoAbility(RapidManeuver))
 	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
 		SetPixel(DoAbility(Accelerate))
 	--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
