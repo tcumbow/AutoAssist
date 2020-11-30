@@ -120,6 +120,14 @@ Loop{
                     Send u
                     LastActionTime := A_TickCount
                 }
+            Case "0x000012": ;DoStartBlock
+                if (GetKeyState("6"))
+                    Send {6 up}
+                if (not GetKeyState("9"))
+                    Send {9 down}
+            Case "0x000013": ;DoStopBlock
+                if (GetKeyState("9"))
+                    Send {9 up}
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}

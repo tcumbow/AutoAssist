@@ -88,6 +88,8 @@ local DoMountSprint = 14
 local DoCrouch = 15
 local DoFrontBar = 16
 local DoBackBar = 17
+local DoStartBlock = 18
+local DoStopBlock = 19
 
 
 local function SetPixel(x)
@@ -122,6 +124,8 @@ local function BigLogicRoutine()
 		SetPixel(DoMountSprint)
 	elseif Mounted then
 		SetPixel(DoNothing)
+	elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
+		SetPixel(DoStopBlock)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
 	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.40 then
@@ -180,10 +184,20 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(Pokes))
 	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
 		SetPixel(DoAbility(SolarBarrage))
-	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.80 then
-		SetPixel(DoHeavyAttack)
-	elseif InCombat and TargetIsEnemy then
-		SetPixel(DoLightAttack)
+	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 then
+		if IsBlockActive() then
+			SetPixel(DoStopBlock)
+		else
+			SetPixel(DoHeavyAttack)
+		end
+	elseif InCombat and TargetIsEnemy and HealthPercent > 0.90 then
+		if IsBlockActive() then
+			SetPixel(DoStopBlock)
+		else
+			SetPixel(DoLightAttack)
+		end
+	elseif InCombat and StaminaPercent > 0.50 then
+		SetPixel(DoStartBlock)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
