@@ -118,6 +118,8 @@ local function BigLogicRoutine()
 	
 	if InputReady == false or IsUnitDead("player") then
 		SetPixel(DoNothing)
+	elseif AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
+		SetPixel(DoInteract)
 	elseif RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
 		SetPixel(DoAbility(RapidManeuver))
 	elseif Mounted and Moving and not Sprinting then
