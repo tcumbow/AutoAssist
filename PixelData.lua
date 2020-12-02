@@ -73,6 +73,9 @@ local DestructiveTouch = { }
 local ForceShock = { }
 local Pokes = { }
 local SolarBarrage = { }
+local VolatileFamiliar = { }
+local TwilightMatriarch = { } 
+local Surge = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -370,6 +373,9 @@ local function UpdateAbilitySlotInfo()
 	ForceShock = { }
 	Pokes = { }
 	SolarBarrage = { }
+	VolatileFamiliar = { }
+	TwilightMatriarch = { } 
+	Surge = { }
 
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
@@ -431,6 +437,15 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Solar Barrage" then
 				SolarBarrage.Slotted = true
 				SolarBarrage[barNumIterator] = i-2
+			elseif AbilityName == "Summon Volatile Familiar" then
+				VolatileFamiliar.Slotted = true
+				VolatileFamiliar[barNumIterator] = i-2
+			elseif AbilityName == "Summon Twilight Matriarch" then
+				TwilightMatriarch.Slotted = true
+				TwilightMatriarch[barNumIterator] = i-2
+			elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" then
+				Surge.Slotted = true
+				Surge[barNumIterator] = i-2
 			elseif AbilityName == "Bound Aegis" or AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 			else 
 				d("Unrecognized ability:"..AbilityName)
