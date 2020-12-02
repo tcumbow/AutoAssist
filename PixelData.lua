@@ -167,6 +167,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(SunFire))
 	elseif DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(DestructiveTouch))
+	elseif Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		SetPixel(DoAbility(Surge))
 	elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(Degeneration))
 	elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
