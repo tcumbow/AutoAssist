@@ -5,7 +5,7 @@ local ADDON_AUTHOR = "Tom Cumbow"
 local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
 local Moving = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower = false, false, false, false, false, false, false, false, false, false, false
+local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower, FamiliarActive = false, false, false, false, false, false, false, false, false, false, false, false
 local InputReady = true
 local InCombat = false
 local MagickaPercent = 1.00
@@ -161,6 +161,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(Focus))
 	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 		SetPixel(DoInteract)
+	elseif VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		SetPixel(DoAbility(VolatileFamiliar))
 	elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(SoulTrap))
 	elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
@@ -508,7 +510,7 @@ end
 
 
 local function UpdateBuffs()
-	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower = false, false, false, false, false, false, false, false, false, false, false
+	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower, FamiliarActive = false, false, false, false, false, false, false, false, false, false, false, false
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
 	if numBuffs > 0 then
@@ -536,6 +538,8 @@ local function UpdateBuffs()
 				if timeLeft + 100 < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft + 100 end
 			elseif name=="Blazing Shield" or name=="Radiant Ward" then
 				DamageShieldActive = true
+			elseif name=="Summon Volatile Familiar" then
+				FamiliarActive = true
 			elseif name=="Dampen Magic" then
 				DamageShieldActive = true
 			elseif name=="Empower" then
@@ -548,6 +552,8 @@ local function UpdateBuffs()
 				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
 			-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 			-- 	MustBreakFree = true
+			else
+				d(name)
 			end
 		end
 		if msUntilBuffRecheckNeeded < 999999 then
