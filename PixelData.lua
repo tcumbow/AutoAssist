@@ -199,7 +199,8 @@ local function BigLogicRoutine()
 		if IsBlockActive() then
 			SetPixel(DoStopBlock)
 		else
-			SetPixel(DoLightAttack)
+			-- SetPixel(DoLightAttack)
+			SetPixel(DoHeavyAttack)
 		end
 	elseif InCombat and StaminaPercent > 0.50 then
 		SetPixel(DoStartBlock)
