@@ -431,7 +431,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Solar Barrage" then
 				SolarBarrage.Slotted = true
 				SolarBarrage[barNumIterator] = i-2
-			elseif AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+			elseif AbilityName == "Bound Aegis" or AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 			else 
 				d("Unrecognized ability:"..AbilityName)
 			end
