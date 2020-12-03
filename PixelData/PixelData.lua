@@ -17,6 +17,7 @@ local MajorGallop = false
 local MajorExpedition = false
 local Empower = false
 local FamiliarActive = false
+local TwilightActive = false
 local CrystalWeaver = false
 local CrystalFragmentsProc = false
 
@@ -551,6 +552,7 @@ local function UpdateBuffs()
 	MajorExpedition = false
 	Empower = false
 	FamiliarActive = false
+	TwilightActive = false
 	CrystalWeaver = false
 	CrystalFragmentsProc = false
 	-- MustBreakFree = false
@@ -582,6 +584,8 @@ local function UpdateBuffs()
 				DamageShieldActive = true
 			elseif name=="Summon Volatile Familiar" then
 				FamiliarActive = true
+			elseif name=="Summon Twilight Matriarch" then
+				TwilightActive = true
 			elseif name=="Crystal Weaver" then
 				CrystalWeaver = true
 			elseif name=="Crystal Fragments Proc" then
