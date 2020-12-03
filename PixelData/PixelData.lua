@@ -181,6 +181,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(SunFire))
 	elseif ImbueWeapon.Slotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(DoAbility(ImbueWeapon))
+	elseif CrystalFragments.Slotted and TargetIsEnemy and InCombat == true and MagickaPercent > 0.70 then
+		SetPixel(DoAbility(CrystalFragments))
 	elseif DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
 		SetPixel(DoAbility(DamageShield))
 	elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
