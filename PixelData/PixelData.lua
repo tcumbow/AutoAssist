@@ -205,7 +205,7 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(Meditation))
 	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
 	-- 	SetPixel(DoAbility(SunFire))
-	elseif ForceShock.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
+	elseif ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 		SetPixel(DoAbility(ForceShock))
 	elseif ImbueWeapon.Slotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(DoAbility(ImbueWeapon))
