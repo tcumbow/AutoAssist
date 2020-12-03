@@ -76,6 +76,8 @@ local SolarBarrage = { }
 local VolatileFamiliar = { }
 local TwilightMatriarch = { } 
 local Surge = { }
+local BoundlessStorm = { }
+local CrystalFragments = { }
 
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
@@ -381,6 +383,8 @@ local function UpdateAbilitySlotInfo()
 	VolatileFamiliar = { }
 	TwilightMatriarch = { } 
 	Surge = { }
+	BoundlessStorm = { }
+	CrystalFragments = { }
 
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
@@ -448,6 +452,12 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Summon Twilight Matriarch" then
 				TwilightMatriarch.Slotted = true
 				TwilightMatriarch[barNumIterator] = i-2
+			elseif AbilityName == "Boundless Storm" then
+				BoundlessStorm.Slotted = true
+				BoundlessStorm[barNumIterator] = i-2
+			elseif AbilityName == "Crystal Fragments" then
+				CrystalFragments.Slotted = true
+				CrystalFragments[barNumIterator] = i-2
 			elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" then
 				Surge.Slotted = true
 				Surge[barNumIterator] = i-2
