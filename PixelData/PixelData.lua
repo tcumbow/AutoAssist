@@ -5,7 +5,21 @@ local ADDON_AUTHOR = "Tom Cumbow"
 local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
 local Moving = false
-local MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower, FamiliarActive, CrystalWeaver, CrystalFragmentsProc = false, false, false, false, false, false, false, false, false, false, false, false, false, false
+local MajorSorcery = false
+local MajorProphecy = false
+local MinorSorcery = false
+local MajorResolve = false
+local MinorMending = false
+local MeditationActive = false
+local ImbueWeaponActive = false
+local DamageShieldActive = false
+local MajorGallop = false
+local MajorExpedition = false
+local Empower = false
+local FamiliarActive = false
+local CrystalWeaver = false
+local CrystalFragmentsProc = false
+
 local InputReady = true
 local InCombat = false
 local MagickaPercent = 1.00
@@ -525,7 +539,20 @@ end
 
 
 local function UpdateBuffs()
-	MajorSorcery, MajorProphecy, MinorSorcery, MajorResolve, MinorMending, MeditationActive, ImbueWeaponActive, DamageShieldActive, MajorGallop, MajorExpedition, Empower, FamiliarActive, CrystalWeaver, CrystalFragmentsProc = false, false, false, false, false, false, false, false, false, false, false, false, false, false
+	MajorSorcery = false
+	MajorProphecy = false
+	MinorSorcery = false
+	MajorResolve = false
+	MinorMending = false
+	MeditationActive = false
+	ImbueWeaponActive = false
+	DamageShieldActive = false
+	MajorGallop = false
+	MajorExpedition = false
+	Empower = false
+	FamiliarActive = false
+	CrystalWeaver = false
+	CrystalFragmentsProc = false
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
 	if numBuffs > 0 then
