@@ -163,6 +163,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(HealOverTime))
 	elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
 		SetPixel(DoAbility(RemoteInterrupt))
+	elseif TwilightMatriarch.Slotted and not TwilightActive and MagickaPercent > 0.60 and InCombat and InBossBattle then
+		SetPixel(DoAbility(TwilightMatriarch))
 	elseif MustInterrupt and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
 	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
@@ -231,6 +233,8 @@ local function BigLogicRoutine()
 		else
 			SetPixel(DoLightAttack)
 		end
+	elseif TwilightMatriarch.Slotted and not TwilightActive and MagickaPercent > 0.60 and InCombat then
+		SetPixel(DoAbility(TwilightMatriarch))
 	-- elseif InCombat and StaminaPercent > 0.50 then
 	-- 	SetPixel(DoStartBlock)
 	elseif ReelInFish and not InCombat then
