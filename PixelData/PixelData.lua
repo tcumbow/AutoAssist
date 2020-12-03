@@ -584,6 +584,7 @@ local function UpdateBuffs()
 				DamageShieldActive = true
 			elseif name=="Summon Volatile Familiar" then
 				FamiliarActive = true
+			elseif name=="Summon Volatile Familiar" and id==88933 then
 			elseif name=="Summon Twilight Matriarch" then
 				TwilightActive = true
 			elseif name=="Crystal Weaver" then
