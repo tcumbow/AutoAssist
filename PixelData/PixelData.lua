@@ -17,6 +17,7 @@ local MajorGallop = false
 local MajorExpedition = false
 local Empower = false
 local FamiliarActive = false
+local FamiliarAOEActive = false
 local TwilightActive = false
 local CrystalWeaver = false
 local CrystalFragmentsProc = false
@@ -552,6 +553,7 @@ local function UpdateBuffs()
 	MajorExpedition = false
 	Empower = false
 	FamiliarActive = false
+	FamiliarAOEActive = false
 	TwilightActive = false
 	CrystalWeaver = false
 	CrystalFragmentsProc = false
@@ -561,7 +563,7 @@ local function UpdateBuffs()
 		local optimalBuffOverlap = 200 -- constant
 		local msUntilBuffRecheckNeeded = 999999 -- if this value isn't replaced, then a buff recheck won't be scheduled
 		for i = 1, numBuffs do
-			local name, _, endTime, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo("player", i)
+			local name, _, endTime, _, _, _, _, _, _, _, id, _ = GetUnitBuffInfo("player", i)
 			local now = GetGameTimeMilliseconds()
 			local timeLeft = (math.floor(endTime * 1000)) - now
 			if name=="Major Sorcery" then
@@ -582,9 +584,10 @@ local function UpdateBuffs()
 				if timeLeft + 100 < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft + 100 end
 			elseif name=="Blazing Shield" or name=="Radiant Ward" then
 				DamageShieldActive = true
-			elseif name=="Summon Volatile Familiar" then
+			elseif name=="Summon Volatile Familiar" and id==23316 then
 				FamiliarActive = true
 			elseif name=="Summon Volatile Familiar" and id==88933 then
+				FamiliarAOEActive = true
 			elseif name=="Summon Twilight Matriarch" then
 				TwilightActive = true
 			elseif name=="Crystal Weaver" then
