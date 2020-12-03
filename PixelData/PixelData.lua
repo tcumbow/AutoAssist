@@ -157,6 +157,8 @@ local function BigLogicRoutine()
 		SetPixel(DoRollDodge)
 	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 		SetPixel(DoLightAttack)
+	elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat then
+		SetPixel(DoAbility(CrystalFragments))
 	elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 		SetPixel(DoAbility(Ritual))
 	elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
