@@ -163,13 +163,13 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(RemoteInterrupt))
 	elseif MustInterrupt and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
-	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and TargetIsEnemy and TargetIsNotPlayer and InCombat then
+	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
 		SetPixel(DoAbility(Taunt))
 	elseif MustBlock and StaminaPercent > 0.99 then
 		SetPixel(DoBlock)
 	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
 		SetPixel(DoRollDodge)
-	elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
+	elseif ImbueWeaponActive == true and InCombat and EnemiesAround then
 		SetPixel(DoLightAttack)
 	elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat then
 		SetPixel(DoAbility(CrystalFragments))
@@ -191,11 +191,11 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(DestructiveTouch))
 	elseif Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 		SetPixel(DoAbility(Surge))
-	elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+	elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
 		SetPixel(DoAbility(Degeneration))
 	elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
 		SetPixel(DoAbility(WeaknessToElements))
-	elseif SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and TargetIsEnemy and InCombat then
+	elseif SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
 		SetPixel(DoAbility(SunFire))
 	elseif DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
 		SetPixel(DoAbility(DamageShield))
@@ -203,15 +203,15 @@ local function BigLogicRoutine()
 		SetPixel(DoNothing)
 	elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 		SetPixel(DoAbility(Meditation))
-	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy then
+	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 	-- 	SetPixel(DoAbility(SunFire))
-	elseif ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+	elseif ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
 		SetPixel(DoAbility(ForceShock))
-	elseif ImbueWeapon.Slotted and TargetIsEnemy and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+	elseif ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 		SetPixel(DoAbility(ImbueWeapon))
-	elseif CrystalFragments.Slotted and TargetIsEnemy and InCombat == true and MagickaPercent > 0.70 then
+	elseif CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
 		SetPixel(DoAbility(CrystalFragments))
-	elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and TargetIsEnemy then
+	elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and EnemiesAround then
 		SetPixel(DoAbility(Pokes))
 	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
 		SetPixel(DoAbility(SolarBarrage))
@@ -221,7 +221,7 @@ local function BigLogicRoutine()
 		else
 			SetPixel(DoHeavyAttack)
 		end
-	elseif InCombat and TargetIsEnemy then
+	elseif InCombat and EnemiesAround then
 		if IsBlockActive() then
 			SetPixel(DoStopBlock)
 		else
