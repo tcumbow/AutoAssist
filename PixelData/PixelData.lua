@@ -158,6 +158,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(BurstHeal))
 	elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 		SetPixel(DoAbility(HealOverTime))
+	elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.80 then
+		SetPixel(DoAbility(BurstHeal))
 	elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
 		SetPixel(DoAbility(RemoteInterrupt))
 	elseif TwilightMatriarch.Slotted and not TwilightActive and MagickaPercent > 0.60 and InCombat and InBossBattle then
