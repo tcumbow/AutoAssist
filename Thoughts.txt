@@ -21,4 +21,5 @@ auto sprint after walking for a certain time
 Get rid of separate Samantha fork and just add logic based on PlayerName
 write auto-deploy script (beyond just PixelData)
 summon twilight in combat, remove with sheath
-figure Crystal Weave and persistent cost reduction
+figure Crystal Weave and maybe tweak MagPercent when on
+Minor Prophesy, something...

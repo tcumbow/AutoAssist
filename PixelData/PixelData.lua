@@ -456,7 +456,7 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
 				DestructiveTouch.Slotted = true
 				DestructiveTouch[barNumIterator] = i-2
-			elseif AbilityName == "Force Shock" or AbilityName == "Force Shock" or AbilityName == "Force Shock" or AbilityName == "Force Shock" then
+			elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" then
 				ForceShock.Slotted = true
 				ForceShock[barNumIterator] = i-2
 			elseif AbilityName == "Puncturing Sweep" then
