@@ -205,14 +205,14 @@ local function BigLogicRoutine()
 		else
 			SetPixel(DoHeavyAttack)
 		end
-	elseif InCombat and TargetIsEnemy and HealthPercent > 0.90 then
+	elseif InCombat and TargetIsEnemy then
 		if IsBlockActive() then
 			SetPixel(DoStopBlock)
 		else
 			SetPixel(DoLightAttack)
 		end
-	elseif InCombat and StaminaPercent > 0.50 then
-		SetPixel(DoStartBlock)
+	-- elseif InCombat and StaminaPercent > 0.50 then
+	-- 	SetPixel(DoStartBlock)
 	elseif ReelInFish and not InCombat then
 		SetPixel(DoReelInFish)
 		zo_callLater(PD_StopReelInFish, 2000)
