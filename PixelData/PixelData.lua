@@ -33,6 +33,7 @@ local Health = 0
 local HealthPrevious = 0
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
+local LowestGroupHealthPercent = 1.00
 local Feared = false
 local Stunned = false
 local MustDodge = false
@@ -289,6 +290,7 @@ local function UpdateLowestGroupHealth()
 	GroupSize = GetGroupSize()
 	LowestGroupHealthPercentWithoutRegen = 1.00
 	LowestGroupHealthPercentWithRegen = 1.00
+	LowestGroupHealthPercent = 1.00
 
 	if GroupSize > 0 then
 		for i = 1, GroupSize do
@@ -299,6 +301,9 @@ local function UpdateLowestGroupHealth()
 			local InHealingRange = IsUnitInGroupSupportRange(unitTag)
 			local IsAlive = not IsUnitDead(unitTag)
 			local IsPlayer = GetUnitType(unitTag) == 1
+			if HpPercent < LowestGroupHealthPercent and InHealingRange and IsAlive and IsPlayer then
+				LowestGroupHealthPercent = HpPercent
+			end
 			if HpPercent < LowestGroupHealthPercentWithoutRegen and HasRegen == false and InHealingRange and IsAlive and IsPlayer then
 				LowestGroupHealthPercentWithoutRegen = HpPercent
 			elseif HpPercent < LowestGroupHealthPercentWithRegen and HasRegen and InHealingRange and IsAlive and IsPlayer then
@@ -309,6 +314,7 @@ local function UpdateLowestGroupHealth()
 		local unitTag = "player"
 		local currentHp, maxHp, effectiveMaxHp = GetUnitPower(unitTag, POWERTYPE_HEALTH)
 		local HpPercent = currentHp / maxHp
+		LowestGroupHealthPercent = HpPercent
 		local HasRegen = UnitHasRegen(unitTag)
 		if HasRegen == false then
 			LowestGroupHealthPercentWithoutRegen = HpPercent
