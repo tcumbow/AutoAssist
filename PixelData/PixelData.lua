@@ -773,6 +773,27 @@ end
 
 
 
+function DismissTwilight()
+	-- All the abilityIDs for Twilights
+	local PetList = { 24613, 30581, 30584, 30587, 24636, 30592, 30595, 30598, 24639, 30618, 30622, 30626 }
+
+	local i, k, v
+	
+	-- Walk through the player's active buffs
+	for i = 1, GetNumBuffs("player") do
+		local buffName, timeStarted, timeEnding, buffSlot, stackCount, iconFilename, buffType, effectType, abilityType, statusEffectType, abilityId, canClickOff = GetUnitBuffInfo("player", i)
+		-- Compare each buff's abilityID to the list of IDs we were given
+		for k, v in pairs(PetList) do
+			if abilityId == v then
+				-- Cancel the buff if we got a match
+				CancelBuff(buffSlot)
+			end
+		end
+	end
+	
+end
+
+
 
 function PD_InputReady()
 	InputReady = true
@@ -795,6 +816,10 @@ function PD_InCombat()
 	InCombat = true
 	UpdateAbilitySlotInfo()
 	BigLogicRoutine()
+end
+
+function PD_CombatCalm()
+	DismissTwilight()
 end
 
 function PD_NotMounted()
