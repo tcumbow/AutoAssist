@@ -571,6 +571,8 @@ local function UpdateBuffs()
 				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
 			-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 			-- 	MustBreakFree = true
+			elseif name=="Increased Experience" or name=="ESO Plus Member" or name=="Bound Aegis" or name=="Minor Resolve" or name=="Minor Slayer" or name=="Inner Light" or name=="Boon: The Steed" or name=="Critical Surge" or name=="Major Brutality" or name=="Minor Prophecy" or name=="Boundless Storm" then
+
 			else
 				d(name)
 			end
