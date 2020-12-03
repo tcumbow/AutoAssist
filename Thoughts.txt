@@ -20,3 +20,5 @@ Mine Platinum even when mounted
 auto sprint after walking for a certain time
 Get rid of separate Samantha fork and just add logic based on PlayerName
 write auto-deploy script (beyond just PixelData)
+summon twilight in combat, remove with sheath
+figure Crystal Weave and persistent cost reduction
