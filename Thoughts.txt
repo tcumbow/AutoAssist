@@ -1,4 +1,4 @@
-add 1 to Red so this doesn't get fake-triggered
+add 1 or 255 to Red so this doesn't get fake-triggered, maybe make pixel bigger
 detect when buffs are .25 secs away from fading
 add dependencies to txt file or add detection in other direction
 add PD detection to all hooks in other add-ons
