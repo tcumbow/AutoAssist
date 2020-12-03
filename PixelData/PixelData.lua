@@ -152,13 +152,9 @@ local function BigLogicRoutine()
 		SetPixel(DoStopBlock)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
-	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.40 then
+	elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
 		SetPixel(DoAbility(BurstHeal))
-	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithoutRegen < 0.40 then
-		SetPixel(DoAbility(BurstHeal))
-	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithRegen < 0.60 and MagickaPercent > 0.80 then
-		SetPixel(DoAbility(BurstHeal))
-	elseif BurstHeal.Slotted and LowestGroupHealthPercentWithoutRegen < 0.60 and MagickaPercent > 0.80 then
+	elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.80 then
 		SetPixel(DoAbility(BurstHeal))
 	elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 		SetPixel(DoAbility(HealOverTime))
