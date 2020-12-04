@@ -138,134 +138,140 @@ local function UpdateLastSights()
 end
 
 local function BigLogicRoutine()
-	Moving = IsPlayerMoving()
-	if not Moving then Sprinting = false end
-	if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
+	-- Last-Minute Info Gathering
+		Moving = IsPlayerMoving()
+		if not Moving then Sprinting = false end
+		if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
 	
-	if InputReady == false or IsUnitDead("player") then
-		SetPixel(DoNothing)
-	elseif AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
-		SetPixel(DoInteract)
-	elseif RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
-		SetPixel(DoAbility(RapidManeuver))
-	elseif Mounted and Moving and not Sprinting then
-		SetPixel(DoMountSprint)
-	elseif Mounted then
-		SetPixel(DoNothing)
-	-- elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
-	-- 	SetPixel(DoStopBlock)
-	elseif Stunned or Feared and StaminaPercent > 0.49 then
-		SetPixel(DoBreakFreeInterrupt)
-	elseif TwilightMatriarch.Slotted and not TwilightActive and InCombat then
-		SetPixel(DoAbility(TwilightMatriarch))
-	elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
-		SetPixel(DoAbility(BurstHeal))
-	elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.80 then
-		SetPixel(DoAbility(BurstHeal))
-	elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
-		SetPixel(DoAbility(HealOverTime))
-	elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.80 then
-		SetPixel(DoAbility(BurstHeal))
-	elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
-		SetPixel(DoAbility(RemoteInterrupt))
-	elseif Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss then
-		SetPixel(DoAbility(Fury))
-	elseif MustInterrupt and StaminaPercent > 0.49 then
-		SetPixel(DoBreakFreeInterrupt)
-	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
-		SetPixel(DoAbility(Taunt))
-	elseif MustBlock and StaminaPercent > 0.99 then
-		SetPixel(DoBlock)
-	elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
-		SetPixel(DoRollDodge)
-	elseif ImbueWeaponActive == true and InCombat and EnemiesAround then
-		SetPixel(DoLightAttack)
-	elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat then
-		SetPixel(DoAbility(CrystalFragments))
-	elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
-		SetPixel(DoAbility(Ritual))
-	elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
-		SetPixel(DoAbility(Focus))
-	elseif BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
-		SetPixel(DoAbility(BoundlessStorm))
-	elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
-		SetPixel(DoInteract)
-	elseif VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
-		SetPixel(DoAbility(VolatileFamiliar))
-	elseif VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and InCombat then
-		SetPixel(DoAbility(VolatileFamiliar))
-	elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
-		SetPixel(DoAbility(SoulTrap))
-	elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
-		SetPixel(DoAbility(SunFire))
-	elseif DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
-		SetPixel(DoAbility(DestructiveTouch))
-	elseif Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
-		SetPixel(DoAbility(Surge))
-	elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
-		SetPixel(DoAbility(Degeneration))
-	elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
-		SetPixel(DoAbility(WeaknessToElements))
-	elseif SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
-		SetPixel(DoAbility(SunFire))
-	elseif DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
-		SetPixel(DoAbility(DamageShield))
-	elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
-		SetPixel(DoNothing)
-	elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
-		SetPixel(DoAbility(Meditation))
-	-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
-	-- 	SetPixel(DoAbility(SunFire))
-	elseif ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
-		SetPixel(DoAbility(ForceShock))
-	elseif ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
-		SetPixel(DoAbility(ImbueWeapon))
-	elseif CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
-		SetPixel(DoAbility(CrystalFragments))
-	elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and EnemiesAround then
-		SetPixel(DoAbility(Pokes))
-	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
-		SetPixel(DoAbility(SolarBarrage))
-	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 then
-		-- if IsBlockActive() then
+	-- Mounted/Dead/InMenu
+		if InputReady == false or IsUnitDead("player") then
+			SetPixel(DoNothing)
+		elseif AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
+			SetPixel(DoInteract)
+		elseif RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
+			SetPixel(DoAbility(RapidManeuver))
+		elseif Mounted and Moving and not Sprinting then
+			SetPixel(DoMountSprint)
+		elseif Mounted then
+			SetPixel(DoNothing)
+	
+	-- Combat: Healing
+		elseif Stunned or Feared and StaminaPercent > 0.49 then
+			SetPixel(DoBreakFreeInterrupt)
+		elseif TwilightMatriarch.Slotted and not TwilightActive and InCombat then
+			SetPixel(DoAbility(TwilightMatriarch))
+		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
+			SetPixel(DoAbility(BurstHeal))
+		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.80 then
+			SetPixel(DoAbility(BurstHeal))
+		elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
+			SetPixel(DoAbility(HealOverTime))
+		elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.80 then
+			SetPixel(DoAbility(BurstHeal))
+	
+	-- Combat: High Priority (Procs, Interrupt, Dodge, Block)
+		elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
+			SetPixel(DoAbility(RemoteInterrupt))
+		elseif Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss then
+			SetPixel(DoAbility(Fury))
+		elseif MustInterrupt and StaminaPercent > 0.49 then
+			SetPixel(DoBreakFreeInterrupt)
+		-- elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
 		-- 	SetPixel(DoStopBlock)
-		-- else
-			SetPixel(DoHeavyAttack)
-		-- end
-	elseif InCombat and EnemiesAround then
-		-- if IsBlockActive() then
-		-- 	SetPixel(DoStopBlock)
-		-- else
+		elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
+			SetPixel(DoAbility(Taunt))
+		elseif MustBlock and StaminaPercent > 0.99 then
+			SetPixel(DoBlock)
+		elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
+			SetPixel(DoRollDodge)
+		elseif ImbueWeaponActive == true and InCombat and EnemiesAround then
 			SetPixel(DoLightAttack)
-		-- end
-	-- elseif InCombat and StaminaPercent > 0.50 then
-	-- 	SetPixel(DoStartBlock)
-	elseif ReelInFish and not InCombat then
-		SetPixel(DoReelInFish)
-		zo_callLater(PD_StopReelInFish, 2000)
-	elseif (AvailableReticleInteraction=="Disarm" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam"))) then
-		SetPixel(DoInteract)
-	elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
-		SetPixel(DoInteract)
-	elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat then
-		SetPixel(DoCrouch)
-		CrouchWasAuto = true
-	elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
-		SetPixel(DoCrouch)
-	elseif PickpocketPrime then
-		SetPixel(DoInteract)
-	-- elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
-	-- 	SetPixel(DoAbility(RapidManeuver))
-	elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
-		SetPixel(DoAbility(Accelerate))
-	--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
-	--	SetPixel(DoSprint)
-		-- zo_callLater(SetSprintingTrue, 100)
-	else
-		SetPixel(DoNothing)
-	end
+		elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat then
+			SetPixel(DoAbility(CrystalFragments))
 
-	if CurrentPixel ~= DoSprint and CurrentPixel ~= DoMountSprint and CurrentPixel ~= DoNothing then Sprinting = false end
+	-- Combat: Medium Priority (Buffs, DoTs, Looting, Meditation)
+		elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+			SetPixel(DoAbility(Ritual))
+		elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
+			SetPixel(DoAbility(Focus))
+		elseif BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
+			SetPixel(DoAbility(BoundlessStorm))
+		elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
+			SetPixel(DoInteract)
+		elseif VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+			SetPixel(DoAbility(VolatileFamiliar))
+		elseif VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and InCombat then
+			SetPixel(DoAbility(VolatileFamiliar))
+		elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+			SetPixel(DoAbility(SoulTrap))
+		elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+			SetPixel(DoAbility(SunFire))
+		elseif DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+			SetPixel(DoAbility(DestructiveTouch))
+		elseif Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+			SetPixel(DoAbility(Surge))
+		elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
+			SetPixel(DoAbility(Degeneration))
+		elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
+			SetPixel(DoAbility(WeaknessToElements))
+		elseif SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
+			SetPixel(DoAbility(SunFire))
+		elseif DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
+			SetPixel(DoAbility(DamageShield))
+		elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
+			SetPixel(DoNothing)
+		elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
+			SetPixel(DoAbility(Meditation))
+
+	-- Combat: Low Priority (Damage Spamming)
+		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
+		-- 	SetPixel(DoAbility(SunFire))
+		elseif ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
+			SetPixel(DoAbility(ForceShock))
+		elseif ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+			SetPixel(DoAbility(ImbueWeapon))
+		elseif CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
+			SetPixel(DoAbility(CrystalFragments))
+		elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and EnemiesAround then
+			SetPixel(DoAbility(Pokes))
+		elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
+			SetPixel(DoAbility(SolarBarrage))
+		elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 then
+				SetPixel(DoHeavyAttack)
+		elseif InCombat and EnemiesAround then
+				SetPixel(DoLightAttack)
+		-- elseif InCombat and StaminaPercent > 0.50 then
+		-- 	SetPixel(DoStartBlock)
+
+	-- Environment Interaction (Looting, Stealing, Sprinting)
+		elseif ReelInFish and not InCombat then
+			SetPixel(DoReelInFish)
+			zo_callLater(PD_StopReelInFish, 2000)
+		elseif (AvailableReticleInteraction=="Disarm" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam"))) then
+			SetPixel(DoInteract)
+		elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
+			SetPixel(DoInteract)
+		elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat then
+			SetPixel(DoCrouch)
+			CrouchWasAuto = true
+		elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
+			SetPixel(DoCrouch)
+		elseif PickpocketPrime then
+			SetPixel(DoInteract)
+		-- elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
+		-- 	SetPixel(DoAbility(RapidManeuver))
+		elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
+			SetPixel(DoAbility(Accelerate))
+		--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
+		--	SetPixel(DoSprint)
+			-- zo_callLater(SetSprintingTrue, 100)
+	
+	-- End of Logic
+		else
+			SetPixel(DoNothing)
+		end
+
+		if CurrentPixel ~= DoSprint and CurrentPixel ~= DoMountSprint and CurrentPixel ~= DoNothing then Sprinting = false end
 end
 
 
