@@ -29,6 +29,7 @@ local Stamina = 0
 local StaminaPrevious = 0
 local Health = 0
 local HealthPrevious = 0
+local Ultimate = 0
 
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
@@ -725,6 +726,10 @@ local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, pow
 			HealthPercent = powerValue / powerMax
 		end
 		UpdateLowestGroupHealth()
+		BigLogicRoutine()
+	elseif powerType==POWERTYPE_ULTIMATE then
+		Ultimate = powerValue
+		d(Ultimate)
 		BigLogicRoutine()
 	end
 end
