@@ -59,6 +59,8 @@ local TargetIsBoss = false
 local TargetNotSunFired = false
 local TargetNotMajorBreach = false
 local TargetMaxHealth = 0
+local TargetHealth = 0
+local TargetHealthPercent = 0
 local TargetIsNotSoulTrap = false
 local TargetIsNotDestructiveTouched = false
 
@@ -351,9 +353,11 @@ local function UpdateTargetInfo()
 			TargetIsBoss = false
 		end
 
-		local _, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+		local currentHp, maxHp, _ = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+		TargetHealth = currentHp
 		TargetMaxHealth = maxHp
-		
+		TargetHealthPercent = currentHp/maxHp
+
 		local numAuras = GetNumBuffs('reticleover')
 
 		TargetNotSunFired = true
