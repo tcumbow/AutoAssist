@@ -22,8 +22,6 @@ local TwilightActive = false
 local CrystalWeaver = false
 local CrystalFragmentsProc = false
 
-local InputReady = true
-local InCombat = false
 local MagickaPercent = 1.00
 local StaminaPercent = 1.00
 local HealthPercent = 1.00
@@ -31,9 +29,14 @@ local Stamina = 0
 local StaminaPrevious = 0
 local Health = 0
 local HealthPrevious = 0
+
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
 local LowestGroupHealthPercent = 1.00
+
+
+local InputReady = true
+local InCombat = false
 local Feared = false
 local Stunned = false
 local MustDodge = false
