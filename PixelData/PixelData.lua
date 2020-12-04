@@ -268,7 +268,6 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(Accelerate))
 		--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
 		--	SetPixel(DoSprint)
-			-- zo_callLater(SetSprintingTrue, 100)
 	
 	-- End of Logic
 		else
