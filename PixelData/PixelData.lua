@@ -729,7 +729,6 @@ local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, pow
 		BigLogicRoutine()
 	elseif powerType==POWERTYPE_ULTIMATE then
 		Ultimate = powerValue
-		d(Ultimate)
 		BigLogicRoutine()
 	end
 end
