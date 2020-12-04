@@ -202,6 +202,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(CrystalFragments))
 
 	-- Combat: Medium Priority (Buffs, DoTs, Looting, Meditation)
+		elseif EnergyOverload.Slotted and not EnergyOverloadActive and MagickaPercent < 0.40 and Ultimate > (EnergyOverload.Cost * 5) and InCombat then
+			SetPixel(DoAbility(EnergyOverload))
 		elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 			SetPixel(DoAbility(Ritual))
 		elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
@@ -235,6 +237,10 @@ local function BigLogicRoutine()
 		elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 			SetPixel(DoAbility(Meditation))
 
+		elseif EnergyOverloadActive and (MagickaPercent > 0.80 or not InCombat) then
+			SetPixel(DoAbility(EnergyOverload))
+		elseif EnergyOverloadActive and TargetIsEnemy and InCombat then
+			SetPixel(DoLightAttack)
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
@@ -530,10 +536,12 @@ local function UpdateAbilitySlotInfo()
 				d("Unrecognized ability:"..AbilityName)
 			end
 		end
-		local UltimateName = GetAbilityName(GetSlotBoundId(8,barNumIterator))
+		local AbilityId = GetSlotBoundId(8,barNumIterator)
+		local UltimateName = GetAbilityName(AbilityId)
 		if UltimateName == "Energy Overload" then
 			EnergyOverload.Slotted = true
 			EnergyOverload[barNumIterator] = DoUltimate
+			EnergyOverload.Cost = GetAbilityCost(AbilityId)
 		end
 	end
 end
