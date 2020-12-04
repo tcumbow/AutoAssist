@@ -49,6 +49,7 @@ local OtherBar = 0
 
 local LastStealSightTime = 0
 local LastEnemySightTime = 0
+local LastStationaryTime = 0
 
 local CurrentPixel = 0
 local PreviousPixel = 0
@@ -136,10 +137,12 @@ end
 local function UpdateLastSights()
 	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
 	if AvailableReticleInteraction == "Steal" or AvailableReticleInteraction == "BlockedSteal" then LastStealSightTime = GetGameTimeMilliseconds() end
+	if not IsPlayerMoving() then LastStationaryTime = GetGameTimeMilliseconds() end
 end
 
 local function BigLogicRoutine()
 	-- Last-Minute Info Gathering
+		UpdateLastSights()
 		Moving = IsPlayerMoving()
 		if not Moving then Sprinting = false end
 		if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
@@ -682,7 +685,6 @@ local function OnEventInteractableTargetChanged()
 	if AvailableReticleInteraction ~= action or AvailableReticleTarget ~= interactableName then
 		AvailableReticleInteraction = action
 		AvailableReticleTarget = interactableName
-		UpdateLastSights()
 		BigLogicRoutine()
 	end
 	
