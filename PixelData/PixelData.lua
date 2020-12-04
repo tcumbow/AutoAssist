@@ -266,8 +266,8 @@ local function BigLogicRoutine()
 		-- 	SetPixel(DoAbility(RapidManeuver))
 		elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
 			SetPixel(DoAbility(Accelerate))
-		--elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 then
-		--	SetPixel(DoSprint)
+		elseif not InCombat and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 and (GetGameTimeMilliseconds() - LastStationaryTime) > 2000 then
+			SetPixel(DoSprint)
 	
 	-- End of Logic
 		else
