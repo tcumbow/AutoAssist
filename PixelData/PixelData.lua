@@ -41,13 +41,14 @@ local MustInterrupt = false
 local MustBreakFree = false
 local MustBlock = false
 local Sprinting = false
-local LastEnemySightTime = 0
 local Hidden = false
 local Crouching = false
 local CrouchWasAuto = false
-local LastStealSightTime = 0
 local CurrentBar = 0
 local OtherBar = 0
+
+local LastStealSightTime = 0
+local LastEnemySightTime = 0
 
 local CurrentPixel = 0
 local PreviousPixel = 0
