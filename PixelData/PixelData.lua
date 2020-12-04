@@ -152,8 +152,8 @@ local function BigLogicRoutine()
 		SetPixel(DoMountSprint)
 	elseif Mounted then
 		SetPixel(DoNothing)
-	elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
-		SetPixel(DoStopBlock)
+	-- elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
+	-- 	SetPixel(DoStopBlock)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
 	elseif LowestGroupHealthPercent < 0.85 and TwilightMatriarch.Slotted and not TwilightActive and InCombat then
@@ -229,17 +229,17 @@ local function BigLogicRoutine()
 	elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
 		SetPixel(DoAbility(SolarBarrage))
 	elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 then
-		if IsBlockActive() then
-			SetPixel(DoStopBlock)
-		else
+		-- if IsBlockActive() then
+		-- 	SetPixel(DoStopBlock)
+		-- else
 			SetPixel(DoHeavyAttack)
-		end
+		-- end
 	elseif InCombat and EnemiesAround then
-		if IsBlockActive() then
-			SetPixel(DoStopBlock)
-		else
+		-- if IsBlockActive() then
+		-- 	SetPixel(DoStopBlock)
+		-- else
 			SetPixel(DoLightAttack)
-		end
+		-- end
 	elseif TwilightMatriarch.Slotted and not TwilightActive and MagickaPercent > 0.60 and InCombat then
 		SetPixel(DoAbility(TwilightMatriarch))
 	-- elseif InCombat and StaminaPercent > 0.50 then
