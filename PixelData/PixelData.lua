@@ -21,6 +21,7 @@ local FamiliarAOEActive = false
 local TwilightActive = false
 local CrystalWeaver = false
 local CrystalFragmentsProc = false
+local EnergyOverloadActive = false
 
 local MagickaPercent = 1.00
 local StaminaPercent = 1.00
@@ -603,6 +604,7 @@ local function UpdateBuffs()
 	TwilightActive = false
 	CrystalWeaver = false
 	CrystalFragmentsProc = false
+	EnergyOverloadActive = false
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
 	if numBuffs > 0 then
@@ -640,6 +642,8 @@ local function UpdateBuffs()
 				CrystalWeaver = true
 			elseif name=="Crystal Fragments Proc" then
 				CrystalFragmentsProc = true
+			elseif name=="Energy Overload" then
+				EnergyOverloadActive = true
 			elseif name=="Dampen Magic" then
 				DamageShieldActive = true
 			elseif name=="Empower" then
