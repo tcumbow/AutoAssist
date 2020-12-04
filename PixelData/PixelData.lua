@@ -749,7 +749,7 @@ local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, pow
 		end
 		UpdateLowestGroupHealth()
 		BigLogicRoutine()
-	elseif powerType==POWERTYPE_ULTIMATE then
+	elseif unitTag=="player" and powerType==POWERTYPE_ULTIMATE then
 		Ultimate = powerValue
 		BigLogicRoutine()
 	end
