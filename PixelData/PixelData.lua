@@ -152,6 +152,8 @@ local function BigLogicRoutine()
 		SetPixel(DoStopBlock)
 	elseif Stunned or Feared and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
+	elseif LowestGroupHealthPercent < 0.85 and TwilightMatriarch.Slotted and not TwilightActive and InCombat then
+		SetPixel(DoAbility(TwilightMatriarch))
 	elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
 		SetPixel(DoAbility(BurstHeal))
 	elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.80 then
