@@ -238,10 +238,8 @@ local function BigLogicRoutine()
 		elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 			SetPixel(DoAbility(Meditation))
 
-		elseif EnergyOverloadActive and (MagickaPercent > 0.80 or not InCombat) then
+		elseif EnergyOverloadActive and ((MagickaPercent > 0.70 and UltimatePercent < 0.70) or not InCombat) then
 			SetPixel(DoAbility(EnergyOverload))
-		elseif EnergyOverloadActive and TargetIsEnemy and InCombat then
-			SetPixel(DoLightAttack)
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
@@ -251,15 +249,19 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(ImbueWeapon))
 		elseif CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
 			SetPixel(DoAbility(CrystalFragments))
-		elseif Pokes.Slotted and MagickaPercent > 0.60 and InCombat and EnemiesAround then
+		elseif Pokes.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(Pokes))
-		elseif SolarBarrage.Slotted and MagickaPercent > 0.60 and InCombat and not Empower and EnemiesAround then
+		elseif SolarBarrage.Slotted and MagickaPercent > 0.70 and InCombat and not Empower and EnemiesAround then
 			SetPixel(DoAbility(SolarBarrage))
+		elseif EnergyOverload.Slotted and UltimatePercent > 0.97 and EnemiesAround and not EnergyOverloadActive then
+			SetPixel(DoAbility(EnergyOverload))
+		elseif EnergyOverloadActive and TargetIsEnemy and InCombat then
+			SetPixel(DoLightAttack)
 		elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 and not EnergyOverloadActive then
 				SetPixel(DoHeavyAttack)
 		elseif InCombat and EnemiesAround and not EnergyOverloadActive then
 				SetPixel(DoLightAttack)
-		-- elseif InCombat and StaminaPercent > 0.50 then
+	-- elseif InCombat and StaminaPercent > 0.50 then
 		-- 	SetPixel(DoStartBlock)
 
 	-- Environment Interaction (Looting, Stealing, Sprinting)
