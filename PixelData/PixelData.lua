@@ -125,6 +125,7 @@ local DoFrontBar = 16
 local DoBackBar = 17
 local DoStartBlock = 18
 local DoStopBlock = 19
+local DoUltimate = 20
 
 
 local function SetPixel(x)
@@ -532,7 +533,7 @@ local function UpdateAbilitySlotInfo()
 		local UltimateName = GetAbilityName(GetSlotBoundId(8,barNumIterator))
 		if UltimateName == "Energy Overload" then
 			EnergyOverload.Slotted = true
-			EnergyOverload[barNumIterator] = 6
+			EnergyOverload[barNumIterator] = DoUltimate
 		end
 	end
 end

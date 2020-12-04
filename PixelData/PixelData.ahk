@@ -128,6 +128,13 @@ Loop{
             Case "0x000013": ;DoStopBlock
                 if (GetKeyState("9"))
                     Send {9 up}
+            Case "0x000014": ;DoUltimate
+                if (GetKeyState("6"))
+                    Send {6 up}
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send r
+                    LastActionTime := A_TickCount
+                }
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}
