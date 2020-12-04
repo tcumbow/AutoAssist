@@ -63,6 +63,7 @@ local TargetHealth = 0
 local TargetHealthPercent = 0
 local TargetIsNotSoulTrap = false
 local TargetIsNotDestructiveTouched = false
+local TargetNotFury = false
 
 local AvailableReticleInteraction = nil
 local AvailableReticleTarget = nil
@@ -169,6 +170,8 @@ local function BigLogicRoutine()
 		SetPixel(DoAbility(RemoteInterrupt))
 	elseif TwilightMatriarch.Slotted and not TwilightActive and MagickaPercent > 0.60 and InCombat and InBossBattle then
 		SetPixel(DoAbility(TwilightMatriarch))
+	elseif Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss then
+		SetPixel(DoAbility(Fury))
 	elseif MustInterrupt and StaminaPercent > 0.49 then
 		SetPixel(DoBreakFreeInterrupt)
 	elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
@@ -365,6 +368,7 @@ local function UpdateTargetInfo()
 		TargetNotMajorBreach = true
 		TargetIsNotSoulTrap = true
 		TargetIsNotDestructiveTouched = true
+		TargetNotFury = true
 		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
@@ -374,6 +378,8 @@ local function UpdateTargetInfo()
 					TargetNotSunFired = false
 				elseif name=="Major Breach" then
 					TargetNotMajorBreach = false
+				elseif name=="Endless Fury" then
+					TargetNotFury = false
 				elseif name=="Soul Trap" or name=="Soul Splitting Trap" or name=="Consuming Trap" then
 					TargetIsNotSoulTrap = false
 				elseif name == "Destructive Touch" or name == "Shock Touch" or name == "Destructive Reach" or name == "Shock Reach" then
@@ -388,6 +394,7 @@ local function UpdateTargetInfo()
 		TargetNotSunFired = false
 		TargetIsBoss = false
 		TargetNotMajorBreach = false
+		TargetNotFury = false
 		TargetIsNotSoulTrap = false
 		TargetIsNotDestructiveTouched = false
 	end
@@ -627,10 +634,11 @@ local function UpdateBuffs()
 				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
 			-- elseif name=="Rending Leap Ranged" or name=="Uppercut" or name=="Skeletal Smash" or name=="Stunning Shock" or name=="Discharge" or name=="Constricting Strike" or name=="Stun" then
 			-- 	MustBreakFree = true
-			elseif name=="Increased Experience" or name=="ESO Plus Member" or name=="Bound Aegis" or name=="Minor Resolve" or name=="Minor Slayer" or name=="Inner Light" or name=="Boon: The Steed" or name=="Critical Surge" or name=="Major Brutality" or name=="Minor Prophecy" or name=="Boundless Storm" then
 
-			else
-				d(name)
+
+			-- elseif name=="Increased Experience" or name=="ESO Plus Member" or name=="Bound Aegis" or name=="Minor Resolve" or name=="Minor Slayer" or name=="Inner Light" or name=="Boon: The Steed" or name=="Critical Surge" or name=="Major Brutality" or name=="Minor Prophecy" or name=="Boundless Storm" then
+			-- else
+			-- 	d(name)
 			end
 		end
 		if msUntilBuffRecheckNeeded < 999999 then
