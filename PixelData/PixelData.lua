@@ -106,6 +106,8 @@ local BoundlessStorm = { }
 local CrystalFragments = { }
 local Fury = { }
 
+local EnergyOverload = { }
+
 local DoNothing = 0
 -- 1 thru 5 are used for doing abilities 1 thru 5, based on the number assigned in UpdateAbilitySlotInfo()
 local DoHeavyAttack = 6
@@ -441,6 +443,8 @@ local function UpdateAbilitySlotInfo()
 	CrystalFragments = { }
 	Fury = { }
 
+	EnergyOverload = { }
+
 	for barNumIterator = 0, 1 do
 		for i = 3, 7 do
 			local AbilityName = GetAbilityName(GetSlotBoundId(i,barNumIterator))
@@ -523,6 +527,11 @@ local function UpdateAbilitySlotInfo()
 			else 
 				d("Unrecognized ability:"..AbilityName)
 			end
+		end
+		local UltimateName = GetAbilityName(GetSlotBoundId(8,barNumIterator))
+		if UltimateName == "Energy Overload" then
+			EnergyOverload.Slotted = true
+			EnergyOverload[barNumIterator] = 6
 		end
 	end
 end
