@@ -240,7 +240,7 @@ local function BigLogicRoutine()
 		elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 			SetPixel(DoAbility(Meditation))
 
-		elseif EnergyOverloadActive and ((MagickaPercent > 0.70 and UltimatePercent < 0.70) or not InCombat) then
+		elseif EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 then
 			SetPixel(DoAbility(EnergyOverload))
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
