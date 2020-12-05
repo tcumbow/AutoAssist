@@ -175,11 +175,13 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(TwilightMatriarch))
 		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.80 then
+		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.40 then
 			SetPixel(DoAbility(BurstHeal))
 		elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 			SetPixel(DoAbility(HealOverTime))
-		elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.80 then
+		elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
+			SetPixel(DoAbility(BurstHeal))
+		elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.60 then
 			SetPixel(DoAbility(BurstHeal))
 	
 	-- Combat: High Priority (Procs, Interrupt, Dodge, Block)
