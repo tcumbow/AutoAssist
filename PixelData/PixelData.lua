@@ -557,7 +557,7 @@ end
 
 local function UpdatePickpocketState()
 	local isInBonus, isHostile, percentChance, _, isEmpty, prospectiveResult, _, _ = GetGameCameraPickpocketingBonusInfo()
-	local cantInteract 	= isHostile or empty or not prospectiveResult == PROSPECTIVE_PICKPOCKET_RESULT_CAN_ATTEMPT 
+	local cantInteract 	= isHostile or isEmpty or not prospectiveResult == PROSPECTIVE_PICKPOCKET_RESULT_CAN_ATTEMPT 
 	PickpocketPrime		= not cantInteract and percentChance == 100
 end
 
