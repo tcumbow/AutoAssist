@@ -53,6 +53,9 @@
         "GetBagSize",
         "GetNumBagUsedSlots",
         "PROSPECTIVE_PICKPOCKET_RESULT_CAN_ATTEMPT",
-        "GetGameCameraPickpocketingBonusInfo"
+        "GetGameCameraPickpocketingBonusInfo",
+        "GetAbilityCost",
+        "CancelBuff",
+        "POWERTYPE_ULTIMATE"
     ]
 }
