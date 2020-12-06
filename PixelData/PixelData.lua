@@ -40,6 +40,7 @@ local LowestGroupHealthPercent = 1.00
 
 local InputReady = true
 local InCombat = false
+local InventoryFull = false
 local Feared = false
 local Stunned = false
 local MustDodge = false
@@ -213,7 +214,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(Focus))
 		elseif BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(BoundlessStorm))
-		elseif (AvailableReticleInteraction=="Search" and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
+		elseif (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
 		elseif VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(VolatileFamiliar))
@@ -272,9 +273,9 @@ local function BigLogicRoutine()
 			zo_callLater(PD_StopReelInFish, 2000)
 		elseif (AvailableReticleInteraction=="Disarm" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Spoiled Food" or AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam"))) then
 			SetPixel(DoInteract)
-		elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat then
+		elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat and not InventoryFull then
 			SetPixel(DoInteract)
-		elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat then
+		elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat and not InventoryFull then
 			SetPixel(DoCrouch)
 			CrouchWasAuto = true
 		elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
@@ -614,6 +615,16 @@ local function PeriodicUpdate()
 	zo_callLater(PeriodicUpdate,250)
 end
 
+local function OccasionalUpdate()
+	if GetNumBagUsedSlots(BAG_BACKPACK) == GetBagSize(BAG_BACKPACK) then
+		InventoryFull = true
+	else
+		InventoryFull = false
+	end		
+
+	zo_callLater(PeriodicUpdate,5000)
+end
+
 
 
 local function InitialInfoGathering()
@@ -622,6 +633,7 @@ local function InitialInfoGathering()
 	UpdateBarState()
 	UpdateAbilitySlotInfo()
 	PeriodicUpdate()
+	OccasionalUpdate()
 end
 
 
