@@ -108,6 +108,7 @@ local Surge = { }
 local BoundlessStorm = { }
 local CrystalFragments = { }
 local Fury = { }
+local InnerLight = { }
 
 local EnergyOverload = { }
 
@@ -241,6 +242,8 @@ local function BigLogicRoutine()
 		elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 			SetPixel(DoAbility(Meditation))
 
+		elseif InnerLight.Slotted and not MajorProphecy then
+			SetPixel(16+OtherBar)
 		elseif EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 then
 			SetPixel(DoAbility(EnergyOverload))
 	-- Combat: Low Priority (Damage Spamming)
@@ -456,6 +459,7 @@ local function UpdateAbilitySlotInfo()
 	BoundlessStorm = { }
 	CrystalFragments = { }
 	Fury = { }
+	InnerLight = { }
 
 	EnergyOverload = { }
 
@@ -534,6 +538,9 @@ local function UpdateAbilitySlotInfo()
 			elseif AbilityName == "Endless Fury" then
 				Fury.Slotted = true
 				Fury[barNumIterator] = i-2
+			elseif AbilityName == "Inner Light" then
+				InnerLight.Slotted = true
+				InnerLight[barNumIterator] = i-2
 			elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" then
 				Surge.Slotted = true
 				Surge[barNumIterator] = i-2
