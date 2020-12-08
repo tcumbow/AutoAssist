@@ -1,6 +1,7 @@
 local ADDON_NAME = "PixelData"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
+local Config = { }
 
 local RawPlayerName = GetRawUnitName("player")
 local Mounted = false
@@ -297,9 +298,9 @@ local function BigLogicRoutine()
 			zo_callLater(PD_StopReelInFish, 2000)
 		elseif (AvailableReticleInteraction=="Disarm" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Spoiled Food" or AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets" or AvailableReticleTarget=="Guards" or AvailableReticleTarget=="Boots" or AvailableReticleTarget=="Shoes")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam"))) then
 			SetPixel(DoInteract)
-		elseif (AvailableReticleInteraction=="Steal") and Hidden and not InCombat and not InventoryFull then
+		elseif Config.Steal and AvailableReticleInteraction=="Steal" and Hidden and not InCombat and not InventoryFull then
 			SetPixel(DoInteract)
-		elseif (AvailableReticleInteraction=="Steal") and not Crouching and not InCombat and not InventoryFull then
+		elseif Config.Steal and AvailableReticleInteraction=="Steal" and not Crouching and not InCombat and not InventoryFull then
 			SetPixel(DoCrouch)
 			CrouchWasAuto = true
 		elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
@@ -979,7 +980,37 @@ local function PD_RegisterForEvents()
 end
 
 
+local function SetUpSettingsMenu()
+	local LAM = LibAddonMenu2
+	local saveData = Config
+	local panelName = "PixelDataSettings"
+	
+	local panelData = {
+		type = "panel",
+		name = "PixelData",
+		author = "Tom Cumbow",
+	}
+	local panel = LAM:RegisterAddonPanel(panelName, panelData)
+	local optionsData = {
+		{
+			type = "checkbox",
+			name = "Steal",
+			getFunc = function() return saveData.Steal end,
+			setFunc = function(value) saveData.Steal = value end
+		},
+		{
+			type = "checkbox",
+			name = "Pickpocket",
+			getFunc = function() return saveData.Pickpocket end,
+			setFunc = function(value) saveData.Pickpocket = value end
+		},
+		
+	}
+	LAM:RegisterOptionControls(panelName, optionsData)
+end
+
 local function InitialInfoGathering()
+	SetUpSettingsMenu()
 	InCombat = IsUnitInCombat("player")
 	Mounted = IsMounted()
 	UpdateBarState()
@@ -997,6 +1028,7 @@ end
 local function OnAddonLoaded(event, name)
 	if name == ADDON_NAME then
 		EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event)
+		Config = ZO_SavedVars:NewCharacterIdSettings("PixelDataSavedVariables",1)
 		PixelDataWindow = WINDOW_MANAGER:CreateTopLevelWindow("PixelData")
 		PixelDataWindow:SetDimensions(100,100)
 

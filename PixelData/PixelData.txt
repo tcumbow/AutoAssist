@@ -10,6 +10,7 @@
 ## APIVersion: 100032 100032
 ## Author: Tom Cumbow
 ## Description: PixelData
-## SavedVariables: 
+## SavedVariables: PixelDataSavedVariables
+## DependsOn: LibAddonMenu-2.0
 
 PixelData.lua
