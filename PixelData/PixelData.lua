@@ -222,7 +222,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(CrystalFragments))
 
 	-- Combat: Medium Priority (Buffs, DoTs, Looting, Meditation)
-		elseif PotionName=="Essence of Spell Power" and not MajorProphecy and not SunFire.Slotted and not InnerLight.Slotted and InCombat then
+		elseif PotionReady and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and not MajorProphecy and not SunFire.Slotted and not InnerLight.Slotted and InCombat then
 			SetPixel(DoQuickslot)
 		elseif EnergyOverload.Slotted and not EnergyOverloadActive and MagickaPercent < 0.40 and Ultimate > (EnergyOverload.Cost * 5) and InCombat then
 			SetPixel(DoAbility(EnergyOverload))
