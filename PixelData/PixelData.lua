@@ -106,7 +106,7 @@ local ForceShock = { }
 local Pokes = { }
 local SolarBarrage = { }
 local VolatileFamiliar = { }
-local TwilightMatriarch = { } 
+local TwilightMatriarch = { }
 local Surge = { }
 local BoundlessStorm = { }
 local CrystalFragments = { }
@@ -173,53 +173,53 @@ local function BigLogicRoutine()
 		if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
 		PotionReady = GetPotionIsReady()
 		PotionName = GetSlotName(GetCurrentQuickslot())
-	
+
 	-- Mounted/Dead/InMenu
 		if InputReady == false or IsUnitDead("player") then
 			SetPixel(DoNothing)
-		elseif AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
+		elseif Config.Loot and Config.PlatinumDismount and AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
 			SetPixel(DoInteract)
-		elseif RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
+		elseif Config.Gallop and RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
 			SetPixel(DoAbility(RapidManeuver))
-		elseif Mounted and Moving and not Sprinting then
+		elseif Config.MountSprint and Mounted and Moving and not Sprinting then
 			SetPixel(DoMountSprint)
 		elseif Mounted then
 			SetPixel(DoNothing)
-	
+
 	-- Combat: Healing
-		elseif Stunned or Feared and StaminaPercent > 0.49 then
+		elseif Config.BreakFree and (Stunned or Feared) and StaminaPercent > 0.49 then
 			SetPixel(DoBreakFreeInterrupt)
-		elseif TwilightMatriarch.Slotted and not TwilightActive and (InCombat or EnemiesAround or LowestGroupHealthPercent < 0.90) then
+		elseif Config.Healing and TwilightMatriarch.Slotted and not TwilightActive and (InCombat or EnemiesAround or LowestGroupHealthPercent < 0.90) then
 			SetPixel(DoAbility(TwilightMatriarch))
-		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
+		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.40 then
+		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.40 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
+		elseif Config.Healing and HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
 			SetPixel(DoAbility(HealOverTime))
-		elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
+		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.60 then
+		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.60 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
+		elseif Config.PotionSpell and PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
 			SetPixel(DoQuickslot)
-		elseif PotionReady and PotionName=="Crown Tri-Restoration Potion" and InCombat and (MagickaPercent < 0.50 or HealthPercent < 0.50 or StaminaPercent < 0.50) then
+		elseif Config.PotionTri and PotionReady and PotionName=="Crown Tri-Restoration Potion" and InCombat and (MagickaPercent < 0.50 or HealthPercent < 0.50 or StaminaPercent < 0.50) then
 			SetPixel(DoQuickslot)
-	
+
 	-- Combat: High Priority (Procs, Interrupt, Dodge, Block)
-		elseif RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
+		elseif Config.RemoteInterrupt and RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
 			SetPixel(DoAbility(RemoteInterrupt))
-		elseif Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss then
+		elseif Config.DamageAbils and Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss then
 			SetPixel(DoAbility(Fury))
-		elseif MustInterrupt and StaminaPercent > 0.49 then
+		elseif Config.Interrupt and MustInterrupt and StaminaPercent > 0.49 then
 			SetPixel(DoBreakFreeInterrupt)
 		-- elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
 		-- 	SetPixel(DoStopBlock)
-		elseif Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
+		elseif Config.TauntBosses and Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
 			SetPixel(DoAbility(Taunt))
-		elseif MustBlock and StaminaPercent > 0.99 then
+		elseif Config.Block and MustBlock and StaminaPercent > 0.99 then
 			SetPixel(DoBlock)
-		elseif MustDodge and FrontBar and StaminaPercent > 0.99 then
+		elseif Config.Dodge and MustDodge and FrontBar and StaminaPercent > 0.99 then
 			SetPixel(DoRollDodge)
 		elseif ImbueWeaponActive == true and InCombat and EnemiesAround then
 			SetPixel(DoLightAttack)
@@ -227,67 +227,67 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(CrystalFragments))
 
 	-- Combat: Medium Priority (Buffs, DoTs, Looting, Meditation)
-		elseif PotionReady and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and not MajorProphecy and not SunFire.Slotted and not InnerLight.Slotted and InCombat then
+		elseif Config.PotionSpell and PotionReady and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and not MajorProphecy and not SunFire.Slotted and not InnerLight.Slotted and InCombat then
 			SetPixel(DoQuickslot)
-		elseif EnergyOverload.Slotted and not EnergyOverloadActive and MagickaPercent < 0.40 and Ultimate > (EnergyOverload.Cost * 5) and InCombat then
+		elseif Config.Overload and EnergyOverload.Slotted and not EnergyOverloadActive and MagickaPercent < 0.40 and Ultimate > (EnergyOverload.Cost * 5) and InCombat then
 			SetPixel(DoAbility(EnergyOverload))
-		elseif Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+		elseif (Config.Buffs or Config.Healing) and Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 			SetPixel(DoAbility(Ritual))
-		elseif Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
+		elseif Config.Buffs and Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
 			SetPixel(DoAbility(Focus))
-		elseif BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
+		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(BoundlessStorm))
-		elseif (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
+		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
-		elseif VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(VolatileFamiliar))
-		elseif VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(VolatileFamiliar))
-		elseif SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+		elseif Config.DamageAbils and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(SoulTrap))
-		elseif SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		elseif Config.DamageAbils and SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(SunFire))
-		elseif DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		elseif Config.DamageAbils and DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(DestructiveTouch))
-		elseif Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.Buffs and Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(Surge))
-		elseif Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
+		elseif Config.Buffs and Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(Degeneration))
-		elseif WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
+		elseif (Config.Buffs or Config.DamageAbils) and WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
 			SetPixel(DoAbility(WeaknessToElements))
-		elseif SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
+		elseif Config.Buffs and SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
 			SetPixel(DoAbility(SunFire))
-		elseif DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
+		elseif Config.Shield and DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
 			SetPixel(DoAbility(DamageShield))
 		elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 			SetPixel(DoNothing)
-		elseif Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
+		elseif Config.Meditation and Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
 			SetPixel(DoAbility(Meditation))
 
-		elseif InnerLight.Slotted and not MajorProphecy then
+		elseif Config.SwapToInnerLight and InnerLight.Slotted and not MajorProphecy then
 			SetPixel(16+OtherBar)
-		elseif EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 then
+		elseif Config.Overload and EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 then
 			SetPixel(DoAbility(EnergyOverload))
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
-		elseif ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
+		elseif Config.DamageAbils and ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(ForceShock))
-		elseif ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+		elseif Config.DamageAbils and ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 			SetPixel(DoAbility(ImbueWeapon))
-		elseif CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
+		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
 			SetPixel(DoAbility(CrystalFragments))
-		elseif Pokes.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
+		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(Pokes))
-		elseif SolarBarrage.Slotted and MagickaPercent > 0.70 and InCombat and not Empower and EnemiesAround then
+		elseif Config.DamageAbils and SolarBarrage.Slotted and MagickaPercent > 0.70 and InCombat and not Empower and EnemiesAround then
 			SetPixel(DoAbility(SolarBarrage))
-		elseif EnergyOverload.Slotted and UltimatePercent > 0.97 and EnemiesAround and not EnergyOverloadActive then
+		elseif Config.Overload and EnergyOverload.Slotted and UltimatePercent > 0.97 and EnemiesAround and not EnergyOverloadActive then
 			SetPixel(DoAbility(EnergyOverload))
-		elseif EnergyOverloadActive and TargetIsEnemy and InCombat then
+		elseif Config.Overload and EnergyOverloadActive and TargetIsEnemy and InCombat then
 			SetPixel(DoLightAttack)
-		elseif InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 and not EnergyOverloadActive then
+		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 and not EnergyOverloadActive then
 				SetPixel(DoHeavyAttack)
-		elseif InCombat and EnemiesAround and not EnergyOverloadActive then
+		elseif Config.LightAttacks and InCombat and EnemiesAround and not EnergyOverloadActive then
 				SetPixel(DoLightAttack)
 	-- elseif InCombat and StaminaPercent > 0.50 then
 		-- 	SetPixel(DoStartBlock)
@@ -296,7 +296,9 @@ local function BigLogicRoutine()
 		elseif ReelInFish and not InCombat then
 			SetPixel(DoReelInFish)
 			zo_callLater(PD_StopReelInFish, 2000)
-		elseif (AvailableReticleInteraction=="Disarm" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Spoiled Food" or AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets" or AvailableReticleTarget=="Guards" or AvailableReticleTarget=="Boots" or AvailableReticleTarget=="Shoes")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam"))) then
+		elseif Config.Disarm and AvailableReticleInteraction=="Disarm" then
+			SetPixel(DoInteract)
+		elseif Config.Loot and (AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Spoiled Food" or AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets" or AvailableReticleTarget=="Guards" or AvailableReticleTarget=="Boots" or AvailableReticleTarget=="Shoes")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam"))) then
 			SetPixel(DoInteract)
 		elseif Config.Steal and AvailableReticleInteraction=="Steal" and Hidden and not InCombat and not InventoryFull then
 			SetPixel(DoInteract)
@@ -307,13 +309,13 @@ local function BigLogicRoutine()
 			SetPixel(DoCrouch)
 		elseif Config.Pickpocket and PickpocketPrime then
 			SetPixel(DoInteract)
-		-- elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
-		-- 	SetPixel(DoAbility(RapidManeuver))
-		elseif Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
+		elseif Config.Expedition and RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
+			SetPixel(DoAbility(RapidManeuver))
+		elseif Config.Expedition and Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving and not InCombat then
 			SetPixel(DoAbility(Accelerate))
-		elseif Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 and (GetGameTimeMilliseconds() - LastStationaryTime) > 2000 then
+		elseif Config.Sprint and Moving and not Sprinting and not Crouching and StaminaPercent > 0.10 and (GetGameTimeMilliseconds() - LastStationaryTime) > 2000 then
 			SetPixel(DoSprint)
-	
+
 	-- End of Logic
 		else
 			SetPixel(DoNothing)
@@ -476,7 +478,7 @@ local function UpdateAbilitySlotInfo()
 	Pokes = { }
 	SolarBarrage = { }
 	VolatileFamiliar = { }
-	TwilightMatriarch = { } 
+	TwilightMatriarch = { }
 	Surge = { }
 	BoundlessStorm = { }
 	CrystalFragments = { }
@@ -567,7 +569,7 @@ local function UpdateAbilitySlotInfo()
 				Surge.Slotted = true
 				Surge[barNumIterator] = i-2
 			elseif AbilityName == "Bound Aegis" or AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
-			else 
+			else
 				d("Unrecognized ability:"..AbilityName)
 			end
 		end
@@ -586,7 +588,7 @@ end
 
 local function UpdatePickpocketState()
 	local isInBonus, isHostile, percentChance, _, isEmpty, prospectiveResult, _, _ = GetGameCameraPickpocketingBonusInfo()
-	local cantInteract 	= isHostile or isEmpty or not prospectiveResult == PROSPECTIVE_PICKPOCKET_RESULT_CAN_ATTEMPT 
+	local cantInteract 	= isHostile or isEmpty or not prospectiveResult == PROSPECTIVE_PICKPOCKET_RESULT_CAN_ATTEMPT
 	PickpocketPrime		= not cantInteract and percentChance == 100
 end
 
@@ -614,7 +616,7 @@ local function DismissTwilight()
 	local PetList = { 24613, 30581, 30584, 30587, 24636, 30592, 30595, 30598, 24639, 30618, 30622, 30626 }
 
 	local i, k, v
-	
+
 	-- Walk through the player's active buffs
 	for i = 1, GetNumBuffs("player") do
 		local buffName, timeStarted, timeEnding, buffSlot, stackCount, iconFilename, buffType, effectType, abilityType, statusEffectType, abilityId, canClickOff = GetUnitBuffInfo("player", i)
@@ -626,7 +628,7 @@ local function DismissTwilight()
 			end
 		end
 	end
-	
+
 end
 
 
@@ -649,7 +651,7 @@ local function OccasionalUpdate()
 		InventoryFull = true
 	else
 		InventoryFull = false
-	end		
+	end
 
 	zo_callLater(PeriodicUpdate,5000)
 end
@@ -776,7 +778,7 @@ local function OnEventInteractableTargetChanged()
 		AvailableReticleTarget = interactableName
 		BigLogicRoutine()
 	end
-	
+
 end
 
 
@@ -872,7 +874,7 @@ local function OnEventCombatTipRemove()
 end
 
 local function OnEventCombatEvent(_,result,_,_,_,_,_,_,targetName)
-	if targetName == RawPlayerName then 
+	if targetName == RawPlayerName then
 		if result == ACTION_RESULT_FEARED then
 			Feared = true
 		end
@@ -982,9 +984,8 @@ end
 
 local function SetUpSettingsMenu()
 	local LAM = LibAddonMenu2
-	local saveData = Config
 	local panelName = "PixelDataSettings"
-	
+
 	local panelData = {
 		type = "panel",
 		name = "PixelData",
@@ -994,23 +995,167 @@ local function SetUpSettingsMenu()
 	local optionsData = {
 		{
 			type = "checkbox",
+			name = "Break free",
+			getFunc = function() return Config.BreakFree end,
+			setFunc = function(value) Config.BreakFree = value end
+		},
+		{
+			type = "checkbox",
+			name = "Dodge",
+			getFunc = function() return Config.Dodge end,
+			setFunc = function(value) Config.Dodge = value end
+		},
+		{
+			type = "checkbox",
+			name = "Block",
+			getFunc = function() return Config.Block end,
+			setFunc = function(value) Config.Block = value end
+		},
+		{
+			type = "checkbox",
+			name = "Interrupt",
+			getFunc = function() return Config.Interrupt end,
+			setFunc = function(value) Config.Interrupt = value end
+		},
+		{
+			type = "checkbox",
+			name = "Remote interrupt",
+			getFunc = function() return Config.RemoteInterrupt end,
+			setFunc = function(value) Config.RemoteInterrupt = value end
+		},
+		{
+			type = "checkbox",
+			name = "Healing",
+			getFunc = function() return Config.Healing end,
+			setFunc = function(value) Config.Healing = value end
+		},
+		{
+			type = "checkbox",
+			name = "Use Crown Tri-Restoration potions",
+			getFunc = function() return Config.PotionTri end,
+			setFunc = function(value) Config.PotionTri = value end
+		},
+		{
+			type = "checkbox",
+			name = "Use Spell Power/Crit potions",
+			getFunc = function() return Config.PotionSpell end,
+			setFunc = function(value) Config.PotionSpell = value end
+		},
+		{
+			type = "checkbox",
+			name = "Taunt bosses",
+			getFunc = function() return Config.TauntBosses end,
+			setFunc = function(value) Config.TauntBosses = value end
+		},
+		{
+			type = "checkbox",
+			name = "Taunt strong enemies",
+			getFunc = function() return Config.TauntStrongEnimies end,
+			setFunc = function(value) Config.TauntStrongEnimies = value end
+		},
+		{
+			type = "checkbox",
+			name = "Overload",
+			getFunc = function() return Config.Overload end,
+			setFunc = function(value) Config.Overload = value end
+		},
+		{
+			type = "checkbox",
+			name = "Buffs",
+			getFunc = function() return Config.Buffs end,
+			setFunc = function(value) Config.Buffs = value end
+		},
+		{
+			type = "checkbox",
+			name = "Swap to bar with Inner Light before attacking",
+			getFunc = function() return Config.SwapToInnerLight end,
+			setFunc = function(value) Config.SwapToInnerLight = value end
+		},
+		{
+			type = "checkbox",
+			name = "Damage abilities",
+			getFunc = function() return Config.DamageAbils end,
+			setFunc = function(value) Config.DamageAbils = value end
+		},
+		{
+			type = "checkbox",
+			name = "Heavy attacks",
+			getFunc = function() return Config.HeavyAttacks end,
+			setFunc = function(value) Config.HeavyAttacks = value end
+		},
+		{
+			type = "checkbox",
+			name = "Light attacks",
+			getFunc = function() return Config.LightAttacks end,
+			setFunc = function(value) Config.LightAttacks = value end
+		},
+		{
+			type = "checkbox",
+			name = "Loot/Harvest/Take",
+			getFunc = function() return Config.Loot end,
+			setFunc = function(value) Config.Loot = value end
+		},
+		{
+			type = "checkbox",
+			name = "Disarm traps",
+			getFunc = function() return Config.Disarm end,
+			setFunc = function(value) Config.Disarm = value end
+		},
+		{
+			type = "checkbox",
+			name = "Sprint",
+			getFunc = function() return Config.Sprint end,
+			setFunc = function(value) Config.Sprint = value end
+		},
+		{
+			type = "checkbox",
+			name = "Speed spell",
+			getFunc = function() return Config.Expedition end,
+			setFunc = function(value) Config.Expedition = value end
+		},
+		{
+			type = "checkbox",
+			name = "Sprint when mounted",
+			getFunc = function() return Config.MountSprint end,
+			setFunc = function(value) Config.MountSprint = value end
+		},
+		{
+			type = "checkbox",
+			name = "Speed spell on mount",
+			getFunc = function() return Config.Gallop end,
+			setFunc = function(value) Config.Gallop = value end
+		},
+		{
+			type = "checkbox",
+			name = "Dismount for Platinum",
+			getFunc = function() return Config.PlatinumDismount end,
+			setFunc = function(value) Config.PlatinumDismount = value end
+		},
+		{
+			type = "checkbox",
+			name = "Hide Twilight when no enemies around",
+			getFunc = function() return Config.HideTwilight end,
+			setFunc = function(value) Config.HideTwilight = value end
+		},
+		{
+			type = "checkbox",
 			name = "Steal when fully hidden",
-			getFunc = function() return saveData.Steal end,
-			setFunc = function(value) saveData.Steal = value end
+			getFunc = function() return Config.Steal end,
+			setFunc = function(value) Config.Steal = value end
 		},
 		{
 			type = "checkbox",
 			name = "Crouch and uncrouch when stealable items detected",
-			getFunc = function() return saveData.CrouchSteal end,
-			setFunc = function(value) saveData.CrouchSteal = value end
+			getFunc = function() return Config.CrouchSteal end,
+			setFunc = function(value) Config.CrouchSteal = value end
 		},
 		{
 			type = "checkbox",
 			name = "Pickpocket when 100% chance",
-			getFunc = function() return saveData.Pickpocket end,
-			setFunc = function(value) saveData.Pickpocket = value end
+			getFunc = function() return Config.Pickpocket end,
+			setFunc = function(value) Config.Pickpocket = value end
 		},
-		
+
 	}
 	LAM:RegisterOptionControls(panelName, optionsData)
 end
@@ -1044,11 +1189,11 @@ local function OnAddonLoaded(event, name)
 		SetPixel(DoNothing)
 
 
-		
+
 		zo_callLater(InitialInfoGathering, 1000)
 
 
-		
+
 	end
 end
 

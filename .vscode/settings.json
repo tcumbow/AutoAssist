@@ -60,6 +60,8 @@
         "GetSlotCooldownInfo",
         "GetCurrentQuickslot",
         "GetSlotItemCount",
-        "GetSlotName"
+        "GetSlotName",
+        "LibAddonMenu2",
+        "ZO_SavedVars"
     ]
 }
