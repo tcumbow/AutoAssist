@@ -1,4 +1,4 @@
-local ADDON_NAME = "PixelData"
+local ADDON_NAME = "AutoAssist"
 local ADDON_VERSION = "1.0"
 local ADDON_AUTHOR = "Tom Cumbow"
 local Config = { }
@@ -984,11 +984,11 @@ end
 
 local function SetUpSettingsMenu()
 	local LAM = LibAddonMenu2
-	local panelName = "PixelDataSettings"
+	local panelName = "AutoAssistSettings"
 
 	local panelData = {
 		type = "panel",
-		name = "PixelData",
+		name = "AutoAssist",
 		author = "Tom Cumbow",
 	}
 	local panel = LAM:RegisterAddonPanel(panelName, panelData)
@@ -1169,6 +1169,7 @@ local function InitialInfoGathering()
 	PeriodicUpdate()
 	OccasionalUpdate()
 	PD_RegisterForEvents()
+	AutoAssistLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
 	PixelDataLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
 
 end
@@ -1179,13 +1180,13 @@ end
 local function OnAddonLoaded(event, name)
 	if name == ADDON_NAME then
 		EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event)
-		Config = ZO_SavedVars:NewCharacterIdSettings("PixelDataSavedVariables",1)
-		PixelDataWindow = WINDOW_MANAGER:CreateTopLevelWindow("PixelData")
-		PixelDataWindow:SetDimensions(100,100)
+		Config = ZO_SavedVars:NewCharacterIdSettings("AutoAssistSavedVariables",1)
+		AutoAssistWindow = WINDOW_MANAGER:CreateTopLevelWindow("AutoAssist")
+		AutoAssistWindow:SetDimensions(100,100)
 
-		PDL = CreateControl(nil, PixelDataWindow,  CT_LINE)
-		PDL:SetAnchor(TOPLEFT, PixelDataWindow, TOPLEFT, 0, 0)
-		PDL:SetAnchor(TOPRIGHT, PixelDataWindow, TOPLEFT, 1, 1)
+		PDL = CreateControl(nil, AutoAssistWindow,  CT_LINE)
+		PDL:SetAnchor(TOPLEFT, AutoAssistWindow, TOPLEFT, 0, 0)
+		PDL:SetAnchor(TOPRIGHT, AutoAssistWindow, TOPLEFT, 1, 1)
 		SetPixel(DoNothing)
 
 
