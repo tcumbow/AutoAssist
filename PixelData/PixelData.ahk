@@ -135,6 +135,13 @@ Loop{
                     Send r
                     LastActionTime := A_TickCount
                 }
+            Case "0x000015": ;DoQuickslot
+                if (GetKeyState("6"))
+                    Send {6 up}
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                    Send q
+                    LastActionTime := A_TickCount
+                }
             Default: ;Same as DoNothing
                 if (GetKeyState("6"))
                     Send {6 up}

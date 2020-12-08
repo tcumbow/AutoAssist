@@ -131,6 +131,7 @@ local DoBackBar = 17
 local DoStartBlock = 18
 local DoStopBlock = 19
 local DoUltimate = 20
+local DoQuickslot = 21
 
 
 local function SetPixel(x)
