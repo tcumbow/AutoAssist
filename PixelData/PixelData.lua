@@ -300,12 +300,12 @@ local function BigLogicRoutine()
 			SetPixel(DoInteract)
 		elseif Config.Steal and AvailableReticleInteraction=="Steal" and Hidden and not InCombat and not InventoryFull then
 			SetPixel(DoInteract)
-		elseif Config.Steal and AvailableReticleInteraction=="Steal" and not Crouching and not InCombat and not InventoryFull then
+		elseif Config.CrouchSteal and AvailableReticleInteraction=="Steal" and not Crouching and not InCombat and not InventoryFull then
 			SetPixel(DoCrouch)
 			CrouchWasAuto = true
 		elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
 			SetPixel(DoCrouch)
-		elseif PickpocketPrime then
+		elseif Config.Pickpocket and PickpocketPrime then
 			SetPixel(DoInteract)
 		-- elseif RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 		-- 	SetPixel(DoAbility(RapidManeuver))
@@ -994,13 +994,19 @@ local function SetUpSettingsMenu()
 	local optionsData = {
 		{
 			type = "checkbox",
-			name = "Steal",
+			name = "Steal when fully hidden",
 			getFunc = function() return saveData.Steal end,
 			setFunc = function(value) saveData.Steal = value end
 		},
 		{
 			type = "checkbox",
-			name = "Pickpocket",
+			name = "Crouch and uncrouch when stealable items detected",
+			getFunc = function() return saveData.CrouchSteal end,
+			setFunc = function(value) saveData.CrouchSteal = value end
+		},
+		{
+			type = "checkbox",
+			name = "Pickpocket when 100% chance",
 			getFunc = function() return saveData.Pickpocket end,
 			setFunc = function(value) saveData.Pickpocket = value end
 		},
