@@ -41,6 +41,7 @@ local LowestGroupHealthPercent = 1.00
 local InputReady = true
 local InCombat = false
 local InventoryFull = false
+local PotionReady = false
 local Feared = false
 local Stunned = false
 local MustDodge = false
@@ -151,12 +152,23 @@ local function UpdateLastSights()
 	if not IsPlayerMoving() then LastStationaryTime = GetGameTimeMilliseconds() end
 end
 
+local function GetPotionIsReady()
+	local timeRemaining, _, global, _ = GetSlotCooldownInfo(GetCurrentQuickslot())
+	local potionsAvailable = GetSlotItemCount(GetCurrentQuickslot())
+	if timeRemaining==0 and global and potionsAvailable > 0 then
+		return true
+	else
+		return false
+	end
+end
+
 local function BigLogicRoutine()
 	-- Last-Minute Info Gathering
 		UpdateLastSights()
 		Moving = IsPlayerMoving()
 		if not Moving then Sprinting = false end
 		if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
+		PotionReady = GetPotionIsReady()
 	
 	-- Mounted/Dead/InMenu
 		if InputReady == false or IsUnitDead("player") then

@@ -56,6 +56,9 @@
         "GetGameCameraPickpocketingBonusInfo",
         "GetAbilityCost",
         "CancelBuff",
-        "POWERTYPE_ULTIMATE"
+        "POWERTYPE_ULTIMATE",
+        "GetSlotCooldownInfo",
+        "GetCurrentQuickslot",
+        "GetSlotItemCount"
     ]
 }
