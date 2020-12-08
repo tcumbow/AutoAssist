@@ -59,6 +59,7 @@
         "POWERTYPE_ULTIMATE",
         "GetSlotCooldownInfo",
         "GetCurrentQuickslot",
-        "GetSlotItemCount"
+        "GetSlotItemCount",
+        "GetSlotName"
     ]
 }

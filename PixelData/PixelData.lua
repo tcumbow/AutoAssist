@@ -42,6 +42,7 @@ local InputReady = true
 local InCombat = false
 local InventoryFull = false
 local PotionReady = false
+local PotionName
 local Feared = false
 local Stunned = false
 local MustDodge = false
@@ -169,6 +170,7 @@ local function BigLogicRoutine()
 		if not Moving then Sprinting = false end
 		if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
 		PotionReady = GetPotionIsReady()
+		PotionName = GetSlotName(GetCurrentQuickslot())
 	
 	-- Mounted/Dead/InMenu
 		if InputReady == false or IsUnitDead("player") then
