@@ -62,6 +62,7 @@
         "GetSlotItemCount",
         "GetSlotName",
         "LibAddonMenu2",
-        "ZO_SavedVars"
+        "ZO_SavedVars",
+        "CallSecureProtected"
     ]
 }
