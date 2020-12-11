@@ -89,14 +89,14 @@ Loop{
                 if (GetKeyState("6"))
                     Send {6 up}
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
-                    Send g
+                    Send {Shift}
                     LastActionTime := A_TickCount
                 }
             Case "0x00000e": ;DoMountSprint
                 if (GetKeyState("6"))
                     Send {6 up}
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
-                    Send g
+                    Send {Shift}
                     LastActionTime := A_TickCount
                 }
             Case "0x00000f": ;DoCrouch
