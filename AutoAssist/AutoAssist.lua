@@ -635,16 +635,12 @@ end
 
 
 local function PeriodicUpdate()
-	UpdateLastSights()
+	BigLogicRoutine()
 
 	if TwilightActive and not InCombat and LowestGroupHealthPercent > 0.90 and (GetGameTimeMilliseconds() - LastEnemySightTime) > 60000 then
 		DismissTwilight()
 	end
-
-	if Moving ~= IsPlayerMoving() then
-		BigLogicRoutine()
-	end
-
+	
 	zo_callLater(PeriodicUpdate,250)
 end
 
