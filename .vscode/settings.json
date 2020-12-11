@@ -63,6 +63,11 @@
         "GetSlotName",
         "LibAddonMenu2",
         "ZO_SavedVars",
-        "CallSecureProtected"
+        "CallSecureProtected",
+        "POWERTYPE_MAGICKA",
+        "EVENT_PLAYER_COMBAT_STATE",
+        "EVENT_GAME_CAMERA_UI_MODE_CHANGED",
+        "IsReticleHidden",
+        "IsGameCameraUIModeActive"
     ]
 }

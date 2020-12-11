@@ -792,7 +792,10 @@ local function OnEventEffectChanged(e, change, slot, auraName, unitTag, start, f
 end
 
 local function OnEventPowerUpdate(eventCode, unitTag, powerIndex, powerType, powerValue, powerMax, powerEffectiveMax)
-	if unitTag=="player" and powerType==POWERTYPE_STAMINA then
+	if unitTag=="player" and powerType==POWERTYPE_MAGICKA then
+		MagickaPercent = powerValue / powerMax
+		BigLogicRoutine()
+	elseif unitTag=="player" and powerType==POWERTYPE_STAMINA then
 		StaminaPrevious = Stamina
 		Stamina = powerValue
 		StaminaPercent = powerValue / powerMax
@@ -906,45 +909,23 @@ local function OnEventAbilityChange()
 	UpdateAbilitySlotInfo()
 end
 
-
-
-
-
-function PD_InputReady()
-	InputReady = true
-	UpdateAbilitySlotInfo()
+local function OnEventCombatStateChanged(event, inCombat)
+	InCombat = inCombat
+	if InCombat then
+		UpdateAbilitySlotInfo()
+	else
+		InBossBattle = false
+	end
 	BigLogicRoutine()
 end
 
-function PD_InputNotReady()
-	InputReady = false
-	BigLogicRoutine()
-end
-
-function PD_NotInCombat()
-	InCombat = false
-	InBossBattle = false
-	BigLogicRoutine()
-end
-
-function PD_InCombat()
-	InCombat = true
-	UpdateAbilitySlotInfo()
-	BigLogicRoutine()
-end
-
-function PD_NotMounted()
-	Mounted = false
-	BigLogicRoutine()
-end
-
-function PD_Mounted()
-	Mounted = true
-	BigLogicRoutine()
-end
-
-function PD_MagickaPercent(x)
-	MagickaPercent = x
+local function OnEventUiModeChanged()
+	if (IsReticleHidden()) then
+		InputReady = false
+	else
+		InputReady = true
+		UpdateAbilitySlotInfo()
+	end
 	BigLogicRoutine()
 end
 
@@ -961,6 +942,8 @@ end
 
 
 local function PD_RegisterForEvents()
+	EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_GAME_CAMERA_UI_MODE_CHANGED, OnEventUiModeChanged)
+	EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_PLAYER_COMBAT_STATE, OnEventCombatStateChanged)
 	EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_MOUNTED_STATE_CHANGED, OnEventMountedStateChanged)
 	EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_EFFECT_CHANGED, OnEventEffectChanged)
 	EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_POWER_UPDATE, OnEventPowerUpdate)
