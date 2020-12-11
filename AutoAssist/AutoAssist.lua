@@ -1053,12 +1053,6 @@ local function SetUpSettingsMenu()
 		},
 		{
 			type = "checkbox",
-			name = "Taunt strong enemies",
-			getFunc = function() return Config.TauntStrongEnimies end,
-			setFunc = function(value) Config.TauntStrongEnimies = value end
-		},
-		{
-			type = "checkbox",
 			name = "Overload",
 			getFunc = function() return Config.Overload end,
 			setFunc = function(value) Config.Overload = value end
@@ -1068,6 +1062,12 @@ local function SetUpSettingsMenu()
 			name = "Buffs",
 			getFunc = function() return Config.Buffs end,
 			setFunc = function(value) Config.Buffs = value end
+		},
+		{
+			type = "checkbox",
+			name = "Meditation",
+			getFunc = function() return Config.Meditation end,
+			setFunc = function(value) Config.Meditation = value end
 		},
 		{
 			type = "checkbox",
