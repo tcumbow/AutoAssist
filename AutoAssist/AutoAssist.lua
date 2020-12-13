@@ -308,7 +308,7 @@ local function BigLogicRoutine()
 			CrouchWasAuto = true
 		elseif (GetGameTimeMilliseconds() - LastStealSightTime) > 3000 and CrouchWasAuto and Crouching and Moving then
 			SetPixel(DoCrouch)
-		elseif Config.Pickpocket and PickpocketPrime then
+		elseif Config.Pickpocket and PickpocketPrime and Hidden then
 			SetPixel(DoInteract)
 		elseif Config.Expedition and RapidManeuver.Slotted and not MajorExpedition and Moving and StaminaPercent > 0.90 then
 			SetPixel(DoAbility(RapidManeuver))
