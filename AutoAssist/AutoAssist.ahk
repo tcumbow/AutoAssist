@@ -110,14 +110,14 @@ Loop{
                 if (GetKeyState("6"))
                     Send {6 up}
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
-                    Send y
+                    Send 0
                     LastActionTime := A_TickCount
                 }
             Case "0x000011": ;DoBackBar
                 if (GetKeyState("6"))
                     Send {6 up}
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
-                    Send u
+                    Send -
                     LastActionTime := A_TickCount
                 }
             Case "0x000012": ;DoStartBlock
