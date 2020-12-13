@@ -14,3 +14,4 @@
 ## DependsOn: LibAddonMenu-2.0
 
 AutoAssist.lua
+Bindings.xml

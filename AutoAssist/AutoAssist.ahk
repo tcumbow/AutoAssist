@@ -88,7 +88,7 @@ Loop{
             Case "0x00000d": ;DoSprint
                 if (GetKeyState("6"))
                     Send {6 up}
-                if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
+                if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
                     Send {Shift}
                     LastActionTime := A_TickCount
                 }
