@@ -1163,12 +1163,13 @@ end
 
 local function BindRequiredKeys()
 	-- LayerIndex,CategoryIndex,ActionIndex,BindIndex(1-4),KeyCode,Modx4
-    CallSecureProtected("BindKeyToAction", 1, 1, 8, 4, 29, 0, 0, 0, 0) -- Dodge 8
-    CallSecureProtected("BindKeyToAction", 1, 2, 1, 4, 28, 0, 0, 0, 0) -- Attack 6
-    CallSecureProtected("BindKeyToAction", 1, 2, 2, 4, 31, 0, 0, 0, 0) -- Block 9
-    CallSecureProtected("BindKeyToAction", 1, 2, 5, 4, 30, 0, 0, 0, 0) -- Interrupt 8
-    CallSecureProtected("BindKeyToAction", 1, 2, 8, 4, 22, 0, 0, 0, 0) -- Front Bar 0
-    CallSecureProtected("BindKeyToAction", 1, 2, 9, 4, 99, 0, 0, 0, 0) -- Back Bar -
+    CallSecureProtected("BindKeyToAction", 1, 1, 8, 4, 29, 0, 0, 0, 0)  -- Dodge 8
+    CallSecureProtected("BindKeyToAction", 1, 2, 1, 4, 28, 0, 0, 0, 0)  -- Attack 6
+    CallSecureProtected("BindKeyToAction", 1, 2, 2, 4, 31, 0, 0, 0, 0)  -- Block 9
+    CallSecureProtected("BindKeyToAction", 1, 2, 5, 4, 30, 0, 0, 0, 0)  -- Interrupt 8
+    CallSecureProtected("BindKeyToAction", 1, 2, 8, 4, 22, 0, 0, 0, 0)  -- Front Bar 0
+    CallSecureProtected("BindKeyToAction", 1, 2, 9, 4, 99, 0, 0, 0, 0)  -- Back Bar -
+    CallSecureProtected("BindKeyToAction", 1, 7, 1, 4, 100, 0, 0, 0, 0) -- AutoSprint -
 end
 
 local function InitialInfoGathering()
