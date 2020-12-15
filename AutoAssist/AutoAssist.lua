@@ -159,6 +159,7 @@ end
 local function GetPotionIsReady()
 	local timeRemaining, _, global, _ = GetSlotCooldownInfo(GetCurrentQuickslot())
 	local potionsAvailable = GetSlotItemCount(GetCurrentQuickslot())
+	if potionsAvailable==nil then return false end
 	if timeRemaining==0 and global and potionsAvailable > 0 then
 		return true
 	else
