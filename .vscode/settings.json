@@ -69,6 +69,10 @@
         "EVENT_GAME_CAMERA_UI_MODE_CHANGED",
         "IsReticleHidden",
         "IsGameCameraUIModeActive",
-        "ZO_CreateStringId"
+        "ZO_CreateStringId",
+        "GetNumActionLayers",
+        "GetActionLayerInfo",
+        "GetActionLayerCategoryInfo",
+        "GetActionInfo"
     ]
 }

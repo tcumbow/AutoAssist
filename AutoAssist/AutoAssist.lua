@@ -1159,6 +1159,23 @@ local function SetUpSettingsMenu()
 	LAM:RegisterOptionControls(panelName, optionsData)
 end
 
+local function BindSpecial (desiredActionName, keyCode)
+    local layers = GetNumActionLayers()
+    for layerIndex=1, layers do
+        local layerName, categories = GetActionLayerInfo(layerIndex)
+        for categoryIndex=1, categories do
+			local categoryName, actions = GetActionLayerCategoryInfo(layerIndex, categoryIndex)
+            for actionIndex=1, actions do
+                local actionName, isRebindable, isHidden = GetActionInfo(layerIndex, categoryIndex, actionIndex)
+                if isRebindable and actionName == desiredActionName then
+                    -- LayerIndex,CategoryIndex,ActionIndex,BindIndex(1-4),KeyCode,Modx4
+                    CallSecureProtected("BindKeyToAction", layerIndex, categoryIndex, actionIndex, 4, keyCode, 0, 0, 0, 0)
+                end
+            end
+        end
+    end
+end
+
 local function BindRequiredKeys()
 	-- LayerIndex,CategoryIndex,ActionIndex,BindIndex(1-4),KeyCode,Modx4
     CallSecureProtected("BindKeyToAction", 1, 1, 8, 4, 29, 0, 0, 0, 0)  -- Dodge 8
@@ -1167,7 +1184,7 @@ local function BindRequiredKeys()
     CallSecureProtected("BindKeyToAction", 1, 2, 5, 4, 30, 0, 0, 0, 0)  -- Interrupt 8
     CallSecureProtected("BindKeyToAction", 1, 2, 8, 4, 22, 0, 0, 0, 0)  -- Front Bar 0
     CallSecureProtected("BindKeyToAction", 1, 2, 9, 4, 99, 0, 0, 0, 0)  -- Back Bar -
-    CallSecureProtected("BindKeyToAction", 1, 7, 1, 4, 100, 0, 0, 0, 0) -- AutoSprint -
+    BindSpecial("AutoSprint", 100) -- AutoSprint =
 end
 
 local function InitialInfoGathering()
