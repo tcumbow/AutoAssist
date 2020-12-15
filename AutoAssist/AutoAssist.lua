@@ -292,8 +292,6 @@ local function BigLogicRoutine()
 				SetPixel(DoLightAttack)
 		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and not EnergyOverloadActive then
 			SetPixel(DoHeavyAttack)
-	-- elseif InCombat and StaminaPercent > 0.50 then
-		-- 	SetPixel(DoStartBlock)
 
 	-- Environment Interaction (Looting, Stealing, Sprinting)
 		elseif ReelInFish and not InCombat then
