@@ -200,8 +200,6 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(HealOverTime))
 		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.60 then
-			SetPixel(DoAbility(BurstHeal))
 		elseif Config.PotionSpell and PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
 			SetPixel(DoQuickslot)
 		elseif Config.PotionTri and PotionReady and PotionName=="Crown Tri-Restoration Potion" and InCombat and (MagickaPercent < 0.50 or HealthPercent < 0.50 or StaminaPercent < 0.50) then
