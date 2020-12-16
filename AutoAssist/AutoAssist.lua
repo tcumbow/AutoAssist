@@ -98,7 +98,7 @@ local Ritual = { }
 local RemoteInterrupt = { }
 local Taunt = { }
 local SunFire = { }
-local Focus = { }
+local MagMajorResolveSkill = { }
 local Meditation = { }
 local ImbueWeapon = { }
 local DamageShield = { }
@@ -107,7 +107,7 @@ local Accelerate = { }
 local WeaknessToElements = { }
 local SoulTrap = { }
 local DestructiveTouch = { }
-local ForceShock = { }
+local MagDpsSpamSkill = { }
 local Pokes = { }
 local SolarBarrage = { }
 local VolatileFamiliar = { }
@@ -239,8 +239,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(EnergyOverload))
 		elseif (Config.Buffs or Config.Healing) and Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 			SetPixel(DoAbility(Ritual))
-		elseif Config.Buffs and Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
-			SetPixel(DoAbility(Focus))
+		elseif Config.Buffs and MagMajorResolveSkill.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
+			SetPixel(DoAbility(MagMajorResolveSkill))
 		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(BoundlessStorm))
 		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
@@ -279,8 +279,8 @@ local function BigLogicRoutine()
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
-		elseif Config.DamageAbils and ForceShock.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
-			SetPixel(DoAbility(ForceShock))
+		elseif Config.DamageAbils and MagDpsSpamSkill.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
+			SetPixel(DoAbility(MagDpsSpamSkill))
 		elseif Config.DamageAbils and ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
 			SetPixel(DoAbility(ImbueWeapon))
 		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
@@ -477,7 +477,7 @@ local function UpdateAbilitySlotInfo()
 	RemoteInterrupt = { }
 	Taunt = { }
 	SunFire = { }
-	Focus = { }
+	MagMajorResolveSkill = { }
 	Meditation = { }
 	ImbueWeapon = { }
 	DamageShield = { }
@@ -486,7 +486,7 @@ local function UpdateAbilitySlotInfo()
 	WeaknessToElements = { }
 	SoulTrap = { }
 	DestructiveTouch = { }
-	ForceShock = { }
+	MagDpsSpamSkill = { }
 	Pokes = { }
 	SolarBarrage = { }
 	VolatileFamiliar = { }
@@ -525,8 +525,8 @@ local function UpdateAbilitySlotInfo()
 					ImbueWeapon.Slotted = true
 					ImbueWeapon[barNumIterator] = i-2
 				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" or AbilityName == "Summoner's Armor" then
-					Focus.Slotted = true
-					Focus[barNumIterator] = i-2
+					MagMajorResolveSkill.Slotted = true
+					MagMajorResolveSkill[barNumIterator] = i-2
 				elseif AbilityName == "Extended Ritual" then
 					Ritual.Slotted = true
 					Ritual[barNumIterator] = i-2
@@ -558,8 +558,8 @@ local function UpdateAbilitySlotInfo()
 					DestructiveTouch.Slotted = true
 					DestructiveTouch[barNumIterator] = i-2
 				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" or AbilityName == "Ricochet Skull" then
-					ForceShock.Slotted = true
-					ForceShock[barNumIterator] = i-2
+					MagDpsSpamSkill.Slotted = true
+					MagDpsSpamSkill[barNumIterator] = i-2
 				elseif AbilityName == "Puncturing Sweep" then
 					Pokes.Slotted = true
 					Pokes[barNumIterator] = i-2
