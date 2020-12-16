@@ -17,6 +17,8 @@ local DamageShieldActive = false
 local MajorGallop = false
 local MajorExpedition = false
 local Empower = false
+local SkeletonMageActive = false
+local SpiritMenderActive = false
 local FamiliarActive = false
 local FamiliarAOEActive = false
 local TwilightActive = false
@@ -89,6 +91,8 @@ local ShouldSprint = false
 
 local BurstHeal = { }
 local HealOverTime = { }
+local SkeletonMage = { }
+local SpiritMender = { }
 local Degeneration = { }
 local Ritual = { }
 local RemoteInterrupt = { }
@@ -201,6 +205,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(HealOverTime))
 		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
 			SetPixel(DoAbility(BurstHeal))
+		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 then
+			SetPixel(DoAbility(SpiritMender))
 		elseif Config.PotionSpell and PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
 			SetPixel(DoQuickslot)
 		elseif Config.PotionTri and PotionReady and PotionName=="Crown Tri-Restoration Potion" and InCombat and (MagickaPercent < 0.50 or HealthPercent < 0.50 or StaminaPercent < 0.50) then
@@ -233,12 +239,14 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(EnergyOverload))
 		elseif (Config.Buffs or Config.Healing) and Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
 			SetPixel(DoAbility(Ritual))
-		elseif Config.Buffs and Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and InCombat then
+		elseif Config.Buffs and Focus.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(Focus))
 		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(BoundlessStorm))
 		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
+		elseif Config.DamageAbils and SkeletonMage.Slotted and not SkeletonMageActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+			SetPixel(DoAbility(SkeletonMage))
 		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(VolatileFamiliar))
 		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
@@ -462,6 +470,8 @@ local function UpdateAbilitySlotInfo()
 
 	BurstHeal = { }
 	HealOverTime = { }
+	SkeletonMage = { }
+	SpiritMender = { }
 	Degeneration = { }
 	Ritual = { }
 	RemoteInterrupt = { }
@@ -499,6 +509,12 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration" then
 					HealOverTime.Slotted = true
 					HealOverTime[barNumIterator] = i-2
+				elseif AbilityName == "Skeletal Arcanist" then
+					SkeletonMage.Slotted = true
+					SkeletonMage[barNumIterator] = i-2
+				elseif AbilityName == "Spirit Mender" then
+					SpiritMender.Slotted = true
+					SpiritMender[barNumIterator] = i-2
 				elseif AbilityName == "Inner Rage" then
 					Taunt.Slotted = true
 					Taunt[barNumIterator] = i-2
@@ -508,7 +524,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Elemental Weapon" then
 					ImbueWeapon.Slotted = true
 					ImbueWeapon[barNumIterator] = i-2
-				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" then
+				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" or AbilityName == "Summoner's Armor" then
 					Focus.Slotted = true
 					Focus[barNumIterator] = i-2
 				elseif AbilityName == "Extended Ritual" then
@@ -541,7 +557,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
 					DestructiveTouch.Slotted = true
 					DestructiveTouch[barNumIterator] = i-2
-				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" then
+				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" or AbilityName == "Ricochet Skull" then
 					ForceShock.Slotted = true
 					ForceShock[barNumIterator] = i-2
 				elseif AbilityName == "Puncturing Sweep" then
@@ -674,6 +690,8 @@ local function UpdateBuffs()
 	MajorGallop = false
 	MajorExpedition = false
 	Empower = false
+	SkeletonMageActive = false
+	SpiritMenderActive = false
 	FamiliarActive = false
 	FamiliarAOEActive = false
 	TwilightActive = false
@@ -723,6 +741,10 @@ local function UpdateBuffs()
 				DamageShieldActive = true
 			elseif name=="Empower" then
 				Empower = true
+			elseif name=="Skeletal Arcanist" then
+				SkeletonMageActive = true
+			elseif name=="Spirit Mender" then
+				SpiritMenderActive = true
 			elseif name=="Major Expedition" and timeLeft>optimalBuffOverlap then
 				MajorExpedition = true
 				if timeLeft < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft end
