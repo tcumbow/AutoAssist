@@ -1,1 +1,1 @@
-unison .\AutoAssist "I:\Code\AutoAssist" -auto -batch -repeat 5
+unison .\AutoAssist "I:\Code\AutoAssist" -auto
