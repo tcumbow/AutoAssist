@@ -1,6 +1,10 @@
 Write-Host
 Write-Host
 Write-Host
+unison .\AutoAssist "I:\Code\AutoAssist" -auto
+Write-Host
+Write-Host
+Write-Host
 unison .\AutoAssist A:\AutoAssist -auto
 Write-Host
 Write-Host
