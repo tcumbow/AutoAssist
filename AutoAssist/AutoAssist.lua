@@ -584,7 +584,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Inner Light" then
 					InnerLight.Slotted = true
 					InnerLight[barNumIterator] = i-2
-				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" then
+				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" or AbilityName == "Blue Betty" then
 					Surge.Slotted = true
 					Surge[barNumIterator] = i-2
 				elseif AbilityName == "Bound Aegis" or AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
