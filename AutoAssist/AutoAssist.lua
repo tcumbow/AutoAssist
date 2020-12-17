@@ -61,7 +61,7 @@ local OtherBar = 0
 
 local LastStealSightTime = 0
 local LastEnemySightTime = 0
-local LastStationaryTime = 0
+-- local LastStationaryTime = 0
 
 local CurrentPixel = 0
 local PreviousPixel = 0
@@ -158,7 +158,7 @@ end
 local function UpdateLastSights()
 	if TargetIsEnemy then LastEnemySightTime = GetGameTimeMilliseconds() end
 	if AvailableReticleInteraction == "Steal" or AvailableReticleInteraction == "BlockedSteal" then LastStealSightTime = GetGameTimeMilliseconds() end
-	if not IsPlayerMoving() then LastStationaryTime = GetGameTimeMilliseconds() end
+	--if not IsPlayerMoving() then LastStationaryTime = GetGameTimeMilliseconds() end
 end
 
 local function GetPotionIsReady()
@@ -222,15 +222,13 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(Fury))
 		elseif Config.Interrupt and MustInterrupt and StaminaPercent > 0.49 then
 			SetPixel(DoBreakFreeInterrupt)
-		-- elseif (not InCombat or StaminaPercent < 0.20) and IsBlockActive() then
-		-- 	SetPixel(DoStopBlock)
-		elseif Config.TauntBosses and Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and EnemiesAround and TargetIsNotPlayer and InCombat then
+		elseif Config.TauntBosses and Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and InCombat then
 			SetPixel(DoAbility(Taunt))
 		elseif Config.Block and MustBlock and StaminaPercent > 0.99 then
 			SetPixel(DoBlock)
-		elseif Config.Dodge and MustDodge and FrontBar and StaminaPercent > 0.99 then
+		elseif Config.Dodge and MustDodge and StaminaPercent > 0.99 then
 			SetPixel(DoRollDodge)
-		elseif ImbueWeaponActive == true and InCombat and EnemiesAround then
+		elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
 			SetPixel(DoLightAttack)
 		elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat then
 			SetPixel(DoAbility(CrystalFragments))
@@ -244,7 +242,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(Ritual))
 		elseif Config.Buffs and MagMajorResolveSkill.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(MagMajorResolveSkill))
-		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
+		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then --merge with skill above?
 			SetPixel(DoAbility(BoundlessStorm))
 		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
