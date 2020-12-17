@@ -90,6 +90,7 @@ local ReelInFish = false
 local ShouldSprint = false
 
 local BurstHeal = { }
+local SelfHeal = { }
 local HealOverTime = { }
 local SkeletonMage = { }
 local SpiritMender = { }
@@ -207,6 +208,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(BurstHeal))
 		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 then
 			SetPixel(DoAbility(SpiritMender))
+		elseif Config.Healing and SelfHeal.Slotted and HealthPercent < 0.70 and MagickaPercent > 0.20 then
+			SetPixel(DoAbility(SelfHeal))
 		elseif Config.PotionSpell and PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
 			SetPixel(DoQuickslot)
 		elseif Config.PotionTri and PotionReady and PotionName=="Crown Tri-Restoration Potion" and InCombat and (MagickaPercent < 0.50 or HealthPercent < 0.50 or StaminaPercent < 0.50) then
@@ -469,6 +472,7 @@ end
 local function UpdateAbilitySlotInfo()
 
 	BurstHeal = { }
+	SelfHeal = { }
 	HealOverTime = { }
 	SkeletonMage = { }
 	SpiritMender = { }
@@ -506,6 +510,9 @@ local function UpdateAbilitySlotInfo()
 				if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
 					BurstHeal.Slotted = true
 					BurstHeal[barNumIterator] = i-2
+				if AbilityName == "Polar Wind" then
+					SelfHeal.Slotted = true
+					SelfHeal[barNumIterator] = i-2
 				elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration" then
 					HealOverTime.Slotted = true
 					HealOverTime[barNumIterator] = i-2
