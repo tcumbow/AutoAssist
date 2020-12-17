@@ -531,7 +531,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Elemental Weapon" then
 					ImbueWeapon.Slotted = true
 					ImbueWeapon[barNumIterator] = i-2
-				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" or AbilityName == "Summoner's Armor" then
+				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" or AbilityName == "Summoner's Armor" or AbilityName == "Expansive Frost Cloak" then
 					MagMajorResolveSkill.Slotted = true
 					MagMajorResolveSkill[barNumIterator] = i-2
 				elseif AbilityName == "Extended Ritual" then
