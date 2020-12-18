@@ -246,7 +246,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(BoundlessStorm))
 		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
-		elseif Config.DamageAbils and SkeletonMage.Slotted and not SkeletonMageActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.DamageAbils and SkeletonMage.Slotted and not SkeletonMageActive and MagickaPercent > 0.60 and InCombat then
 			SetPixel(DoAbility(SkeletonMage))
 		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(VolatileFamiliar))
