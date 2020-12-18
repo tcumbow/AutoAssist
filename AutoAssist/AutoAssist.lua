@@ -206,7 +206,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(HealOverTime))
 		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
 			SetPixel(DoAbility(BurstHeal))
-		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 then
+		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 and InCombat then
 			SetPixel(DoAbility(SpiritMender))
 		elseif Config.Healing and SelfHeal.Slotted and HealthPercent < 0.70 and MagickaPercent > 0.20 then
 			SetPixel(DoAbility(SelfHeal))
