@@ -295,9 +295,9 @@ local function BigLogicRoutine()
 		elseif Config.Overload and EnergyOverloadActive and TargetIsEnemy and InCombat then
 			SetPixel(DoLightAttack)
 		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 and not EnergyOverloadActive then
-				SetPixel(DoHeavyAttack)
+			SetPixel(DoHeavyAttack)
 		elseif Config.LightAttacks and InCombat and EnemiesAround and not EnergyOverloadActive then
-				SetPixel(DoLightAttack)
+			SetPixel(DoLightAttack)
 		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and not EnergyOverloadActive then
 			SetPixel(DoHeavyAttack)
 
