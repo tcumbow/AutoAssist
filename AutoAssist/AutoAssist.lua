@@ -562,7 +562,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
 					DestructiveTouch.Slotted = true
 					DestructiveTouch[barNumIterator] = i-2
-				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" or AbilityName == "Ricochet Skull" then
+				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" or AbilityName == "Ricochet Skull" or AbilityName == "Piercing Javelin" then
 					MagDpsSpamSkill.Slotted = true
 					MagDpsSpamSkill[barNumIterator] = i-2
 				elseif AbilityName == "Puncturing Sweep" then
