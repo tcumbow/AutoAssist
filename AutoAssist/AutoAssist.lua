@@ -252,7 +252,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(VolatileFamiliar))
 		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
 			SetPixel(DoAbility(VolatileFamiliar))
-		elseif Config.DamageAbils and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+		elseif (Config.DamageAbils or Config.Buffs) and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(SoulTrap))
 		elseif Config.DamageAbils and SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(SunFire))
