@@ -266,7 +266,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(WeaknessToElements))
 		elseif Config.Buffs and SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
 			SetPixel(DoAbility(SunFire))
-		elseif Config.Shield and DamageShield.Slotted and InCombat == true and DamageShieldActive == false and MagickaPercent > 0.50 then
+		elseif DamageShield.Slotted and (InCombat == true or EnemiesAround) and DamageShieldActive == false and MagickaPercent > 0.50 then
 			SetPixel(DoAbility(DamageShield))
 		elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 			SetPixel(DoNothing)
