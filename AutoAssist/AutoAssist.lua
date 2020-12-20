@@ -1227,7 +1227,7 @@ local function InitialInfoGathering()
 	PD_RegisterForEvents()
 	AutoAssistLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
 	PixelDataLoaded = true -- global variable to indicate this add-on has been loaded, used to enable integrations in other add-ons
-
+	UpdateBuffs()
 end
 
 
@@ -1239,17 +1239,12 @@ local function OnAddonLoaded(event, name)
 		Config = ZO_SavedVars:NewCharacterIdSettings("AutoAssistSavedVariables",1)
 		AutoAssistWindow = WINDOW_MANAGER:CreateTopLevelWindow("AutoAssist")
 		AutoAssistWindow:SetDimensions(100,100)
-
 		PDL = CreateControl(nil, AutoAssistWindow,  CT_LINE)
 		PDL:SetAnchor(TOPLEFT, AutoAssistWindow, TOPLEFT, 0, 0)
 		PDL:SetAnchor(TOPRIGHT, AutoAssistWindow, TOPLEFT, 1, 1)
 		SetPixel(DoNothing)
 
-
-
 		zo_callLater(InitialInfoGathering, 1000)
-
-
 
 	end
 end
