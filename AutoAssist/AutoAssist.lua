@@ -280,15 +280,15 @@ local function BigLogicRoutine()
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
-		elseif Config.DamageAbils and MagDpsSpamSkill.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
+		elseif Config.DamageAbils and MagDpsSpamSkill.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(MagDpsSpamSkill))
-		elseif Config.DamageAbils and ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.70 then
+		elseif Config.DamageAbils and ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.80 then
 			SetPixel(DoAbility(ImbueWeapon))
-		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.70 then
+		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.80 then
 			SetPixel(DoAbility(CrystalFragments))
-		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.70 and InCombat and EnemiesAround then
+		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(Pokes))
-		elseif Config.DamageAbils and SolarBarrage.Slotted and MagickaPercent > 0.70 and InCombat and not Empower and EnemiesAround then
+		elseif Config.DamageAbils and SolarBarrage.Slotted and MagickaPercent > 0.80 and InCombat and not Empower and EnemiesAround then
 			SetPixel(DoAbility(SolarBarrage))
 		elseif Config.Overload and EnergyOverload.Slotted and UltimatePercent > 0.97 and EnemiesAround and not EnergyOverloadActive then
 			SetPixel(DoAbility(EnergyOverload))
