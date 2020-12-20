@@ -541,7 +541,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
 					SunFire.Slotted = true
 					SunFire[barNumIterator] = i-2
-				elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" then
+				elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" or AbilityName == "Conjured Ward" then
 					DamageShield.Slotted = true
 					DamageShield[barNumIterator] = i-2
 				elseif AbilityName == "Explosive Charge" then
@@ -728,7 +728,7 @@ local function UpdateBuffs()
 			elseif name=="Elemental Weapon" and (timeLeft + 100) > optimalBuffOverlap then
 				ImbueWeaponActive = true
 				if timeLeft + 100 < msUntilBuffRecheckNeeded then msUntilBuffRecheckNeeded = timeLeft + 100 end
-			elseif name=="Blazing Shield" or name=="Radiant Ward" then
+			elseif name=="Blazing Shield" or name=="Radiant Ward" or name=="Conjured Ward" then
 				DamageShieldActive = true
 			elseif name=="Summon Volatile Familiar" and id==23316 then
 				FamiliarActive = true
