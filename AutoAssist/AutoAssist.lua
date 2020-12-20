@@ -322,10 +322,10 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(RapidManeuver))
 		elseif Config.Expedition and Accelerate.Slotted and not MajorExpedition and MagickaPercent > 0.99 and Moving then
 			SetPixel(DoAbility(Accelerate))
-		elseif Config.Sprint and ShouldSprint and Moving and not Sprinting and not Crouching and StaminaPercent > 0.80 then
+		elseif Config.Sprint and ShouldSprint and Moving and not Sprinting and not Crouching then
 			SetPixel(DoSprint)
-		elseif Config.Sprint and Sprinting and (not ShouldSprint or StaminaPercent < 0.80) and Moving and not Crouching then
-			SetPixel(DoSprint)
+		-- elseif Config.Sprint and Sprinting and (not ShouldSprint or StaminaPercent < 0.80) and Moving and not Crouching then
+		-- 	SetPixel(DoSprint)
 
 	-- End of Logic
 		else
