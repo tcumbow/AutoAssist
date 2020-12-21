@@ -106,6 +106,7 @@ local DamageShield = { }
 local RapidManeuver = { }
 local Accelerate = { }
 local WeaknessToElements = { }
+local UnstableWall = { }
 local SoulTrap = { }
 local DestructiveTouch = { }
 local MagDpsSpamSkill = { }
@@ -277,6 +278,8 @@ local function BigLogicRoutine()
 			SetPixel(16+OtherBar)
 		elseif Config.Overload and EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 then
 			SetPixel(DoAbility(EnergyOverload))
+		elseif Config.DamageAbils and UnstableWall.Slotted and MagickaPercent > 0.85 and InCombat and TargetIsEnemy then
+			SetPixel(DoAbility(UnstableWall))
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
@@ -486,6 +489,7 @@ local function UpdateAbilitySlotInfo()
 	RapidManeuver = { }
 	Accelerate = { }
 	WeaknessToElements = { }
+	UnstableWall = { }
 	SoulTrap = { }
 	DestructiveTouch = { }
 	MagDpsSpamSkill = { }
@@ -556,6 +560,9 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
 					WeaknessToElements.Slotted = true
 					WeaknessToElements[barNumIterator] = i-2
+				elseif AbilityName == "Unstable Wall of Storms" then
+					UnstableWall.Slotted = true
+					UnstableWall[barNumIterator] = i-2
 				elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" or AbilityName == "Consuming Trap" then
 					SoulTrap.Slotted = true
 					SoulTrap[barNumIterator] = i-2
