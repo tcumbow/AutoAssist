@@ -554,7 +554,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
 					RapidManeuver.Slotted = true
 					RapidManeuver[barNumIterator] = i-2
-				elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" or AbilityName == "Boundless Storm" then
+				elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
 					Accelerate.Slotted = true
 					Accelerate[barNumIterator] = i-2
 				elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
@@ -587,6 +587,8 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Boundless Storm" then
 					BoundlessStorm.Slotted = true
 					BoundlessStorm[barNumIterator] = i-2
+					Accelerate.Slotted = true
+					Accelerate[barNumIterator] = i-2
 				elseif AbilityName == "Crystal Fragments" then
 					CrystalFragments.Slotted = true
 					CrystalFragments[barNumIterator] = i-2
