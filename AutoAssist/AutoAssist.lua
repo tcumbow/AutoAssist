@@ -24,6 +24,7 @@ local FamiliarAOEActive = false
 local TwilightActive = false
 local CrystalWeaver = false
 local CrystalFragmentsProc = false
+local DnInfernoActive = false
 local EnergyOverloadActive = false
 
 local MagickaPercent = 1.00
@@ -119,6 +120,7 @@ local BoundlessStorm = { }
 local CrystalFragments = { }
 local Fury = { }
 local InnerLight = { }
+local DnInferno = { }
 
 local EnergyOverload = { }
 
@@ -255,6 +257,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(VolatileFamiliar))
 		elseif (Config.DamageAbils or Config.Buffs) and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(SoulTrap))
+		elseif (Config.DamageAbils or Config.Buffs) and DnInferno.Slotted and not DnInfernoActive and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
+			SetPixel(DoAbility(DnInferno))
 		elseif Config.DamageAbils and SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(SunFire))
 		elseif Config.DamageAbils and DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
@@ -502,6 +506,7 @@ local function UpdateAbilitySlotInfo()
 	CrystalFragments = { }
 	Fury = { }
 	InnerLight = { }
+	DnInferno = { }
 
 	EnergyOverload = { }
 
@@ -598,6 +603,9 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Inner Light" then
 					InnerLight.Slotted = true
 					InnerLight[barNumIterator] = i-2
+				elseif AbilityName == "Inferno" or AbilityName == "Flames of Oblivion" then
+					DnInferno.Slotted = true
+					DnInferno[barNumIterator] = i-2
 				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" or AbilityName == "Blue Betty" then
 					Surge.Slotted = true
 					Surge[barNumIterator] = i-2
@@ -711,6 +719,7 @@ local function UpdateBuffs()
 	TwilightActive = false
 	CrystalWeaver = false
 	CrystalFragmentsProc = false
+	DnInfernoActive = false
 	EnergyOverloadActive = false
 	-- MustBreakFree = false
 	local numBuffs = GetNumBuffs("player")
@@ -749,6 +758,8 @@ local function UpdateBuffs()
 				CrystalWeaver = true
 			elseif name=="Crystal Fragments Proc" then
 				CrystalFragmentsProc = true
+			elseif name=="Flames of Oblivion" then
+				DnInfernoActive = true
 			elseif name=="Energy Overload" then
 				EnergyOverloadActive = true
 			elseif name=="Dampen Magic" then
