@@ -115,7 +115,7 @@ local Pokes = { }
 local SolarBarrage = { }
 local VolatileFamiliar = { }
 local TwilightMatriarch = { }
-local Surge = { }
+local MagMajSorc = { }
 local BoundlessStorm = { }
 local CrystalFragments = { }
 local Fury = { }
@@ -263,8 +263,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(SunFire))
 		elseif Config.DamageAbils and DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
 			SetPixel(DoAbility(DestructiveTouch))
-		elseif Config.Buffs and Surge.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
-			SetPixel(DoAbility(Surge))
+		elseif Config.Buffs and MagMajSorc.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+			SetPixel(DoAbility(MagMajSorc))
 		elseif Config.Buffs and Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
 			SetPixel(DoAbility(Degeneration))
 		elseif (Config.Buffs or Config.DamageAbils) and WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
@@ -501,7 +501,7 @@ local function UpdateAbilitySlotInfo()
 	SolarBarrage = { }
 	VolatileFamiliar = { }
 	TwilightMatriarch = { }
-	Surge = { }
+	MagMajSorc = { }
 	BoundlessStorm = { }
 	CrystalFragments = { }
 	Fury = { }
@@ -606,10 +606,10 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Inferno" or AbilityName == "Flames of Oblivion" then
 					DnInferno.Slotted = true
 					DnInferno[barNumIterator] = i-2
-				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" or AbilityName == "Blue Betty" then
-					Surge.Slotted = true
-					Surge[barNumIterator] = i-2
-				elseif AbilityName == "Bound Aegis" or AbilityName == "Inner Light" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" or AbilityName == "Blue Betty" or AbilityName == "Molten Armaments" then
+					MagMajSorc.Slotted = true
+					MagMajSorc[barNumIterator] = i-2
+				elseif AbilityName == "Bound Aegis" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 				else
 					d("Unrecognized ability:"..AbilityName)
 				end
