@@ -512,7 +512,7 @@ local function UpdateAbilitySlotInfo()
 				if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
 					BurstHeal.Slotted = true
 					BurstHeal[barNumIterator] = i-2
-				elseif AbilityName == "Polar Wind" then
+				elseif AbilityName == "Polar Wind" or AbilityName == "Green Dragon Blood" then
 					SelfHeal.Slotted = true
 					SelfHeal[barNumIterator] = i-2
 				elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration" then
