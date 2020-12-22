@@ -211,7 +211,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(BurstHeal))
 		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 and InCombat then
 			SetPixel(DoAbility(SpiritMender))
-		elseif Config.Healing and SelfHeal.Slotted and HealthPercent < 0.70 and MagickaPercent > 0.20 then
+		elseif Config.Healing and SelfHeal.Slotted and HealthPercent < 0.70 and MagickaPercent > 0.30 then
 			SetPixel(DoAbility(SelfHeal))
 		elseif Config.PotionSpell and PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
 			SetPixel(DoQuickslot)
