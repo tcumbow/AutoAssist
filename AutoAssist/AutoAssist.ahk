@@ -2,6 +2,27 @@ CoordMode, Pixel, Screen
 global LastPixelColor := "dummy"
 global LastActionTime := 0
 
+StartHeavyAttack()
+{
+	if (!GetKeyState("6"))
+		Send {6 down}
+}
+EndHeavyAttack()
+{
+	if (GetKeyState("6"))
+		Send {6 up}
+}
+StartBlock()
+{
+	if (!GetKeyState("9"))
+		Send {9 down}
+}
+EndBlock()
+{
+	if (GetKeyState("9"))
+		Send {9 up}
+}
+
 Loop{
     WinWaitActive Elder Scrolls Online
     PixelGetColor, PixelColor, 0, 0, RGB
@@ -10,68 +31,58 @@ Loop{
         Switch PixelColor
         {
             Case "0x000000": ;DoNothing
-                if (GetKeyState("6")) ; 6 is bound to attack, so many of these cases are set to release the 6 key since it might be held down for a heavy attack
-                    Send {6 up}
+                EndHeavyAttack()
             Case "0x000001": ;Ability 1
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 1
                     LastActionTime := A_TickCount
                 }
             Case "0x000002": ;Ability 2
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 2
                     LastActionTime := A_TickCount
                 }
             Case "0x000003": ;Ability 3
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 3
                     LastActionTime := A_TickCount
                 }
             Case "0x000004": ;Ability 4
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 4
                     LastActionTime := A_TickCount
                 }
             Case "0x000005": ;Ability 5
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 5
                     LastActionTime := A_TickCount
                 }
             Case "0x000006": ;DoHeavyAttack
-                Send {6 down}
+                StartHeavyAttack()
             Case "0x000007": ;DoRollDodge
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 7
                     LastActionTime := A_TickCount
                 }
             Case "0x000008": ;DoBreakFreeInterrupt
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 8
                     LastActionTime := A_TickCount
                 }
             Case "0x000009": ;DoBlock
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 Send {9 down}
                 Sleep 1500
                 Send {9 up}
             Case "0x00000a": ;ReelInFish
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 Send e
                 Sleep 2000
                 Send e
@@ -82,70 +93,61 @@ Loop{
                     LastActionTime := A_TickCount
                 }
             Case "0x00000c": ;DoInteract
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 Send e
             Case "0x00000d": ;DoSprint
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
                     Send {Shift}
                     LastActionTime := A_TickCount
                 }
             Case "0x00000e": ;DoMountSprint
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
                     Send {Shift}
                     LastActionTime := A_TickCount
                 }
             Case "0x00000f": ;DoCrouch
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 2000) <= A_TickCount )) {
                     Send {Ctrl}
                     LastActionTime := A_TickCount
                 }
             Case "0x000010": ;DoFrontBar
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send 0
                     LastActionTime := A_TickCount
                 }
             Case "0x000011": ;DoBackBar
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send -
                     LastActionTime := A_TickCount
                 }
             Case "0x000012": ;DoStartBlock
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (not GetKeyState("9"))
                     Send {9 down}
             Case "0x000013": ;DoStopBlock
                 if (GetKeyState("9"))
                     Send {9 up}
             Case "0x000014": ;DoUltimate
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send r
                     LastActionTime := A_TickCount
                 }
             Case "0x000015": ;DoQuickslot
-                if (GetKeyState("6"))
-                    Send {6 up}
+                EndHeavyAttack()
                 if (LastPixelColor != PixelColor Or ((LastActionTime + 200) <= A_TickCount )) {
                     Send q
                     LastActionTime := A_TickCount
                 }
+			Case "0x000016": ;DoNeutral - like DoNothing, but doesn't end blocks or heavy attacks
+                Sleep 1
             Default: ;Same as DoNothing
-                if (GetKeyState("6"))
-                    Send {6 up}
-                
+                EndHeavyAttack()
         }
         LastPixelColor := PixelColor
     }   
