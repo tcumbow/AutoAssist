@@ -199,7 +199,7 @@ local function BigLogicRoutine()
 	-- Combat: Healing
 		elseif Config.BreakFree and (Stunned or Feared) and StaminaPercent > 0.49 then
 			SetPixel(DoBreakFreeInterrupt)
-		elseif Config.Healing and TwilightMatriarch.Slotted and not TwilightActive and (InCombat or EnemiesAround or LowestGroupHealthPercent < 0.90) then
+		elseif Config.Healing and TwilightMatriarch.Slotted and not TwilightActive and InCombat and LowestGroupHealthPercent < 0.70 then
 			SetPixel(DoAbility(TwilightMatriarch))
 		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
 			SetPixel(DoAbility(BurstHeal))
@@ -677,7 +677,7 @@ end
 local function PeriodicUpdate()
 	BigLogicRoutine()
 
-	if TwilightActive and not InCombat and LowestGroupHealthPercent > 0.90 and (GetGameTimeMilliseconds() - LastEnemySightTime) > 60000 then
+	if TwilightActive and not InCombat and LowestGroupHealthPercent > 0.90 and (GetGameTimeMilliseconds() - LastEnemySightTime) > 45000 then
 		DismissTwilight()
 	end
 	
