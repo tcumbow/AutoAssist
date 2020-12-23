@@ -958,11 +958,20 @@ local function OnEventAbilityChange()
 	UpdateAbilitySlotInfo()
 end
 
+local function PreventAttackingInnocents()
+	SetSetting(SETTING_TYPE_COMBAT, COMBAT_SETTING_PREVENT_ATTACKING_INNOCENTS, 1)
+end
+local function AllowAttackingInnocents()
+	SetSetting(SETTING_TYPE_COMBAT, COMBAT_SETTING_PREVENT_ATTACKING_INNOCENTS, 0)
+end
+
 local function OnEventCombatStateChanged(event, inCombat)
 	InCombat = inCombat
 	if InCombat then
+		AllowAttackingInnocents()
 		UpdateAbilitySlotInfo()
 	else
+		PreventAttackingInnocents()
 		InBossBattle = false
 	end
 	BigLogicRoutine()
@@ -1236,6 +1245,7 @@ local function BindRequiredKeys()
 end
 
 local function InitialInfoGathering()
+	PreventAttackingInnocents()
 	SetUpSettingsMenu()
 	BindRequiredKeys()
 	InCombat = IsUnitInCombat("player")
