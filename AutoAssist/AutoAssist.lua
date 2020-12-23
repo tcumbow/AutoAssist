@@ -877,8 +877,16 @@ local function OnEventGroupSupportRangeUpdate()
 	BigLogicRoutine()
 end
 
+local function PreventStealing()
+	SetSetting(SETTING_TYPE_LOOT, LOOT_SETTING_PREVENT_STEALING_PLACED, 1)
+end
+local function AllowStealing()
+	SetSetting(SETTING_TYPE_LOOT, LOOT_SETTING_PREVENT_STEALING_PLACED, 0)
+end
+
 local function OnEventStealthChange(_,_,stealthState)
 	if stealthState > 0 then
+		AllowStealing()
 		Crouching = true
 		if stealthState == 3 then
 			Hidden = true
@@ -886,6 +894,7 @@ local function OnEventStealthChange(_,_,stealthState)
 			Hidden = false
 		end
 	else
+		PreventStealing()
 		Crouching = false
 		CrouchWasAuto = false
 		Hidden = false

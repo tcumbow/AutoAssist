@@ -73,6 +73,11 @@
         "GetNumActionLayers",
         "GetActionLayerInfo",
         "GetActionLayerCategoryInfo",
-        "GetActionInfo"
+        "GetActionInfo",
+        "SetSetting",
+        "SETTING_TYPE_LOOT",
+        "LOOT_SETTING_PREVENT_STEALING_PLACED",
+        "SETTING_TYPE_COMBAT",
+        "COMBAT_SETTING_PREVENT_ATTACKING_INNOCENTS"
     ]
 }
