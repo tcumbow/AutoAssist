@@ -199,19 +199,19 @@ local function BigLogicRoutine()
 	-- Combat: Healing
 		elseif Config.BreakFree and (Stunned or Feared) and StaminaPercent > 0.49 then
 			SetPixel(DoBreakFreeInterrupt)
-		elseif Config.Healing and TwilightMatriarch.Slotted and not TwilightActive and InCombat and LowestGroupHealthPercent < 0.70 then
+		elseif Config.Healing and TwilightMatriarch.Slotted and not TwilightActive and InCombat and LowestGroupHealthPercent < 0.70 and not Crouching then
 			SetPixel(DoAbility(TwilightMatriarch))
-		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 then
+		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.40 and not Crouching then
 			SetPixel(DoAbility(BurstHeal))
-		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.40 then
+		elseif Config.Healing and BurstHeal.Slotted and LowestGroupHealthPercent < 0.60 and MagickaPercent > 0.40 and not Crouching then
 			SetPixel(DoAbility(BurstHeal))
-		elseif Config.Healing and HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat then
+		elseif Config.Healing and HealOverTime.Slotted and LowestGroupHealthPercentWithoutRegen < 0.90 and InCombat and not Crouching then
 			SetPixel(DoAbility(HealOverTime))
-		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 then
+		elseif Config.Healing and BurstHeal.Slotted and not HealOverTime.Slotted and LowestGroupHealthPercent < 0.80 and MagickaPercent > 0.50 and not Crouching then
 			SetPixel(DoAbility(BurstHeal))
-		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 and InCombat then
+		elseif Config.Healing and SpiritMender.Slotted and not SpiritMenderActive and LowestGroupHealthPercent < 0.90 and MagickaPercent > 0.30 and InCombat and not Crouching then
 			SetPixel(DoAbility(SpiritMender))
-		elseif Config.Healing and SelfHeal.Slotted and HealthPercent < 0.70 and MagickaPercent > 0.30 then
+		elseif Config.Healing and SelfHeal.Slotted and HealthPercent < 0.70 and MagickaPercent > 0.30 and not Crouching then
 			SetPixel(DoAbility(SelfHeal))
 		elseif Config.PotionSpell and PotionReady and MagickaPercent < 0.10 and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and InCombat then
 			SetPixel(DoQuickslot)
@@ -219,93 +219,93 @@ local function BigLogicRoutine()
 			SetPixel(DoQuickslot)
 
 	-- Combat: High Priority (Procs, Interrupt, Dodge, Block)
-		elseif Config.RemoteInterrupt and RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 then
+		elseif Config.RemoteInterrupt and RemoteInterrupt.Slotted and MustInterrupt and MagickaPercent > 0.49 and not Crouching then
 			SetPixel(DoAbility(RemoteInterrupt))
-		elseif Config.DamageAbils and Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss then
+		elseif Config.DamageAbils and Fury.Slotted and TargetNotFury and TargetHealthPercent < 0.50 and TargetHealthPercent > 0.20 and TargetIsEnemy and not TargetIsBoss and not Crouching then
 			SetPixel(DoAbility(Fury))
-		elseif Config.Interrupt and MustInterrupt and StaminaPercent > 0.49 then
+		elseif Config.Interrupt and MustInterrupt and StaminaPercent > 0.49 and not Crouching then
 			SetPixel(DoBreakFreeInterrupt)
-		elseif Config.TauntBosses and Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and InCombat then
+		elseif Config.TauntBosses and Taunt.Slotted and TargetIsBoss and TargetNotTaunted and MagickaPercent > 0.30 and InCombat and not Crouching then
 			SetPixel(DoAbility(Taunt))
 		elseif Config.Block and MustBlock and StaminaPercent > 0.99 then
 			SetPixel(DoBlock)
 		elseif Config.Dodge and MustDodge and StaminaPercent > 0.99 then
 			SetPixel(DoRollDodge)
-		elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy then
+		elseif ImbueWeaponActive == true and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoLightAttack)
-		elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat then
+		elseif CrystalFragmentsProc and CrystalFragments.Slotted and MagickaPercent > 0.30 and EnemiesAround and InCombat and not Crouching then
 			SetPixel(DoAbility(CrystalFragments))
 
 	-- Combat: Medium Priority (Buffs, DoTs, Looting, Meditation)
 		elseif Config.PotionSpell and PotionReady and (PotionName=="Essence of Spell Power" or PotionName=="Essence of Spell Critical") and not MajorProphecy and not SunFire.Slotted and not InnerLight.Slotted and InCombat then
 			SetPixel(DoQuickslot)
-		elseif Config.Overload and EnergyOverload.Slotted and not EnergyOverloadActive and MagickaPercent < 0.40 and Ultimate > (EnergyOverload.Cost * 5) and InCombat then
+		elseif Config.Overload and EnergyOverload.Slotted and not EnergyOverloadActive and MagickaPercent < 0.40 and Ultimate > (EnergyOverload.Cost * 5) and InCombat and not Crouching then
 			SetPixel(DoAbility(EnergyOverload))
-		elseif (Config.Buffs or Config.Healing) and Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 then
+		elseif (Config.Buffs or Config.Healing) and Ritual.Slotted and not MinorMending and InCombat and MagickaPercent > 0.55 and not Crouching then
 			SetPixel(DoAbility(Ritual))
-		elseif Config.Buffs and MagMajorResolveSkill.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
+		elseif Config.Buffs and MagMajorResolveSkill.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) and not Crouching then
 			SetPixel(DoAbility(MagMajorResolveSkill))
-		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then --merge with skill above?
+		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) and not Crouching then --merge with skill above?
 			SetPixel(DoAbility(BoundlessStorm))
 		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
-		elseif Config.DamageAbils and SkeletonMage.Slotted and not SkeletonMageActive and MagickaPercent > 0.60 and InCombat then
+		elseif Config.DamageAbils and SkeletonMage.Slotted and not SkeletonMageActive and MagickaPercent > 0.60 and InCombat and not Crouching then
 			SetPixel(DoAbility(SkeletonMage))
-		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) and not Crouching then
 			SetPixel(DoAbility(VolatileFamiliar))
-		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.DamageAbils and VolatileFamiliar.Slotted and not FamiliarAOEActive and MagickaPercent > 0.60 and (InCombat or EnemiesAround) and not Crouching then
 			SetPixel(DoAbility(VolatileFamiliar))
-		elseif (Config.DamageAbils or Config.Buffs) and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy then
+		elseif (Config.DamageAbils or Config.Buffs) and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(SoulTrap))
-		elseif (Config.DamageAbils or Config.Buffs) and DnInferno.Slotted and not DnInfernoActive and MagickaPercent > 0.50 and (InCombat or EnemiesAround) then
+		elseif (Config.DamageAbils or Config.Buffs) and DnInferno.Slotted and not DnInfernoActive and MagickaPercent > 0.50 and (InCombat or EnemiesAround) and not Crouching then
 			SetPixel(DoAbility(DnInferno))
-		elseif Config.DamageAbils and SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		elseif Config.DamageAbils and SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(SunFire))
-		elseif Config.DamageAbils and DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy then
+		elseif Config.DamageAbils and DestructiveTouch.Slotted and TargetIsNotDestructiveTouched and MagickaPercent > 0.70 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(DestructiveTouch))
-		elseif Config.Buffs and MagMajSorc.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) then
+		elseif Config.Buffs and MagMajSorc.Slotted and not MajorSorcery and MagickaPercent > 0.60 and (InCombat or EnemiesAround) and not Crouching then
 			SetPixel(DoAbility(MagMajSorc))
-		elseif Config.Buffs and Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround then
+		elseif Config.Buffs and Degeneration.Slotted and not MajorSorcery and MagickaPercent > 0.60 and InCombat and EnemiesAround and not Crouching then
 			SetPixel(DoAbility(Degeneration))
-		elseif (Config.Buffs or Config.DamageAbils) and WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 then
+		elseif (Config.Buffs or Config.DamageAbils) and WeaknessToElements.Slotted and TargetNotMajorBreach and TargetMaxHealth > 40000 and TargetIsEnemy and MagickaPercent > 0.60 and not Crouching then
 			SetPixel(DoAbility(WeaknessToElements))
-		elseif Config.Buffs and SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat then
+		elseif Config.Buffs and SunFire.Slotted and (MajorProphecy == false or MinorSorcery == false) and MagickaPercent > 0.60 and EnemiesAround and InCombat and not Crouching then
 			SetPixel(DoAbility(SunFire))
-		elseif DamageShield.Slotted and (InCombat == true or EnemiesAround) and DamageShieldActive == false and MagickaPercent > 0.50 then
+		elseif DamageShield.Slotted and (InCombat == true or EnemiesAround) and DamageShieldActive == false and MagickaPercent > 0.50 and not Crouching then
 			SetPixel(DoAbility(DamageShield))
 		elseif MeditationActive and InCombat and (MagickaPercent < 0.98 or StaminaPercent < 0.98) then
 			SetPixel(DoNothing)
-		elseif Config.Meditation and Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat then
+		elseif Config.Meditation and Meditation.Slotted and (MagickaPercent < 0.80 or StaminaPercent < 0.80) and MeditationActive == false and InCombat and not Crouching then
 			SetPixel(DoAbility(Meditation))
 
-		elseif Config.SwapToInnerLight and InnerLight.Slotted and not MajorProphecy then
+		elseif Config.SwapToInnerLight and InnerLight.Slotted and not MajorProphecy and not Crouching then
 			SetPixel(16+OtherBar)
-		elseif Config.Overload and EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 then
+		elseif Config.Overload and EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 and not Crouching then
 			SetPixel(DoAbility(EnergyOverload))
-		elseif Config.DamageAbils and UnstableWall.Slotted and MagickaPercent > 0.85 and InCombat and TargetIsEnemy then
+		elseif Config.DamageAbils and UnstableWall.Slotted and MagickaPercent > 0.85 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(UnstableWall))
 	-- Combat: Low Priority (Damage Spamming)
 		-- elseif SunFire.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
 		-- 	SetPixel(DoAbility(SunFire))
-		elseif Config.DamageAbils and MagDpsSpamSkill.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
+		elseif Config.DamageAbils and MagDpsSpamSkill.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround and not Crouching then
 			SetPixel(DoAbility(MagDpsSpamSkill))
-		elseif Config.DamageAbils and ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.80 then
+		elseif Config.DamageAbils and ImbueWeapon.Slotted and EnemiesAround and InCombat == true and ImbueWeaponActive == false and MagickaPercent > 0.80 and not Crouching then
 			SetPixel(DoAbility(ImbueWeapon))
-		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.80 then
+		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.80 and not Crouching then
 			SetPixel(DoAbility(CrystalFragments))
-		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround then
+		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround and not Crouching then
 			SetPixel(DoAbility(Pokes))
-		elseif Config.DamageAbils and SolarBarrage.Slotted and MagickaPercent > 0.80 and InCombat and not Empower and EnemiesAround then
+		elseif Config.DamageAbils and SolarBarrage.Slotted and MagickaPercent > 0.80 and InCombat and not Empower and EnemiesAround and not Crouching then
 			SetPixel(DoAbility(SolarBarrage))
-		elseif Config.Overload and EnergyOverload.Slotted and UltimatePercent > 0.97 and EnemiesAround and not EnergyOverloadActive then
+		elseif Config.Overload and EnergyOverload.Slotted and UltimatePercent > 0.97 and EnemiesAround and not EnergyOverloadActive and not Crouching then
 			SetPixel(DoAbility(EnergyOverload))
-		elseif Config.Overload and EnergyOverloadActive and TargetIsEnemy and InCombat then
+		elseif Config.Overload and EnergyOverloadActive and TargetIsEnemy and InCombat and not Crouching then
 			SetPixel(DoLightAttack)
-		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 and not EnergyOverloadActive then
+		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and MagickaPercent < 0.85 and not EnergyOverloadActive and not Crouching then
 			SetPixel(DoHeavyAttack)
-		elseif Config.LightAttacks and InCombat and EnemiesAround and not EnergyOverloadActive then
+		elseif Config.LightAttacks and InCombat and EnemiesAround and not EnergyOverloadActive and not Crouching then
 			SetPixel(DoLightAttack)
-		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and not EnergyOverloadActive then
+		elseif Config.HeavyAttacks and InCombat and EnemiesAround and not ImbueWeaponActive and not EnergyOverloadActive and not Crouching then
 			SetPixel(DoHeavyAttack)
 
 	-- Environment Interaction (Looting, Stealing, Sprinting)
