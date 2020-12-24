@@ -293,7 +293,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(ImbueWeapon))
 		elseif Config.DamageAbils and CrystalFragments.Slotted and EnemiesAround and InCombat == true and MagickaPercent > 0.80 and not Crouching then
 			SetPixel(DoAbility(CrystalFragments))
-		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.80 and InCombat and EnemiesAround and not Crouching then
+		elseif Config.DamageAbils and Pokes.Slotted and MagickaPercent > 0.80 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(Pokes))
 		elseif Config.DamageAbils and SolarBarrage.Slotted and MagickaPercent > 0.80 and InCombat and not Empower and EnemiesAround and not Crouching then
 			SetPixel(DoAbility(SolarBarrage))
