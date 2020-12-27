@@ -441,7 +441,7 @@ local function BigLogicRoutine()
 
 		elseif Config.SwapToInnerLight and InnerLight.Slotted and not MajorProphecy and not Crouching then
 			SetPixel(16+OtherBar)
-		elseif Config.Overload and EnergyOverloadActive and MagickaPercent > 0.70 and UltimatePercent < 0.70 and not Crouching then
+		elseif Config.Overload and EnergyOverloadActive and MagickaPercent > 0.70 and ((UltimatePercent < 0.70 and not InBossBattle) or (UltimatePercent < 0.40) ) and not Crouching then
 			SetPixel(DoAbility(EnergyOverload))
 		elseif Config.DamageAbils and UnstableWall.Slotted and MagickaPercent > 0.85 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(UnstableWall))
