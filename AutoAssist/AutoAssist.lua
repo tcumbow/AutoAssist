@@ -79,6 +79,7 @@ local TargetHealthPercent = 0
 local TargetIsNotSoulTrap = false
 local TargetIsNotDestructiveTouched = false
 local TargetNotFury = false
+local TargetNotMagSteal = false
 
 local AvailableReticleInteraction = nil
 local AvailableReticleTarget = nil
@@ -116,6 +117,7 @@ local SolarBarrage = { }
 local VolatileFamiliar = { }
 local TwilightMatriarch = { }
 local MagMajSorc = { }
+local RadiantAura = { }
 local BoundlessStorm = { }
 local CrystalFragments = { }
 local Fury = { }
@@ -175,6 +177,162 @@ local function GetPotionIsReady()
 	end
 end
 
+local function UpdateAbilitySlotInfo()
+
+	BurstHeal = { }
+	SelfHeal = { }
+	HealOverTime = { }
+	SkeletonMage = { }
+	SpiritMender = { }
+	Degeneration = { }
+	Ritual = { }
+	RemoteInterrupt = { }
+	Taunt = { }
+	SunFire = { }
+	MagMajorResolveSkill = { }
+	Meditation = { }
+	ImbueWeapon = { }
+	DamageShield = { }
+	RapidManeuver = { }
+	Accelerate = { }
+	WeaknessToElements = { }
+	UnstableWall = { }
+	SoulTrap = { }
+	DestructiveTouch = { }
+	MagDpsSpamSkill = { }
+	Pokes = { }
+	SolarBarrage = { }
+	VolatileFamiliar = { }
+	TwilightMatriarch = { }
+	MagMajSorc = { }
+	RadiantAura = { }
+	BoundlessStorm = { }
+	CrystalFragments = { }
+	Fury = { }
+	InnerLight = { }
+	DnInferno = { }
+
+	EnergyOverload = { }
+
+	for barNumIterator = 0, 1 do
+		if Config.SwapBars or barNumIterator==CurrentBar then -- only examine current bar unless SwapBars is true
+			for i = 3, 7 do
+				local AbilityName = GetAbilityName(GetSlotBoundId(i,barNumIterator))
+				if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
+					BurstHeal.Slotted = true
+					BurstHeal[barNumIterator] = i-2
+				elseif AbilityName == "Polar Wind" or AbilityName == "Green Dragon Blood" then
+					SelfHeal.Slotted = true
+					SelfHeal[barNumIterator] = i-2
+				elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration" then
+					HealOverTime.Slotted = true
+					HealOverTime[barNumIterator] = i-2
+				elseif AbilityName == "Skeletal Arcanist" then
+					SkeletonMage.Slotted = true
+					SkeletonMage[barNumIterator] = i-2
+				elseif AbilityName == "Spirit Mender" then
+					SpiritMender.Slotted = true
+					SpiritMender[barNumIterator] = i-2
+				elseif AbilityName == "Inner Rage" then
+					Taunt.Slotted = true
+					Taunt[barNumIterator] = i-2
+				elseif AbilityName == "Deep Thoughts" then
+					Meditation.Slotted = true
+					Meditation[barNumIterator] = i-2
+				elseif AbilityName == "Elemental Weapon" then
+					ImbueWeapon.Slotted = true
+					ImbueWeapon[barNumIterator] = i-2
+				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" or AbilityName == "Summoner's Armor" or AbilityName == "Expansive Frost Cloak" then
+					MagMajorResolveSkill.Slotted = true
+					MagMajorResolveSkill[barNumIterator] = i-2
+				elseif AbilityName == "Extended Ritual" then
+					Ritual.Slotted = true
+					Ritual[barNumIterator] = i-2
+				elseif AbilityName == "Degeneration" then
+					Degeneration.Slotted = true
+					Degeneration[barNumIterator] = i-2
+				elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
+					SunFire.Slotted = true
+					SunFire[barNumIterator] = i-2
+				elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" or AbilityName == "Conjured Ward" or AbilityName == "Empowered Ward" then
+					DamageShield.Slotted = true
+					DamageShield[barNumIterator] = i-2
+				elseif AbilityName == "Explosive Charge" then
+					RemoteInterrupt.Slotted = true
+					RemoteInterrupt[barNumIterator] = i-2
+				elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
+					RapidManeuver.Slotted = true
+					RapidManeuver[barNumIterator] = i-2
+				elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
+					Accelerate.Slotted = true
+					Accelerate[barNumIterator] = i-2
+				elseif AbilityName == "Elemental Drain" or AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
+					WeaknessToElements.Slotted = true
+					WeaknessToElements[barNumIterator] = i-2
+				elseif AbilityName == "Unstable Wall of Storms" then
+					UnstableWall.Slotted = true
+					UnstableWall[barNumIterator] = i-2
+				elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" or AbilityName == "Consuming Trap" then
+					SoulTrap.Slotted = true
+					SoulTrap[barNumIterator] = i-2
+				elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
+					DestructiveTouch.Slotted = true
+					DestructiveTouch[barNumIterator] = i-2
+				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" or AbilityName == "Ricochet Skull" or AbilityName == "Piercing Javelin" or AbilityName == "Aurora Javelin" or AbilityName == "Solar Flare" or AbilityName == "Dark Flare" then
+					MagDpsSpamSkill.Slotted = true
+					MagDpsSpamSkill[barNumIterator] = i-2
+				elseif AbilityName == "Puncturing Sweep" then
+					Pokes.Slotted = true
+					Pokes[barNumIterator] = i-2
+				elseif AbilityName == "Solar Barrage" then
+					SolarBarrage.Slotted = true
+					SolarBarrage[barNumIterator] = i-2
+				elseif AbilityName == "Summon Volatile Familiar" then
+					VolatileFamiliar.Slotted = true
+					VolatileFamiliar[barNumIterator] = i-2
+				elseif AbilityName == "Summon Twilight Matriarch" then
+					TwilightMatriarch.Slotted = true
+					TwilightMatriarch[barNumIterator] = i-2
+				elseif AbilityName == "Boundless Storm" then
+					BoundlessStorm.Slotted = true
+					BoundlessStorm[barNumIterator] = i-2
+					Accelerate.Slotted = true
+					Accelerate[barNumIterator] = i-2
+				elseif AbilityName == "Crystal Fragments" then
+					CrystalFragments.Slotted = true
+					CrystalFragments[barNumIterator] = i-2
+				elseif AbilityName == "Endless Fury" then
+					Fury.Slotted = true
+					Fury[barNumIterator] = i-2
+				elseif AbilityName == "Inner Light" then
+					InnerLight.Slotted = true
+					InnerLight[barNumIterator] = i-2
+				elseif AbilityName == "Inferno" or AbilityName == "Flames of Oblivion" then
+					DnInferno.Slotted = true
+					DnInferno[barNumIterator] = i-2
+				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" or AbilityName == "Blue Betty" or AbilityName == "Molten Armaments" then
+					MagMajSorc.Slotted = true
+					MagMajSorc[barNumIterator] = i-2
+				elseif AbilityName == "Radiant Aura" then
+					RadiantAura.Slotted = true
+					RadiantAura[barNumIterator] = i-2
+				elseif AbilityName == "Bound Aegis" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+				else
+					d("Unrecognized ability:"..AbilityName)
+				end
+			end
+			local AbilityId = GetSlotBoundId(8,barNumIterator)
+			local UltimateName = GetAbilityName(AbilityId)
+			if UltimateName == "Energy Overload" then
+				EnergyOverload.Slotted = true
+				EnergyOverload[barNumIterator] = DoUltimate
+				EnergyOverload.Cost = GetAbilityCost(AbilityId)
+			end
+		end
+	end
+end
+
+
 local function BigLogicRoutine()
 	-- Last-Minute Info Gathering
 		UpdateLastSights()
@@ -183,6 +341,7 @@ local function BigLogicRoutine()
 		if (GetGameTimeMilliseconds() - LastEnemySightTime) > 3000 then EnemiesAround = false else EnemiesAround = true	end
 		PotionReady = GetPotionIsReady()
 		PotionName = GetSlotName(GetCurrentQuickslot())
+		UpdateAbilitySlotInfo()
 
 	-- Mounted/Dead/InMenu
 		if InputReady == false or IsUnitDead("player") then
@@ -257,6 +416,8 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(VolatileFamiliar))
 		elseif (Config.DamageAbils or Config.Buffs) and SoulTrap.Slotted and TargetIsNotSoulTrap and MagickaPercent > 0.50 and InCombat and TargetIsEnemy and not Crouching then
 			SetPixel(DoAbility(SoulTrap))
+		elseif (Config.DamageAbils or Config.Buffs) and RadiantAura.Slotted and TargetNotMagSteal and TargetIsEnemy and not Crouching then
+			SetPixel(DoAbility(RadiantAura))
 		elseif (Config.DamageAbils or Config.Buffs) and DnInferno.Slotted and not DnInfernoActive and MagickaPercent > 0.50 and (InCombat or EnemiesAround) and not Crouching then
 			SetPixel(DoAbility(DnInferno))
 		elseif Config.DamageAbils and SunFire.Slotted and TargetNotSunFired and MagickaPercent > 0.70 and InCombat and TargetIsEnemy and not Crouching then
@@ -439,6 +600,7 @@ local function UpdateTargetInfo()
 		TargetIsNotSoulTrap = true
 		TargetIsNotDestructiveTouched = true
 		TargetNotFury = true
+		TargetNotMagSteal = true
 		if (numAuras > 0) then
 			for i = 1, numAuras do
 				local name, _, _, _, _, _, _, _, _, _, _, _ = GetUnitBuffInfo('reticleover', i)
@@ -450,6 +612,8 @@ local function UpdateTargetInfo()
 					TargetNotMajorBreach = false
 				elseif name=="Endless Fury" then
 					TargetNotFury = false
+				elseif name=="Minor Magickasteal" then
+					TargetNotMagSteal = false
 				elseif name=="Soul Trap" or name=="Soul Splitting Trap" or name=="Consuming Trap" then
 					TargetIsNotSoulTrap = false
 				elseif name == "Destructive Touch" or name == "Shock Touch" or name == "Destructive Reach" or name == "Shock Reach" then
@@ -470,160 +634,6 @@ local function UpdateTargetInfo()
 	end
 end
 
-
-
-
-
-local function UpdateAbilitySlotInfo()
-
-	BurstHeal = { }
-	SelfHeal = { }
-	HealOverTime = { }
-	SkeletonMage = { }
-	SpiritMender = { }
-	Degeneration = { }
-	Ritual = { }
-	RemoteInterrupt = { }
-	Taunt = { }
-	SunFire = { }
-	MagMajorResolveSkill = { }
-	Meditation = { }
-	ImbueWeapon = { }
-	DamageShield = { }
-	RapidManeuver = { }
-	Accelerate = { }
-	WeaknessToElements = { }
-	UnstableWall = { }
-	SoulTrap = { }
-	DestructiveTouch = { }
-	MagDpsSpamSkill = { }
-	Pokes = { }
-	SolarBarrage = { }
-	VolatileFamiliar = { }
-	TwilightMatriarch = { }
-	MagMajSorc = { }
-	BoundlessStorm = { }
-	CrystalFragments = { }
-	Fury = { }
-	InnerLight = { }
-	DnInferno = { }
-
-	EnergyOverload = { }
-
-	for barNumIterator = 0, 1 do
-		if Config.SwapBars or barNumIterator==CurrentBar then -- only examine current bar unless SwapBars is true
-			for i = 3, 7 do
-				local AbilityName = GetAbilityName(GetSlotBoundId(i,barNumIterator))
-				if AbilityName == "Ritual of Rebirth" or AbilityName == "Twilight Matriarch Restore" then
-					BurstHeal.Slotted = true
-					BurstHeal[barNumIterator] = i-2
-				elseif AbilityName == "Polar Wind" or AbilityName == "Green Dragon Blood" then
-					SelfHeal.Slotted = true
-					SelfHeal[barNumIterator] = i-2
-				elseif AbilityName == "Rapid Regeneration" or AbilityName == "Radiating Regeneration" then
-					HealOverTime.Slotted = true
-					HealOverTime[barNumIterator] = i-2
-				elseif AbilityName == "Skeletal Arcanist" then
-					SkeletonMage.Slotted = true
-					SkeletonMage[barNumIterator] = i-2
-				elseif AbilityName == "Spirit Mender" then
-					SpiritMender.Slotted = true
-					SpiritMender[barNumIterator] = i-2
-				elseif AbilityName == "Inner Rage" then
-					Taunt.Slotted = true
-					Taunt[barNumIterator] = i-2
-				elseif AbilityName == "Deep Thoughts" then
-					Meditation.Slotted = true
-					Meditation[barNumIterator] = i-2
-				elseif AbilityName == "Elemental Weapon" then
-					ImbueWeapon.Slotted = true
-					ImbueWeapon[barNumIterator] = i-2
-				elseif AbilityName == "Channeled Focus" or AbilityName == "Restoring Focus" or AbilityName == "Summoner's Armor" or AbilityName == "Expansive Frost Cloak" then
-					MagMajorResolveSkill.Slotted = true
-					MagMajorResolveSkill[barNumIterator] = i-2
-				elseif AbilityName == "Extended Ritual" then
-					Ritual.Slotted = true
-					Ritual[barNumIterator] = i-2
-				elseif AbilityName == "Degeneration" then
-					Degeneration.Slotted = true
-					Degeneration[barNumIterator] = i-2
-				elseif AbilityName == "Vampire's Bane" or AbilityName == "Reflective Light" then
-					SunFire.Slotted = true
-					SunFire[barNumIterator] = i-2
-				elseif AbilityName == "Radiant Ward" or AbilityName == "Blazing Shield" or AbilityName == "Conjured Ward" or AbilityName == "Empowered Ward" then
-					DamageShield.Slotted = true
-					DamageShield[barNumIterator] = i-2
-				elseif AbilityName == "Explosive Charge" then
-					RemoteInterrupt.Slotted = true
-					RemoteInterrupt[barNumIterator] = i-2
-				elseif AbilityName == "Rapid Maneuver" or AbilityName == "Charging Maneuver" then
-					RapidManeuver.Slotted = true
-					RapidManeuver[barNumIterator] = i-2
-				elseif AbilityName == "Accelerate" or AbilityName == "Race Against Time" then
-					Accelerate.Slotted = true
-					Accelerate[barNumIterator] = i-2
-				elseif AbilityName == "Elemental Susceptibility" or AbilityName == "Weakness to Elements" then
-					WeaknessToElements.Slotted = true
-					WeaknessToElements[barNumIterator] = i-2
-				elseif AbilityName == "Unstable Wall of Storms" then
-					UnstableWall.Slotted = true
-					UnstableWall[barNumIterator] = i-2
-				elseif AbilityName == "Soul Trap" or AbilityName == "Soul Splitting Trap" or AbilityName == "Consuming Trap" then
-					SoulTrap.Slotted = true
-					SoulTrap[barNumIterator] = i-2
-				elseif AbilityName == "Destructive Touch" or AbilityName == "Shock Touch" or AbilityName == "Destructive Reach" or AbilityName == "Shock Reach" then
-					DestructiveTouch.Slotted = true
-					DestructiveTouch[barNumIterator] = i-2
-				elseif AbilityName == "Force Shock" or AbilityName == "Force Pulse" or AbilityName == "Crushing Shock" or AbilityName == "Ricochet Skull" or AbilityName == "Piercing Javelin" or AbilityName == "Aurora Javelin" then
-					MagDpsSpamSkill.Slotted = true
-					MagDpsSpamSkill[barNumIterator] = i-2
-				elseif AbilityName == "Puncturing Sweep" then
-					Pokes.Slotted = true
-					Pokes[barNumIterator] = i-2
-				elseif AbilityName == "Solar Barrage" then
-					SolarBarrage.Slotted = true
-					SolarBarrage[barNumIterator] = i-2
-				elseif AbilityName == "Summon Volatile Familiar" then
-					VolatileFamiliar.Slotted = true
-					VolatileFamiliar[barNumIterator] = i-2
-				elseif AbilityName == "Summon Twilight Matriarch" then
-					TwilightMatriarch.Slotted = true
-					TwilightMatriarch[barNumIterator] = i-2
-				elseif AbilityName == "Boundless Storm" then
-					BoundlessStorm.Slotted = true
-					BoundlessStorm[barNumIterator] = i-2
-					Accelerate.Slotted = true
-					Accelerate[barNumIterator] = i-2
-				elseif AbilityName == "Crystal Fragments" then
-					CrystalFragments.Slotted = true
-					CrystalFragments[barNumIterator] = i-2
-				elseif AbilityName == "Endless Fury" then
-					Fury.Slotted = true
-					Fury[barNumIterator] = i-2
-				elseif AbilityName == "Inner Light" then
-					InnerLight.Slotted = true
-					InnerLight[barNumIterator] = i-2
-				elseif AbilityName == "Inferno" or AbilityName == "Flames of Oblivion" then
-					DnInferno.Slotted = true
-					DnInferno[barNumIterator] = i-2
-				elseif AbilityName == "Surge" or AbilityName == "Power Surge" or AbilityName == "Critical Surge" or AbilityName == "Blue Betty" or AbilityName == "Molten Armaments" then
-					MagMajSorc.Slotted = true
-					MagMajSorc[barNumIterator] = i-2
-				elseif AbilityName == "Bound Aegis" or AbilityName == "Radiant Aura" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
-				else
-					d("Unrecognized ability:"..AbilityName)
-				end
-			end
-			local AbilityId = GetSlotBoundId(8,barNumIterator)
-			local UltimateName = GetAbilityName(AbilityId)
-			if UltimateName == "Energy Overload" then
-				EnergyOverload.Slotted = true
-				EnergyOverload[barNumIterator] = DoUltimate
-				EnergyOverload.Cost = GetAbilityCost(AbilityId)
-			end
-		end
-	end
-end
 
 
 
