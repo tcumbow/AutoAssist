@@ -921,7 +921,7 @@ local function OnEventCombatTipDisplay(_, tipId)
 	elseif tipId == 3 then
 		MustInterrupt = true
 		BigLogicRoutine()
-	elseif tipId == 1 then
+	elseif tipId == 1 or tipId == 130 then
 		MustBlock = true
 		BigLogicRoutine()
 	elseif tipId == 18 then
