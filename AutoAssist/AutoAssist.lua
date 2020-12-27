@@ -35,7 +35,7 @@ local StaminaPrevious = 0
 local Health = 0
 local HealthPrevious = 0
 local Ultimate = 0
-local UltimatePercent = 0.01
+local UltimatePercent = 1.00
 
 local LowestGroupHealthPercentWithoutRegen = 1.00
 local LowestGroupHealthPercentWithRegen = 1.00
