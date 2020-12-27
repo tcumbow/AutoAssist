@@ -316,7 +316,7 @@ local function UpdateAbilitySlotInfo()
 				elseif AbilityName == "Radiant Aura" then
 					RadiantAura.Slotted = true
 					RadiantAura[barNumIterator] = i-2
-				elseif AbilityName == "Bound Aegis" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
+				elseif AbilityName == "Efficient Purge" or AbilityName == "Revealing Flare" or AbilityName == "Bound Aegis" or AbilityName == "Blockade of Storms" or AbilityName == "" then -- do nothing, cuz we don't care about these abilities
 				else
 					d("Unrecognized ability:"..AbilityName)
 				end
