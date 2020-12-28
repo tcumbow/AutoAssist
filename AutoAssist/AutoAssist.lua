@@ -346,7 +346,7 @@ local function BigLogicRoutine()
 	-- Mounted/Dead/InMenu
 		if InputReady == false or IsUnitDead("player") then
 			SetPixel(DoNothing)
-		elseif Config.Loot and Config.PlatinumDismount and AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
+		elseif Config.Loot and not TFC_AUTOLOOT_LOADED and Config.PlatinumDismount and AvailableReticleInteraction=="Mine" and AvailableReticleTarget=="Platinum Seam" then
 			SetPixel(DoInteract)
 		elseif Config.Gallop and RapidManeuver.Slotted and Mounted and not MajorGallop and StaminaPercent > 0.80 then
 			SetPixel(DoAbility(RapidManeuver))
@@ -406,7 +406,7 @@ local function BigLogicRoutine()
 			SetPixel(DoAbility(MagMajorResolveSkill))
 		elseif Config.Buffs and BoundlessStorm.Slotted and not MajorResolve and MagickaPercent > 0.50 and (InCombat or EnemiesAround) and not Crouching then --merge with skill above?
 			SetPixel(DoAbility(BoundlessStorm))
-		elseif Config.Loot and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
+		elseif Config.Loot and not TFC_AUTOLOOT_LOADED and (AvailableReticleInteraction=="Search" and not InventoryFull and AvailableReticleTarget~="Book Stack" and AvailableReticleTarget~="Bookshelf") then
 			SetPixel(DoInteract)
 		elseif Config.DamageAbils and SkeletonMage.Slotted and not SkeletonMageActive and MagickaPercent > 0.60 and InCombat and not Crouching then
 			SetPixel(DoAbility(SkeletonMage))
@@ -475,7 +475,7 @@ local function BigLogicRoutine()
 			zo_callLater(PD_StopReelInFish, 2000)
 		elseif Config.Disarm and AvailableReticleInteraction=="Disarm" then
 			SetPixel(DoInteract)
-		elseif Config.Loot and (AvailableReticleInteraction=="Destroy" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Spoiled Food" or AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Jerkin" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets" or AvailableReticleTarget=="Guards" or AvailableReticleTarget=="Boots" or AvailableReticleTarget=="Shoes")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam" or AvailableReticleTarget=="Skyshard"))) then
+		elseif Config.Loot and not TFC_AUTOLOOT_LOADED and (AvailableReticleInteraction=="Destroy" or AvailableReticleInteraction=="Cut" or AvailableReticleInteraction=="Mine" or AvailableReticleInteraction=="Collect" or AvailableReticleInteraction=="Loot" or (AvailableReticleInteraction=="Take" and not (AvailableReticleTarget=="Spoiled Food" or AvailableReticleTarget=="Greatsword" or AvailableReticleTarget=="Sword" or AvailableReticleTarget=="Axe" or AvailableReticleTarget=="Bow" or AvailableReticleTarget=="Shield" or AvailableReticleTarget=="Staff" or AvailableReticleTarget=="Sabatons" or AvailableReticleTarget=="Jerkin" or AvailableReticleTarget=="Dagger" or AvailableReticleTarget=="Cuirass" or AvailableReticleTarget=="Pauldron" or AvailableReticleTarget=="Helm" or AvailableReticleTarget=="Gauntlets" or AvailableReticleTarget=="Guards" or AvailableReticleTarget=="Boots" or AvailableReticleTarget=="Shoes")) or (AvailableReticleInteraction=="Use" and (AvailableReticleTarget=="Chest" or AvailableReticleTarget=="Treasure Chest" or AvailableReticleTarget=="Giant Clam" or AvailableReticleTarget=="Skyshard"))) then
 			SetPixel(DoInteract)
 		elseif Config.Steal and AvailableReticleInteraction=="Steal" and Hidden and not InCombat and not InventoryFull then
 			SetPixel(DoInteract)
