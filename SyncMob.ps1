@@ -1,1 +1,1 @@
-unison .\AutoAssist "I:\Code\AutoAssist" -auto
+# unison .\AutoAssist "I:\Code\AutoAssist" -auto

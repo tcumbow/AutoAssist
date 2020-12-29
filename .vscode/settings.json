@@ -82,5 +82,12 @@
     ],
     "cSpell.words": [
         "Sorc"
-    ]
+    ],
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "cmd": "robocopy .\\AutoAssist A:\\AutoAssist /mir"
+            }
+        ]
+    }
 }

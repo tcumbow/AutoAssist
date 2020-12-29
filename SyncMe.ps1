@@ -1,1 +1,1 @@
-unison .\AutoAssist A:\AutoAssist\ -auto -batch
+# unison .\AutoAssist A:\AutoAssist\ -auto -batch
